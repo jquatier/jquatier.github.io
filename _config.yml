@@ -39,6 +39,10 @@ social:
     - https://twitter.com/jquatier
 logo: /img/og-card.png
 
+# search console ownership verification (rendered by jekyll-seo-tag)
+webmaster_verifications:
+  google: 2KT4I-DM-QzBqqgLm55OcUcbLPAKGrQRnjjpVc-LxHw
+
 # this site is fully custom-styled; disable the GitHub Pages default theme
 theme: null
 
