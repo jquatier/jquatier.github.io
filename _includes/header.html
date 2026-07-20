@@ -1,12 +1,7 @@
-<header>
-  <h2><a href="{{ site.baseurl }}/">Jacob Quatier</a></h2>
+<header class="site-header">
+  <a class="site-home-link" href="{{ site.baseurl }}/">&larr; Jacob Quatier</a>
+  <nav id="menu">
+    <a href="{{ "/projects/" | prepend: site.baseurl }}">Projects</a>
+    <a href="{{ "/feed.xml" | prepend: site.baseurl }}" title="Atom Feed">RSS</a>
+  </nav>
 </header>
-<nav id="menu">
-  <div id="social">
-    <a href="{{ "/feed.xml" | prepend: site.baseurl }}" title="Atom Feed"><img src="{{ site.baseurl }}/img/rss.png" alt="RSS Feed"/></a>
-    <a href="http://twitter.com/jquatier" title="Twitter"><img src="{{ site.baseurl }}/img/twitter.png" alt="Twitter"/></a>
-    <a href="http://www.linkedin.com/in/jacobquatier" title="LinkedIn"><img src="{{ site.baseurl }}/img/linkedin.png" alt="LinkedIn"/></a>
-    <a href="https://github.com/jquatier" title="GitHub"><img src="{{ site.baseurl }}/img/github.png" alt="GitHub"/></a>
-  </div>
-  <div class="clearfix"></div>
-</nav>

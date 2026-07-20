@@ -1,0 +1,24 @@
+---
+layout: default
+title: Projects
+permalink: /projects/
+---
+<div id="content">
+  <div class="projects-intro">
+    <h1>Projects</h1>
+    <p class="projects-subtitle">writing cadence: ~1 post per decade. see you in the 2030s.</p>
+  </div>
+  <ul id="post-list">
+    {% for post in site.posts %}
+    <li class="post-list-item" style="--stagger: {{ forloop.index0 }}">
+      <a class="card-link" href="{{ post.url | prepend: site.baseurl }}">
+        <div class="card">
+          <div class="index-post-info">{{ post.date | date: "%b %-d, %Y" }}</div>
+          <h2 class="entry-title">{{ post.title }}</h2>
+          <div class="entry-summary">{{ post.summary }}</div>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

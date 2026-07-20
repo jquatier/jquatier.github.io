@@ -6,15 +6,46 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: JacobQuatier.com
-email:
+title: Jacob Quatier
+tagline: Software Engineer
+email: jacobquatier@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  I'm Jacob Quatier. I'm a software engineer.
+  Jacob Quatier is a software engineer based in Portland, Oregon.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://www.jacobquatier.com" # the base hostname & protocol for your site
+url: "https://www.jacobquatier.com" # the base hostname & protocol for your site
 permalink: /:title/
+lang: en_US
+
+# sitewide default social share image (jekyll-seo-tag reads `image` per-page,
+# so it's set here via front matter defaults rather than a top-level key)
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /img/og-card.png
+
+# author / social settings (read by jekyll-seo-tag and site templates)
+author:
+  name: Jacob Quatier
+  twitter: jquatier
+twitter:
+  username: jquatier
+  card: summary_large_image
+social:
+  name: Jacob Quatier
+  links:
+    - https://github.com/jquatier
+    - https://www.linkedin.com/in/jacobquatier
+    - https://twitter.com/jquatier
+logo: /img/og-card.png
+
+# this site is fully custom-styled; disable the GitHub Pages default theme
+theme: null
+
 # Build settings
 markdown: kramdown
 
-gems:
+plugins:
   - jekyll-redirect-from
+  - jekyll-seo-tag
+  - jekyll-sitemap
