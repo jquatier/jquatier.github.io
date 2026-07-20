@@ -19,7 +19,6 @@
 	--font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	--font-mono: 'JetBrains Mono', Consolas, Menlo, Monaco, monospace;
 
-	--radius: 12px;
 	--transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -195,7 +194,7 @@ nav#menu a {
 	font-size: 13px;
 	color: var(--color-muted);
 	padding: 6px 12px;
-	border-radius: 8px;
+	border-radius: 3px;
 	transition: color var(--transition), background var(--transition);
 }
 
@@ -395,12 +394,41 @@ nav#menu a:hover {
    ========================================================================== */
 
 .card {
-	background: linear-gradient(180deg, var(--color-surface-2), var(--color-surface));
+	position: relative;
+	background:
+		linear-gradient(180deg, rgba(230, 234, 242, 0.02), transparent 40%),
+		var(--color-surface);
 	border: 1px solid var(--color-border);
-	border-radius: var(--radius);
+	border-radius: 3px;
 	padding: 28px 32px;
 	margin-bottom: 20px;
 	transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+/* HUD corner brackets */
+.card::before,
+.card::after {
+	content: '';
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	border: 1px solid var(--color-border-strong);
+	transition: border-color var(--transition), width var(--transition), height var(--transition);
+	pointer-events: none;
+}
+
+.card::before {
+	top: 5px;
+	left: 5px;
+	border-right: 0;
+	border-bottom: 0;
+}
+
+.card::after {
+	bottom: 5px;
+	right: 5px;
+	border-left: 0;
+	border-top: 0;
 }
 
 a.card-link {
@@ -410,8 +438,18 @@ a.card-link {
 
 #post-list li.post-list-item .card:hover {
 	transform: translateY(-3px);
-	border-color: rgba(94, 234, 212, 0.35);
-	box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.6);
+	border-color: rgba(94, 234, 212, 0.5);
+	box-shadow:
+		0 12px 32px -14px rgba(0, 0, 0, 0.6),
+		0 0 28px -6px rgba(94, 234, 212, 0.22),
+		inset 0 0 22px -14px rgba(94, 234, 212, 0.4);
+}
+
+#post-list li.post-list-item .card:hover::before,
+#post-list li.post-list-item .card:hover::after {
+	border-color: var(--color-accent);
+	width: 13px;
+	height: 13px;
 }
 
 #post-list {
@@ -471,7 +509,7 @@ a.card-link {
 
 .entry-content p img {
 	border: 1px solid var(--color-border-strong);
-	border-radius: 8px;
+	border-radius: 3px;
 	float: right;
 	margin: 6px 0 12px 18px;
 	max-width: 100%;
@@ -479,7 +517,7 @@ a.card-link {
 
 .entry-content p img.center {
 	border: 1px solid var(--color-border-strong);
-	border-radius: 8px;
+	border-radius: 3px;
 	float: none;
 	margin: 8px auto;
 	display: block;
@@ -614,7 +652,7 @@ footer#contentinfo {
 	background: #0D1117;
 	color: #f8f8f2;
 	border: 1px solid var(--color-border-strong);
-	border-radius: 10px;
+	border-radius: 3px;
 	padding: 16px 18px;
 	margin: 12px 0 20px 0;
 	overflow-x: auto;
