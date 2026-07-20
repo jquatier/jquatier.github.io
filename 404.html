@@ -1,0 +1,27 @@
+---
+layout: home
+title: "404"
+permalink: /404.html
+sitemap: false
+---
+<section class="hero">
+  <div class="term-404" role="alert">
+    <p class="term-line"><span class="prompt">$&nbsp;</span>cat <span class="term-path">/requested-page</span></p>
+    <p class="term-line term-error">cat: no such file or directory <span class="term-code">[404]</span></p>
+    <p class="term-line"><span class="prompt">$&nbsp;</span>cd ~<span class="term-caret" aria-hidden="true"></span></p>
+  </div>
+
+  <nav class="link-grid link-grid-single" aria-label="Links">
+    <a class="link-card" style="--stagger: 0" href="{{ site.baseurl }}/">
+      {% include icons/code.svg %}
+      <span class="label">home</span>
+    </a>
+  </nav>
+</section>
+
+<script>
+  var el = document.querySelector('.term-path');
+  if (el && location.pathname && location.pathname !== '/404.html') {
+    el.textContent = location.pathname;
+  }
+</script>

@@ -11,5 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Rock+Salt&display=swap" rel="stylesheet">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
-  <link rel="icon" href="{{ "/favicon.ico" | prepend: site.baseurl }}">
+  <link rel="icon" href="{{ "/favicon.ico" | prepend: site.baseurl }}" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ "/img/favicon-32.png" | prepend: site.baseurl }}">
+  <link rel="apple-touch-icon" href="{{ "/img/apple-touch-icon.png" | prepend: site.baseurl }}">
+  <script>
+    console.log(
+      '%c$ whoami%c\njacob quatier · software engineer · portland, or\n\n' +
+      'inspecting the site? nice. say hi: jacobquatier@gmail.com\nsource: https://github.com/jquatier/jquatier.github.io',
+      'color:#5EEAD4;font-family:monospace;font-size:14px;font-weight:bold',
+      'color:#8B93A7;font-family:monospace;font-size:12px'
+    );
+  </script>
 </head>
