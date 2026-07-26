@@ -39,6 +39,10 @@ social:
     - https://twitter.com/jquatier
 logo: /img/og-card.png
 
+# google analytics 4 measurement id (rendered by _includes/google-analytics.html,
+# production builds only)
+google_analytics: G-CXEKR6CQYJ
+
 # search console ownership verification (rendered by jekyll-seo-tag)
 webmaster_verifications:
   google: 2KT4I-DM-QzBqqgLm55OcUcbLPAKGrQRnjjpVc-LxHw
