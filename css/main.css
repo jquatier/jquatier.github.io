@@ -744,6 +744,58 @@ a.card-link {
 	outline-offset: 2px;
 }
 
+/* Top secret placeholder card (not a link, so no lift/glow) */
+
+.project-card-secret,
+.project-card-secret:hover {
+	transform: none;
+	border-color: var(--color-border);
+	box-shadow: none;
+	cursor: default;
+	user-select: none;
+}
+
+.project-card-secret:hover::before,
+.project-card-secret:hover::after {
+	border-color: var(--color-border-strong);
+	width: 9px;
+	height: 9px;
+}
+
+.project-card-image-secret {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 929 / 460;
+	background:
+		repeating-linear-gradient(
+			-45deg,
+			rgba(230, 234, 242, 0.025) 0,
+			rgba(230, 234, 242, 0.025) 14px,
+			transparent 14px,
+			transparent 28px
+		),
+		var(--color-surface-2);
+}
+
+.secret-stamp {
+	font-family: var(--font-mono);
+	font-size: 17px;
+	font-weight: 600;
+	letter-spacing: 0.28em;
+	text-transform: uppercase;
+	color: rgba(248, 113, 113, 0.75);
+	border: 2px solid rgba(248, 113, 113, 0.55);
+	border-radius: 3px;
+	padding: 8px 14px 8px 18px; /* extra left padding offsets the letter-spacing trailing gap */
+	transform: rotate(-8deg);
+}
+
+.project-card-secret .project-card-title {
+	color: var(--color-faint);
+	letter-spacing: -0.06em;
+}
+
 .projects-intro {
 	margin: 34px 0 26px;
 }
