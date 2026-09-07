@@ -70,7 +70,7 @@ title: Jacob Quatier
     var cells = 24;
     var raceMs = 620;   // 0 -> 87%
     var hangMs = 320;   // stall
-    var t0 = performance.now();
+    var t0;
 
     function stamp(line) {
       var s = ((performance.now() - t0) / 1000 + Math.random() * 0.0009).toFixed(6);
@@ -108,16 +108,34 @@ title: Jacob Quatier
       };
     }
 
-    var at = 0;
-    lines.forEach(function (line) {
-      at += Number(line.getAttribute('data-delay'));
-      setTimeout(function () {
-        stamp(line);
-        if (line === lines[lines.length - 1]) {
-          requestAnimationFrame(function (now) { race(now)(now); });
-        }
-      }, at);
-    });
+    function start() {
+      t0 = performance.now();
+      var at = 0;
+      lines.forEach(function (line) {
+        at += Number(line.getAttribute('data-delay'));
+        setTimeout(function () {
+          stamp(line);
+          if (line === lines[lines.length - 1]) {
+            requestAnimationFrame(function (now) { race(now)(now); });
+          }
+        }, at);
+      });
+    }
+
+    // background tabs throttle timers to ~1s ticks, which batches the first lines together;
+    // hold the timeline until the tab is actually on screen
+    if (document.visibilityState === 'visible' && !document.prerendering) {
+      start();
+    } else {
+      var onVisible = function () {
+        if (document.visibilityState !== 'visible' || document.prerendering) return;
+        document.removeEventListener('visibilitychange', onVisible);
+        document.removeEventListener('prerenderingchange', onVisible);
+        start();
+      };
+      document.addEventListener('visibilitychange', onVisible);
+      document.addEventListener('prerenderingchange', onVisible);
+    }
   })();
 </script>
 
