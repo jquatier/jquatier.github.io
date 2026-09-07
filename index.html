@@ -2,8 +2,24 @@
 layout: home
 title: Jacob Quatier
 ---
+<script>
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = false;
+    try { seen = sessionStorage.getItem('booted') === '1'; } catch (e) {}
+    if (!reduce && !seen) document.documentElement.classList.add('booting');
+  })();
+</script>
+<div class="boot" aria-hidden="true">
+  <p class="boot-line"><span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> mounting /projects</p>
+  <p class="boot-line"><span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> loading fonts: rock-salt, jetbrains-mono</p>
+  <p class="boot-line"><span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> starting caret.service</p>
+  <p class="boot-line"><span class="boot-tag">[</span><span class="boot-warn"> WARN </span><span class="boot-tag">]</span> blog.service: last active 2014</p>
+  <p class="boot-line"><span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> reached target hero.target</p>
+</div>
+
 <section class="hero">
-  <h1 class="hero-name">Jacob Quatier</h1>
+  <h1 class="hero-name" data-text="Jacob Quatier">Jacob Quatier</h1>
   <hr class="hero-rule" aria-hidden="true">
   <p class="hero-tagline">
     <span class="typed"><span class="prompt">$&nbsp;</span>software engineer&nbsp;&middot;&nbsp;portland, or</span>
@@ -36,6 +52,28 @@ title: Jacob Quatier
     </a>
   </nav>
 </section>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var boot = document.querySelector('.boot');
+    if (!root.classList.contains('booting') || !boot) return;
+
+    var lines = boot.querySelectorAll('.boot-line');
+    var step = 160;
+
+    lines.forEach(function (line, i) {
+      setTimeout(function () { line.classList.add('is-on'); }, step * (i + 1));
+    });
+
+    setTimeout(function () {
+      boot.classList.add('boot-out');
+      root.classList.remove('booting');
+      try { sessionStorage.setItem('booted', '1'); } catch (e) {}
+      setTimeout(function () { boot.remove(); }, 300);
+    }, step * lines.length + 550);
+  })();
+</script>
 
 <script type="application/ld+json">
 {

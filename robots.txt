@@ -1,7 +1,15 @@
 ---
 permalink: /robots.txt
 ---
+# hi, crawler. make yourself at home.
+#
+# the good stuff is in /projects/
+# the honest stuff is in /status/
+#
+# humans: view-source is more fun. say hi: {{ site.email }}
+
 User-agent: *
 Allow: /
+Disallow: /secrets/   # there is nothing here. that is the secret.
 
 Sitemap: {{ site.url }}{{ site.baseurl }}/sitemap.xml

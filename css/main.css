@@ -226,6 +226,7 @@ nav#menu a:hover {
 }
 
 .hero-name {
+	position: relative;
 	font-family: var(--font-display);
 	font-weight: 400;
 	font-size: clamp(30px, 7vw, 62px);
@@ -234,6 +235,43 @@ nav#menu a:hover {
 	max-width: 100%;
 	animation: rise-in 0.7s ease-out both;
 	text-shadow: 0 0 60px rgba(94, 234, 212, 0.18);
+}
+
+/* chromatic-aberration glitch: two offset colored copies sliced by clip-path on hover */
+.hero-name::before,
+.hero-name::after {
+	content: attr(data-text);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	opacity: 0;
+	pointer-events: none;
+	text-shadow: none;
+}
+
+.hero-name::before { color: var(--color-accent); }
+.hero-name::after  { color: var(--color-accent-2); }
+
+.hero-name:hover::before { animation: glitch-a 0.45s steps(1, end); }
+.hero-name:hover::after  { animation: glitch-b 0.45s steps(1, end); }
+
+@keyframes glitch-a {
+	0%  { opacity: 1; clip-path: inset(8% 0 62% 0);  transform: translate(-4px, -1px); }
+	20% { opacity: 1; clip-path: inset(48% 0 22% 0); transform: translate(3px, 1px); }
+	40% { opacity: 1; clip-path: inset(0 0 78% 0);   transform: translate(-3px, 0); }
+	60% { opacity: 1; clip-path: inset(70% 0 4% 0);  transform: translate(4px, 1px); }
+	80% { opacity: 1; clip-path: inset(30% 0 42% 0); transform: translate(-2px, 0); }
+	100% { opacity: 0; }
+}
+
+@keyframes glitch-b {
+	0%  { opacity: 1; clip-path: inset(55% 0 18% 0); transform: translate(4px, 1px); }
+	20% { opacity: 1; clip-path: inset(12% 0 66% 0); transform: translate(-3px, -1px); }
+	40% { opacity: 1; clip-path: inset(66% 0 8% 0);  transform: translate(3px, 0); }
+	60% { opacity: 1; clip-path: inset(22% 0 50% 0); transform: translate(-4px, -1px); }
+	80% { opacity: 1; clip-path: inset(40% 0 35% 0); transform: translate(2px, 0); }
+	100% { opacity: 0; }
 }
 
 .hero-rule {
@@ -273,6 +311,56 @@ nav#menu a:hover {
 	animation:
 		typing 1.6s 0.75s steps(34, end) both,
 		caret-blink 1.1s 0.75s step-end 4;
+}
+
+/* ==========================================================================
+   Boot sequence (homepage, once per session)
+   ========================================================================== */
+
+.boot {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 10;
+	padding: 28px 24px;
+	background: var(--color-bg);
+	font-family: var(--font-mono);
+	font-size: 13px;
+	line-height: 1.7;
+	color: var(--color-muted);
+	text-align: left;
+	transition: opacity 0.25s ease-out;
+}
+
+html.booting .boot {
+	display: block;
+}
+
+.boot.boot-out {
+	opacity: 0;
+}
+
+.boot-line {
+	margin: 0;
+	visibility: hidden;
+	white-space: pre;
+}
+
+.boot-line.is-on {
+	visibility: visible;
+}
+
+.boot-tag {
+	color: var(--color-faint);
+}
+
+.boot-ok   { color: var(--color-accent); }
+.boot-warn { color: #FBBF24; }
+
+/* hold the hero entrance until the overlay is gone */
+html.booting .hero *,
+html.booting body::before {
+	animation-play-state: paused;
 }
 
 /* ==========================================================================
