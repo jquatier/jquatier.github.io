@@ -322,6 +322,7 @@ nav#menu a:hover {
 	position: fixed;
 	inset: 0;
 	z-index: 30;
+	overflow: hidden;
 	padding: 28px 24px;
 	background: var(--color-bg);
 	font-family: var(--font-mono);
@@ -350,8 +351,39 @@ html.booting .boot {
 	visibility: visible;
 }
 
-.boot-tag {
+.boot-tag,
+.boot-ts {
 	color: var(--color-faint);
+}
+
+.boot-banner {
+	color: var(--color-fg);
+	margin-bottom: 6px;
+}
+
+.boot-progress {
+	margin-top: 10px;
+}
+
+.boot-bar {
+	color: var(--color-accent);
+	letter-spacing: -0.04em;
+}
+
+.boot-pct {
+	color: var(--color-fg);
+}
+
+@media (max-width: 520px) {
+	.boot {
+		padding: 20px 14px;
+		font-size: 11px;
+	}
+
+	.boot-ts,
+	.boot-arch {
+		display: none;
+	}
 }
 
 .boot-ok   { color: var(--color-accent); }
