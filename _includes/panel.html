@@ -1,0 +1,35 @@
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="panel" role="toolbar" aria-label="Site controls">
+  <button class="panel-btn" type="button" data-action="crt" data-tip="crt: off" aria-pressed="false" aria-label="Toggle CRT mode">&#9636;</button>
+  <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence">&#8635;</button>
+</div>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var crt = document.querySelector('[data-action="crt"]');
+    var reboot = document.querySelector('[data-action="reboot"]');
+
+    function render() {
+      var on = root.classList.contains('crt');
+      crt.setAttribute('data-tip', 'crt: ' + (on ? 'on' : 'off'));
+      crt.setAttribute('aria-pressed', String(on));
+    }
+
+    crt.addEventListener('click', function () {
+      var on = root.classList.toggle('crt');
+      try { localStorage.setItem('crt', on ? '1' : '0'); } catch (e) {}
+      if (on) {
+        root.classList.add('crt-power');
+        setTimeout(function () { root.classList.remove('crt-power'); }, 600);
+      }
+      render();
+    });
+
+    reboot.addEventListener('click', function () {
+      try { sessionStorage.removeItem('booted'); } catch (e) {}
+      location.href = '{{ site.baseurl }}/';
+    });
+
+    render();
+  })();
+</script>

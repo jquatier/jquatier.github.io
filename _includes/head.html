@@ -25,6 +25,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="{{ "/img/favicon-32.png" | prepend: site.baseurl }}">
   <link rel="apple-touch-icon" href="{{ "/img/apple-touch-icon.png" | prepend: site.baseurl }}">
   <script>
+    try { if (localStorage.getItem('crt') === '1') document.documentElement.classList.add('crt'); } catch (e) {}
     console.log(
       '%c$ whoami%c\njacob quatier · software engineer · portland, or\n\n' +
       'inspecting the site? nice. say hi: jacobquatier@gmail.com\nsource: https://github.com/jquatier/jquatier.github.io',

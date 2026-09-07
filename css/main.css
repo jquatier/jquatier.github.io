@@ -321,7 +321,7 @@ nav#menu a:hover {
 	display: none;
 	position: fixed;
 	inset: 0;
-	z-index: 10;
+	z-index: 30;
 	padding: 28px 24px;
 	background: var(--color-bg);
 	font-family: var(--font-mono);
@@ -361,6 +361,139 @@ html.booting .boot {
 html.booting .hero *,
 html.booting body::before {
 	animation-play-state: paused;
+}
+
+/* ==========================================================================
+   Control panel (bottom toolbar) + CRT mode
+   ========================================================================== */
+
+.panel {
+	position: fixed;
+	left: 50%;
+	bottom: 14px;
+	z-index: 20;
+	display: flex;
+	gap: 2px;
+	padding: 4px;
+	transform: translateX(-50%);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 6px;
+	box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+	animation: fade-in 0.4s 1.2s ease-out both;
+}
+
+.panel-btn {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	border-radius: 4px;
+	background: none;
+	font-family: var(--font-mono);
+	font-size: 13px;
+	line-height: 1;
+	color: var(--color-faint);
+	cursor: pointer;
+	transition: color var(--transition), background var(--transition);
+}
+
+.panel-btn:hover,
+.panel-btn:focus-visible {
+	color: var(--color-accent);
+	background: rgba(94, 234, 212, 0.08);
+	outline: none;
+}
+
+.panel-btn[aria-pressed="true"] {
+	color: var(--color-accent);
+}
+
+/* hover label, rendered above the button */
+.panel-btn::after {
+	content: '// ' attr(data-tip);
+	position: absolute;
+	left: 50%;
+	bottom: calc(100% + 12px);
+	transform: translate(-50%, 4px);
+	padding: 4px 8px;
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	background: var(--color-surface-2);
+	font-size: 11px;
+	letter-spacing: 0.02em;
+	white-space: nowrap;
+	color: var(--color-muted);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity var(--transition), transform var(--transition);
+}
+
+.panel-btn:hover::after,
+.panel-btn:focus-visible::after {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+.crt-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 15;
+	pointer-events: none;
+}
+
+html.crt .crt-overlay {
+	display: block;
+	background:
+		repeating-linear-gradient(0deg, transparent 0 2px, rgba(0, 0, 0, 0.28) 2px 4px),
+		repeating-linear-gradient(90deg, rgba(255, 0, 0, 0.04) 0 1px, rgba(0, 255, 0, 0.03) 1px 2px, rgba(0, 0, 255, 0.04) 2px 3px),
+		radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.6) 100%);
+	animation: crt-flicker 0.14s steps(2, end) infinite;
+}
+
+/* slow rolling brightness band */
+html.crt .crt-overlay::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(transparent, rgba(255, 255, 255, 0.035) 50%, transparent);
+	background-size: 100% 220px;
+	background-repeat: no-repeat;
+	animation: crt-roll 7s linear infinite;
+}
+
+html.crt #body-wrapper {
+	text-shadow:
+		0 0 2px rgba(94, 234, 212, 0.35),
+		1px 0 0 rgba(255, 0, 0, 0.12),
+		-1px 0 0 rgba(0, 200, 255, 0.12);
+}
+
+html.crt-power #body-wrapper {
+	transform-origin: center;
+	animation: crt-power-on 0.5s ease-out both;
+}
+
+@keyframes crt-flicker {
+	0%, 100% { opacity: 1; }
+	50%      { opacity: 0.94; }
+}
+
+@keyframes crt-roll {
+	from { background-position: 0 -220px; }
+	to   { background-position: 0 calc(100% + 220px); }
+}
+
+@keyframes crt-power-on {
+	0%   { transform: scale(1, 0.004); filter: brightness(8); }
+	35%  { transform: scale(1, 0.004); filter: brightness(8); }
+	60%  { transform: scale(1.02, 1);  filter: brightness(2.2); }
+	100% { transform: none; filter: none; }
 }
 
 /* ==========================================================================
@@ -999,7 +1132,7 @@ footer#contentinfo {
 	font-size: 12px;
 	text-align: center;
 	border-top: 1px solid var(--color-border);
-	padding: 22px 0;
+	padding: 22px 0 72px; /* bottom clearance for the fixed control panel */
 	color: var(--color-faint);
 	margin-top: auto;
 }
