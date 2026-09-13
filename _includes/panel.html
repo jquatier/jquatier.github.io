@@ -1,18 +1,25 @@
 <div class="crt-overlay" aria-hidden="true"></div>
+<div class="bp-layer" aria-hidden="true"></div>
 <div class="panel" role="toolbar" aria-label="Site controls">
-  <button class="panel-btn" type="button" data-action="crt" data-tip="crt: off" aria-pressed="false" aria-label="Toggle CRT mode">&#9636;</button>
+  <button class="panel-btn" type="button" data-action="crt" data-tip="crt: off" aria-pressed="false" aria-label="Toggle CRT mode">&#8803;</button>
+  <button class="panel-btn" type="button" data-action="grid" data-tip="grid: off" aria-pressed="false" aria-label="Toggle blueprint grid">&#8983;</button>
   <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence">&#8635;</button>
 </div>
 <script>
   (function () {
     var root = document.documentElement;
     var crt = document.querySelector('[data-action="crt"]');
+    var grid = document.querySelector('[data-action="grid"]');
     var reboot = document.querySelector('[data-action="reboot"]');
+    var layer = document.querySelector('.bp-layer');
 
     function render() {
-      var on = root.classList.contains('crt');
-      crt.setAttribute('data-tip', 'crt: ' + (on ? 'on' : 'off'));
-      crt.setAttribute('aria-pressed', String(on));
+      var c = root.classList.contains('crt');
+      crt.setAttribute('data-tip', 'crt: ' + (c ? 'on' : 'off'));
+      crt.setAttribute('aria-pressed', String(c));
+      var g = root.classList.contains('blueprint');
+      grid.setAttribute('data-tip', 'grid: ' + (g ? 'on' : 'off'));
+      grid.setAttribute('aria-pressed', String(g));
     }
 
     crt.addEventListener('click', function () {
@@ -29,6 +36,60 @@
       try { sessionStorage.removeItem('booted'); } catch (e) {}
       location.href = '{{ site.baseurl }}/';
     });
+
+    /* blueprint: dashed boxes + dimension labels over the real layout */
+    var targets = '.hero-name, .hero-rule, .hero-tagline, .link-grid, .link-card, ' +
+      'header.site-header, .projects-intro, .project-grid, .project-card, .status-banner, .status-list, .post-list, .post-card';
+
+    function name(el) {
+      return el.classList.length ? el.classList[0] : el.tagName.toLowerCase();
+    }
+
+    function measure() {
+      if (!root.classList.contains('blueprint')) return;
+      var html = '';
+      document.querySelectorAll(targets).forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        var wraps = el.querySelector(targets) ? ' bp-box-outer' : '';
+        html += '<div class="bp-box' + wraps + '" style="left:' + (r.left + scrollX) + 'px;top:' + (r.top + scrollY) +
+          'px;width:' + r.width + 'px;height:' + r.height + 'px">' +
+          '<span class="bp-tag">' + name(el) + ' ' + Math.round(r.width) + '&times;' + Math.round(r.height) + '</span>' +
+          '</div>';
+      });
+      layer.innerHTML = html;
+    }
+
+    grid.addEventListener('click', function () {
+      var on = root.classList.toggle('blueprint');
+      try { localStorage.setItem('blueprint', on ? '1' : '0'); } catch (e) {}
+      if (on) measure(); else layer.innerHTML = '';
+      render();
+    });
+
+    var raf;
+    function remeasure() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    }
+    window.addEventListener('resize', remeasure);
+    document.addEventListener('animationend', remeasure);
+
+    // entrance animations move things for a couple of seconds, so re-measure as they settle
+    function settle() {
+      [0, 400, 1000, 1800, 3200].forEach(function (t) { setTimeout(measure, t); });
+    }
+    if (root.classList.contains('blueprint')) {
+      if (root.classList.contains('booting')) {
+        new MutationObserver(function (_, obs) {
+          if (root.classList.contains('booting')) return;
+          obs.disconnect();
+          settle();
+        }).observe(root, { attributes: true, attributeFilter: ['class'] });
+      } else {
+        settle();
+      }
+    }
 
     render();
   })();

@@ -420,16 +420,16 @@ html.booting body::before {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 32px;
-	height: 28px;
+	width: 36px;
+	height: 32px;
 	padding: 0;
 	border: 0;
 	border-radius: 4px;
 	background: none;
 	font-family: var(--font-mono);
-	font-size: 13px;
+	font-size: 18px;
 	line-height: 1;
-	color: var(--color-faint);
+	color: var(--color-muted);
 	cursor: pointer;
 	transition: color var(--transition), background var(--transition);
 }
@@ -445,8 +445,8 @@ html.booting body::before {
 	color: var(--color-accent);
 }
 
-/* hover label, rendered above the button */
-.panel-btn::after {
+/* hover label, rendered above the control */
+.panel [data-tip]::after {
 	content: '// ' attr(data-tip);
 	position: absolute;
 	left: 50%;
@@ -465,10 +465,89 @@ html.booting body::before {
 	transition: opacity var(--transition), transform var(--transition);
 }
 
-.panel-btn:hover::after,
-.panel-btn:focus-visible::after {
+.panel [data-tip]:hover::after,
+.panel [data-tip]:focus-visible::after {
 	opacity: 1;
 	transform: translate(-50%, 0);
+}
+
+/* blueprint mode: full-strength grid with a fine subgrid, plus dimension callouts */
+html.blueprint body::before {
+	background-image:
+		linear-gradient(rgba(56, 189, 248, 0.16) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(56, 189, 248, 0.16) 1px, transparent 1px),
+		linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
+	background-size: 44px 44px, 44px 44px, 11px 11px, 11px 11px;
+	mask-image: none;
+	-webkit-mask-image: none;
+}
+
+html.blueprint body::after {
+	background:
+		radial-gradient(900px 600px at 50% 40%, rgba(56, 189, 248, 0.07), transparent 70%);
+}
+
+.bp-layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 5;
+	pointer-events: none;
+}
+
+.bp-box {
+	position: absolute;
+	outline: 1px dashed rgba(56, 189, 248, 0.55);
+	outline-offset: 2px;
+}
+
+.bp-box::before,
+.bp-box::after {
+	content: '';
+	position: absolute;
+	background: var(--color-accent-2);
+}
+
+/* dimension ticks: a horizontal line under the box with end caps */
+.bp-box::before {
+	left: 0;
+	right: 0;
+	bottom: -9px;
+	height: 1px;
+	opacity: 0.6;
+}
+
+.bp-box::after {
+	left: -1px;
+	bottom: -12px;
+	width: 1px;
+	height: 7px;
+	box-shadow: calc(100% + 2px) 0 0 var(--color-accent-2);
+	opacity: 0.6;
+}
+
+.bp-tag {
+	position: absolute;
+	top: -18px;
+	left: -1px;
+	padding: 1px 5px;
+	background: var(--color-bg);
+	font-family: var(--font-mono);
+	font-size: 10px;
+	letter-spacing: 0.02em;
+	line-height: 1.4;
+	color: var(--color-accent-2);
+	white-space: nowrap;
+}
+
+/* containers label below-right, under the dimension ticks, so they never collide with a child's label */
+.bp-box-outer .bp-tag {
+	top: auto;
+	bottom: -32px;
+	left: auto;
+	right: -1px;
 }
 
 .crt-overlay {
