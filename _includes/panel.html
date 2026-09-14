@@ -2,13 +2,32 @@
 <div class="bp-layer" aria-hidden="true"></div>
 <div class="panel" role="toolbar" aria-label="Site controls">
   <button class="panel-btn" type="button" data-action="crt" data-tip="crt: off" aria-pressed="false" aria-label="Toggle CRT mode">&#8803;</button>
+  <button class="panel-btn" type="button" data-action="amber" data-tip="amber: off" aria-pressed="false" aria-label="Toggle amber phosphor">&#9680;</button>
   <button class="panel-btn" type="button" data-action="grid" data-tip="grid: off" aria-pressed="false" aria-label="Toggle blueprint grid">&#8983;</button>
   <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence">&#8635;</button>
+  <button class="panel-btn" type="button" data-action="shutdown" data-tip="shutdown" aria-label="Shut down">&#x23FB;</button>
+</div>
+<div class="boot shutdown" aria-hidden="true">
+  <p class="boot-line boot-banner" data-delay="120"><span class="boot-ts"></span> jq-os: received SIGTERM &middot; shutting down</p>
+  <p class="boot-line" data-delay="160"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> stopping caret.service</p>
+  <p class="boot-line" data-delay="50"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> unmounting /projects</p>
+  <p class="boot-line" data-delay="60"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-warn"> WARN </span><span class="boot-tag">]</span> blog.service was not running</p>
+  <p class="boot-line" data-delay="380"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> dropping out of hyperspace</p>
+  <p class="boot-line" data-delay="60"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> lowering shields</p>
+  <p class="boot-line" data-delay="70"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> flux capacitor: 0.00 gigawatts</p>
+  <p class="boot-line" data-delay="70"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> syncing disks</p>
+  <p class="boot-line" data-delay="420"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> reached target poweroff.target</p>
+  <p class="boot-line boot-banner" data-delay="500"><span class="boot-ts"></span> system halted.</p>
+  <div class="boot-halt">
+    <p class="boot-halt-msg">It's now safe to close this tab.</p>
+    <p class="boot-halt-hint">press any key to reboot<span class="boot-cursor"></span></p>
+  </div>
 </div>
 <script>
   (function () {
     var root = document.documentElement;
     var crt = document.querySelector('[data-action="crt"]');
+    var amber = document.querySelector('[data-action="amber"]');
     var grid = document.querySelector('[data-action="grid"]');
     var reboot = document.querySelector('[data-action="reboot"]');
     var layer = document.querySelector('.bp-layer');
@@ -17,10 +36,19 @@
       var c = root.classList.contains('crt');
       crt.setAttribute('data-tip', 'crt: ' + (c ? 'on' : 'off'));
       crt.setAttribute('aria-pressed', String(c));
+      var a = root.classList.contains('amber');
+      amber.setAttribute('data-tip', 'amber: ' + (a ? 'on' : 'off'));
+      amber.setAttribute('aria-pressed', String(a));
       var g = root.classList.contains('blueprint');
       grid.setAttribute('data-tip', 'grid: ' + (g ? 'on' : 'off'));
       grid.setAttribute('aria-pressed', String(g));
     }
+
+    amber.addEventListener('click', function () {
+      var on = root.classList.toggle('amber');
+      try { localStorage.setItem('amber', on ? '1' : '0'); } catch (e) {}
+      render();
+    });
 
     crt.addEventListener('click', function () {
       var on = root.classList.toggle('crt');
@@ -32,9 +60,44 @@
       render();
     });
 
-    reboot.addEventListener('click', function () {
+    function doReboot() {
       try { sessionStorage.removeItem('booted'); } catch (e) {}
       location.href = '{{ site.baseurl }}/';
+    }
+    reboot.addEventListener('click', doReboot);
+
+    /* shutdown: collapse the page like a tube, log the teardown, halt */
+    var shutdown = document.querySelector('[data-action="shutdown"]');
+    var halt = document.querySelector('.boot.shutdown');
+
+    shutdown.addEventListener('click', function () {
+      if (halt.classList.contains('is-open')) return;
+      shutdown.blur();
+      root.classList.add('powering-off');
+
+      setTimeout(function () {
+        halt.classList.add('is-open');
+        var t0 = performance.now();
+        var at = 0;
+        var lines = halt.querySelectorAll('.boot-line');
+
+        lines.forEach(function (line, i) {
+          at += Number(line.getAttribute('data-delay'));
+          setTimeout(function () {
+            var s = ((performance.now() - t0) / 1000 + Math.random() * 0.0009).toFixed(6);
+            line.querySelector('.boot-ts').textContent = '[' + new Array(13 - s.length).join(' ') + s + ']';
+            line.classList.add('is-on');
+            if (i === lines.length - 1) {
+              setTimeout(function () {
+                halt.classList.add('is-halted');
+                window.addEventListener('keydown', doReboot, { once: true });
+                halt.addEventListener('pointerdown', doReboot, { once: true });
+              }, 900);
+              setTimeout(function () { halt.classList.add('is-waiting'); }, 3400);
+            }
+          }, at);
+        });
+      }, 420);
     });
 
     /* blueprint: dashed boxes + dimension labels over the real layout */
