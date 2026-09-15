@@ -24,12 +24,20 @@
 	--transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* amber mode: VT220 phosphor in place of the teal/blue pair */
+/* amber mode: single-phosphor VT220 — every color becomes a tint of amber on warm black */
 html.amber {
-	--color-accent: #FFB000;
-	--color-accent-2: #FF8C1A;
-	--accent-rgb: 255, 176, 0;
-	--accent-2-rgb: 255, 140, 26;
+	--color-bg: #0B0905;
+	--color-surface: #130F07;
+	--color-surface-2: #1A1408;
+	--color-fg: #FFB000;
+	--color-muted: #CF8E08;
+	--color-faint: #8A5F0A;
+	--color-border: rgba(255, 176, 0, 0.14);
+	--color-border-strong: rgba(255, 176, 0, 0.28);
+	--color-accent: #FFD166;
+	--color-accent-2: #FF9A1F;
+	--accent-rgb: 255, 209, 102;
+	--accent-2-rgb: 255, 154, 31;
 }
 
 * {
