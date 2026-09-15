@@ -445,6 +445,23 @@ html.powering-off .panel {
 	color: var(--color-faint);
 }
 
+.boot-logo {
+	margin: 0 0 14px;
+	font-size: 12px;
+	line-height: 1.15;
+	color: var(--color-faint);
+	opacity: 0;
+	transition: opacity 0.5s ease-out;
+}
+
+.boot-logo.is-on {
+	opacity: 1;
+}
+
+.boot-logo .boot-ts {
+	display: none;
+}
+
 .boot-banner {
 	color: var(--color-fg);
 	margin-bottom: 6px;
