@@ -1137,7 +1137,7 @@ a.card-link {
 .project-card-image img {
 	display: block;
 	width: 100%;
-	aspect-ratio: 929 / 460;
+	aspect-ratio: 1159 / 460;
 	object-fit: cover;
 }
 
@@ -1215,7 +1215,7 @@ a.card-link {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	aspect-ratio: 929 / 460;
+	aspect-ratio: 1159 / 460;
 	background:
 		repeating-linear-gradient(
 			-45deg,
