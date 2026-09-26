@@ -688,16 +688,18 @@ html[data-theme="gameboy"] body .hero-tagline .prompt {
 	color: transparent;
 }
 
-/* the cursor glyph comes from a fallback font, so pin it to the text's vertical center */
+/* a drawn triangle, not a glyph: U+25B6 turns into an emoji on iOS */
 html[data-theme="gameboy"] body .hero-tagline .prompt::before {
-	content: '\25B6';
+	content: '';
 	position: absolute;
-	left: 0;
+	left: 0.1em;
 	top: 50%;
+	width: 0;
+	height: 0;
+	border-left: 0.7em solid var(--gb-0);
+	border-top: 0.45em solid transparent;
+	border-bottom: 0.45em solid transparent;
 	transform: translateY(-72%);
-	font-size: 0.85em;
-	line-height: 1;
-	color: var(--gb-0);
 	animation: dos-blink 1s step-end infinite;
 }
 
