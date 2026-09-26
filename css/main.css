@@ -24,36 +24,912 @@
 	--transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* amber mode: single-phosphor VT220 — every color becomes a tint of amber on warm black */
-html.amber {
-	--color-bg: #0B0905;
-	--color-surface: #130F07;
-	--color-surface-2: #1A1408;
-	--color-fg: #FFB000;
-	--color-muted: #CF8E08;
-	--color-faint: #8A5F0A;
-	--color-border: rgba(255, 176, 0, 0.14);
-	--color-border-strong: rgba(255, 176, 0, 0.28);
-	--color-accent: #FFD166;
-	--color-accent-2: #FF9A1F;
-	--accent-rgb: 255, 209, 102;
-	--accent-2-rgb: 255, 154, 31;
-}
+/* ==========================================================================
+   Themes (one at a time, picked from the panel)
+   Component overrides are written as `html[data-theme] body .x` so they outrank
+   the hover/state rules further down the sheet.
+   ========================================================================== */
 
-/* green mode: P1 phosphor, the IBM 5151 look — same single-color treatment as amber */
-html.green {
+/* ---------- apple ][ : 40-column green phosphor, uppercase, inverse-video hover ---------- */
+
+html[data-theme="apple2"] {
 	--color-bg: #040904;
-	--color-surface: #081108;
-	--color-surface-2: #0C170C;
+	--color-surface: #040904;
+	--color-surface-2: #0A150A;
 	--color-fg: #3BF23B;
-	--color-muted: #2DB82D;
+	--color-muted: #33D433;
 	--color-faint: #1E7A1E;
-	--color-border: rgba(59, 242, 59, 0.14);
-	--color-border-strong: rgba(59, 242, 59, 0.28);
+	--color-border: rgba(59, 242, 59, 0.55);
+	--color-border-strong: #3BF23B;
 	--color-accent: #A6FFA6;
 	--color-accent-2: #5CFF5C;
 	--accent-rgb: 166, 255, 166;
 	--accent-2-rgb: 92, 255, 92;
+	--gradient-accent: linear-gradient(#3BF23B, #3BF23B);
+	--font-display: 'VT323', 'JetBrains Mono', monospace;
+	--font-ui: 'VT323', 'JetBrains Mono', monospace;
+	--font-mono: 'VT323', 'JetBrains Mono', monospace;
+	--transition: 0s;
+}
+
+html[data-theme="apple2"] body {
+	font-size: 20px;
+	text-transform: uppercase;
+	-webkit-font-smoothing: none;
+}
+
+html[data-theme="apple2"] body::before,
+html[data-theme="apple2"] body::after {
+	display: none;
+}
+
+html[data-theme="apple2"] body * {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+html[data-theme="apple2"] body .hero-name {
+	font-weight: 400;
+	font-size: clamp(40px, 9vw, 88px);
+	line-height: 1.1;
+	letter-spacing: 0.02em;
+	text-shadow: 0 0 14px rgba(59, 242, 59, 0.55);
+}
+
+html[data-theme="apple2"] body .hero-name::before,
+html[data-theme="apple2"] body .hero-name::after {
+	display: none;
+}
+
+html[data-theme="apple2"] body .hero-rule {
+	height: 3px;
+}
+
+html[data-theme="apple2"] body .hero-tagline {
+	font-size: clamp(18px, 4.2vw, 26px);
+	color: var(--color-fg);
+}
+
+/* the ] prompt and a fat blinking block cursor that never stops */
+html[data-theme="apple2"] body .hero-tagline .prompt {
+	position: relative;
+	color: transparent;
+}
+
+html[data-theme="apple2"] body .hero-tagline .prompt::before {
+	content: ']';
+	position: absolute;
+	left: 0;
+	color: var(--color-fg);
+}
+
+/* longhands, not the shorthand: the shorthand would reset animation-play-state and
+   defeat the boot's pause on hero animations */
+html[data-theme="apple2"] body .hero-tagline .typed {
+	border-right-width: 0.6em;
+	animation-name: typing, caret-blink;
+	animation-duration: 1.6s, 1s;
+	animation-delay: 0.75s, 0.75s;
+	animation-timing-function: steps(34, end), step-end;
+	animation-fill-mode: both, none;
+	animation-iteration-count: 1, infinite;
+}
+
+html[data-theme="apple2"] body .link-card {
+	background: var(--color-bg);
+	border: 2px solid var(--color-fg);
+}
+
+html[data-theme="apple2"] body .link-card::before,
+html[data-theme="apple2"] body .link-card::after {
+	display: none;
+}
+
+html[data-theme="apple2"] body .link-card .label {
+	font-size: 20px;
+	font-weight: 400;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+html[data-theme="apple2"] body .link-card:hover,
+html[data-theme="apple2"] body .link-card:focus-visible {
+	transform: none;
+	background: var(--color-fg);
+	color: #040904;
+}
+
+html[data-theme="apple2"] body .link-card:hover .icon,
+html[data-theme="apple2"] body .link-card:hover .label::before,
+html[data-theme="apple2"] body .link-card:focus-visible .icon,
+html[data-theme="apple2"] body .link-card:focus-visible .label::before {
+	color: #040904;
+	transform: none;
+}
+
+html[data-theme="apple2"] body nav#menu a,
+html[data-theme="apple2"] body .boot,
+html[data-theme="apple2"] body .panel [data-tip]::after {
+	font-size: 18px;
+}
+
+html[data-theme="apple2"] body .boot-logo {
+	font-size: 14px;
+}
+
+html[data-theme="apple2"] body .panel {
+	background: var(--color-bg);
+	border: 2px solid var(--color-fg);
+}
+
+html[data-theme="apple2"] body .panel-btn {
+	font-size: 22px;
+}
+
+html[data-theme="apple2"] body .panel-btn:hover,
+html[data-theme="apple2"] body .panel-btn:focus-visible,
+html[data-theme="apple2"] body .panel-btn[aria-pressed="true"] {
+	background: var(--color-fg);
+	color: #040904;
+}
+
+html[data-theme="apple2"] body .project-card,
+html[data-theme="apple2"] body .status-banner,
+html[data-theme="apple2"] body .status-list {
+	background: var(--color-bg);
+	border: 2px solid var(--color-fg);
+}
+
+/* ---------- dos : the blue TUI. menubar, double-line dialogs with drop shadows, a DIR listing, F-key bar ---------- */
+
+html[data-theme="dos"] {
+	--dos-blue: #0000AA;
+	--dos-cyan: #55FFFF;
+	--dos-teal: #00AAAA;
+	--dos-yellow: #FFFF55;
+	--dos-grey: #AAAAAA;
+	--color-bg: var(--dos-blue);
+	--color-surface: var(--dos-blue);
+	--color-surface-2: var(--dos-blue);
+	--color-fg: #FFFFFF;
+	--color-muted: var(--dos-cyan);
+	--color-faint: var(--dos-grey);
+	--color-border: #FFFFFF;
+	--color-border-strong: #FFFFFF;
+	--color-accent: var(--dos-yellow);
+	--color-accent-2: var(--dos-cyan);
+	--accent-rgb: 255, 255, 85;
+	--accent-2-rgb: 85, 255, 255;
+	--gradient-accent: linear-gradient(#FFFFFF, #FFFFFF);
+	--font-display: 'VT323', 'JetBrains Mono', monospace;
+	--font-ui: 'VT323', 'JetBrains Mono', monospace;
+	--font-mono: 'VT323', 'JetBrains Mono', monospace;
+	--transition: 0s;
+}
+
+html[data-theme="dos"] body {
+	padding: 26px 0 40px;
+	font-size: 20px;
+	-webkit-font-smoothing: none;
+}
+
+html[data-theme="dos"] body * {
+	border-radius: 0 !important;
+	text-shadow: none !important;
+}
+
+/* menubar: light bar across the top, hot letters in red */
+html[data-theme="dos"] body::before {
+	content: 'File   Options   View   Tree   Help';
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: auto;
+	height: 26px;
+	z-index: 25;
+	display: block;
+	padding-left: 16px;
+	background: var(--dos-grey);
+	background-image: none;
+	mask-image: none;
+	-webkit-mask-image: none;
+	animation: none;
+	font: 20px/26px var(--font-mono);
+	word-spacing: 0.1em;
+	color: #000000;
+}
+
+html[data-theme="dos"] body::after {
+	content: 'JQ-OS 2026.09';
+	position: fixed;
+	top: 0;
+	right: 16px;
+	left: auto;
+	bottom: auto;
+	height: 26px;
+	z-index: 26;
+	display: block;
+	background: none;
+	animation: none;
+	font: 20px/26px var(--font-mono);
+	color: #000000;
+}
+
+html[data-theme="dos"] body .hero {
+	padding-top: 40px;
+	padding-bottom: 80px;
+}
+
+/* the name is a dialog: double rule, hard black shadow one cell down and right */
+html[data-theme="dos"] body .hero-name {
+	font-weight: 400;
+	font-size: clamp(30px, 6.5vw, 60px);
+	line-height: 1.1;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--dos-yellow);
+	padding: 12px 34px;
+	border: 3px double #FFFFFF;
+	box-shadow: 10px 10px 0 #000000;
+}
+
+html[data-theme="dos"] body .hero-name::before,
+html[data-theme="dos"] body .hero-name::after {
+	display: none;
+}
+
+html[data-theme="dos"] body .hero-rule {
+	display: none;
+}
+
+html[data-theme="dos"] body .hero-tagline {
+	margin: 34px 0 40px;
+	font-size: clamp(18px, 4.2vw, 24px);
+	color: #FFFFFF;
+}
+
+/* C:\JQ> prompt with a blinking underscore */
+html[data-theme="dos"] body .hero-tagline .prompt {
+	position: relative;
+	display: inline-block;
+	width: 6.4ch;
+	color: transparent;
+}
+
+html[data-theme="dos"] body .hero-tagline .prompt::before {
+	content: 'C:\\JQ>';
+	position: absolute;
+	left: 0;
+	color: #FFFFFF;
+}
+
+html[data-theme="dos"] body .hero-tagline .typed {
+	border-right: 0;
+	padding-right: 0;
+	padding-left: 0;
+	animation-name: typing;
+	animation-duration: 1.6s;
+	animation-delay: 0.75s;
+	animation-timing-function: steps(38, end);
+	animation-fill-mode: both;
+	animation-iteration-count: 1;
+}
+
+html[data-theme="dos"] body .hero-tagline .typed::after {
+	content: '_';
+	color: #FFFFFF;
+	animation: dos-blink 1s step-end infinite;
+}
+
+@keyframes dos-blink {
+	0%, 49%  { opacity: 1; }
+	50%, 100% { opacity: 0; }
+}
+
+/* the link grid becomes a DIR listing inside one dialog */
+html[data-theme="dos"] body .link-grid {
+	display: block;
+	width: min(100%, 520px);
+	padding: 8px 16px 10px;
+	border: 3px double #FFFFFF;
+	box-shadow: 10px 10px 0 #000000;
+	text-align: left;
+}
+
+html[data-theme="dos"] body .link-grid::before {
+	content: ' Volume in drive C is JQ-OS\A Directory of C:\\JQ\A ';
+	display: block;
+	margin-bottom: 4px;
+	white-space: pre;
+	color: var(--dos-grey);
+}
+
+html[data-theme="dos"] body .link-grid::after {
+	content: '\A        6 file(s)        9,001 bytes\A        0 dir(s)   640,000 bytes free';
+	display: block;
+	margin-top: 4px;
+	white-space: pre;
+	color: var(--dos-grey);
+}
+
+html[data-theme="dos"] body .link-card {
+	display: block;
+	padding: 0 6px;
+	background: none;
+	border: 0;
+	box-shadow: none;
+	color: var(--dos-cyan);
+	animation: none;
+	opacity: 1;
+	transform: none;
+}
+
+html[data-theme="dos"] body .link-card::before,
+html[data-theme="dos"] body .link-card::after,
+html[data-theme="dos"] body .link-card .icon {
+	display: none;
+}
+
+html[data-theme="dos"] body .link-card .label {
+	font-size: 20px;
+	font-weight: 400;
+	letter-spacing: 0;
+	text-transform: uppercase;
+	white-space: pre;
+}
+
+html[data-theme="dos"] body .link-card .label::before {
+	content: '';
+}
+
+/* name padded to 8.3, then size and a date, like a real listing */
+html[data-theme="dos"] body .link-card:nth-child(1) .label::after { content: '     EXE      4,096  04-01-13   9:41a'; }
+html[data-theme="dos"] body .link-card:nth-child(2) .label::after { content: '    EXE     65,536  06-27-16   2:14p'; }
+html[data-theme="dos"] body .link-card:nth-child(3) .label::after { content: '  EXE     32,768  11-05-14  10:02a'; }
+html[data-theme="dos"] body .link-card:nth-child(4) .label::after { content: '   EXE        512  08-13-19  11:11p'; }
+html[data-theme="dos"] body .link-card:nth-child(5) .label::after { content: '       XML      1,337  12-01-14   8:00a'; }
+html[data-theme="dos"] body .link-card:nth-child(6) .label::after { content: '  <DIR>            09-25-26   3:33p'; }
+
+html[data-theme="dos"] body .link-card .label::after {
+	color: var(--dos-grey);
+}
+
+/* the cursor bar */
+html[data-theme="dos"] body .link-card:hover,
+html[data-theme="dos"] body .link-card:focus-visible {
+	transform: none;
+	background: var(--dos-teal);
+	color: #000000;
+	box-shadow: none;
+}
+
+html[data-theme="dos"] body .link-card:hover .label::after,
+html[data-theme="dos"] body .link-card:focus-visible .label::after {
+	color: #000000;
+}
+
+/* inner pages: same dialog treatment */
+html[data-theme="dos"] body #page-wrapper {
+	padding-top: 20px;
+}
+
+html[data-theme="dos"] body nav#menu a {
+	font-size: 20px;
+	color: var(--dos-cyan);
+}
+
+html[data-theme="dos"] body header.site-header {
+	border-bottom: 3px double #FFFFFF;
+}
+
+html[data-theme="dos"] body .project-card,
+html[data-theme="dos"] body .status-banner,
+html[data-theme="dos"] body .status-list {
+	background: var(--dos-blue);
+	border: 3px double #FFFFFF;
+	box-shadow: 10px 10px 0 #000000;
+}
+
+html[data-theme="dos"] body .project-card::before,
+html[data-theme="dos"] body .project-card::after,
+html[data-theme="dos"] body .status-banner::before,
+html[data-theme="dos"] body .status-banner::after,
+html[data-theme="dos"] body .status-list::before,
+html[data-theme="dos"] body .status-list::after {
+	display: none;
+}
+
+html[data-theme="dos"] body .status-ok   { color: #55FF55; }
+html[data-theme="dos"] body .status-warn { color: var(--dos-yellow); }
+html[data-theme="dos"] body .status-err  { color: #FF5555; }
+
+/* the panel is the F-key bar along the bottom */
+html[data-theme="dos"] body .panel {
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	gap: 0;
+	padding: 0 8px;
+	transform: none;
+	justify-content: flex-start;
+	background: var(--dos-teal);
+	border: 0;
+	box-shadow: none;
+}
+
+html[data-theme="dos"] body .panel-btn {
+	width: auto;
+	height: 26px;
+	padding: 0 12px 0 4px;
+	font-size: 20px;
+	line-height: 26px;
+	color: #000000;
+}
+
+html[data-theme="dos"] body .panel-btn::before {
+	display: inline-block;
+	margin-right: 6px;
+	padding: 0 3px;
+	background: #000000;
+	color: #FFFFFF;
+	font-size: 20px;
+}
+
+html[data-theme="dos"] body .panel-btn:nth-child(1)::before { content: 'F1'; }
+html[data-theme="dos"] body .panel-btn:nth-child(2)::before { content: 'F2'; }
+html[data-theme="dos"] body .panel-btn:nth-child(3)::before { content: 'F3'; }
+html[data-theme="dos"] body .panel-btn:nth-child(4)::before { content: 'F5'; }
+html[data-theme="dos"] body .panel-btn:nth-child(5)::before { content: 'F10'; }
+
+html[data-theme="dos"] body .panel-btn:hover,
+html[data-theme="dos"] body .panel-btn:focus-visible,
+html[data-theme="dos"] body .panel-btn[aria-pressed="true"] {
+	background: #000000;
+	color: var(--dos-yellow);
+}
+
+html[data-theme="dos"] body .panel [data-tip]::after {
+	bottom: calc(100% + 8px);
+	background: var(--dos-grey);
+	border: 0;
+	color: #000000;
+	box-shadow: 6px 6px 0 #000000;
+}
+
+html[data-theme="dos"] body footer#contentinfo {
+	padding-bottom: 60px;
+}
+
+/* the boot keeps the black screen — that part happened before the TUI loaded */
+html[data-theme="dos"] body .boot,
+html[data-theme="dos"] body .boot .boot-banner {
+	font-size: 18px;
+}
+
+html[data-theme="dos"] body .boot-logo {
+	font-size: 14px;
+}
+
+@media (max-width: 520px) {
+	html[data-theme="dos"] body::before {
+		content: 'File   View   Help';
+	}
+
+	html[data-theme="dos"] body .link-card .label::after {
+		display: none;
+	}
+
+	html[data-theme="dos"] body .link-grid::after {
+		content: '\A        6 file(s)';
+	}
+
+	html[data-theme="dos"] body .panel-btn {
+		padding-right: 6px;
+	}
+}
+
+/* ---------- game boy : DMG-01. four shades of green, a dark bezel, the shell around it ---------- */
+
+html[data-theme="gameboy"] {
+	--gb-0: #0F380F;   /* darkest */
+	--gb-1: #306230;
+	--gb-2: #8BAC0F;
+	--gb-3: #9BBC0F;   /* lightest, the lit LCD */
+	--gb-shell: #C9C6BF;
+	--gb-bezel: #3B3B46;
+	--gb-button: #A9367A;
+	--color-bg: var(--gb-3);
+	--color-surface: var(--gb-3);
+	--color-surface-2: var(--gb-2);
+	--color-fg: var(--gb-0);
+	--color-muted: var(--gb-1);
+	--color-faint: var(--gb-1);
+	--color-border: var(--gb-0);
+	--color-border-strong: var(--gb-0);
+	--color-accent: var(--gb-0);
+	--color-accent-2: var(--gb-1);
+	--accent-rgb: 15, 56, 15;
+	--accent-2-rgb: 48, 98, 48;
+	--gradient-accent: linear-gradient(var(--gb-0), var(--gb-0));
+	--font-display: 'Press Start 2P', 'JetBrains Mono', monospace;
+	--font-ui: 'Press Start 2P', 'JetBrains Mono', monospace;
+	--font-mono: 'Press Start 2P', 'JetBrains Mono', monospace;
+	--transition: 0s;
+}
+
+/* the shell */
+html[data-theme="gameboy"] body {
+	padding: 58px 16px 110px;
+	background: var(--gb-shell);
+	font-size: 10px;
+	line-height: 1.9;
+	text-transform: uppercase;
+	-webkit-font-smoothing: none;
+}
+
+html[data-theme="gameboy"] body::after {
+	display: none;
+}
+
+/* "DOT MATRIX WITH STEREO SOUND", printed on the bezel above the screen */
+html[data-theme="gameboy"] body::before {
+	content: 'DOT MATRIX WITH STEREO SOUND';
+	position: absolute;
+	top: 72px;
+	left: max(60px, calc(50% - 336px));
+	right: auto;
+	bottom: auto;
+	z-index: 2;
+	display: block;
+	background: none;
+	mask-image: none;
+	-webkit-mask-image: none;
+	animation: none;
+	font: 6px/1 'Press Start 2P', monospace;
+	letter-spacing: 0.12em;
+	color: #A9A6A0;
+}
+
+/* the screen: bezel with the angled lower-right corner, LCD inside with a faint pixel grid */
+html[data-theme="gameboy"] body #body-wrapper {
+	position: relative;
+	min-height: 0;
+	max-width: 760px;
+	margin: 0 auto;
+	background:
+		linear-gradient(rgba(15, 56, 15, 0.07) 1px, transparent 1px) 0 0 / 3px 3px,
+		linear-gradient(90deg, rgba(15, 56, 15, 0.07) 1px, transparent 1px) 0 0 / 3px 3px,
+		var(--gb-3);
+	border: 24px solid var(--gb-bezel);
+	border-top-width: 44px;
+	border-bottom-width: 40px;
+	border-radius: 10px 10px 54px 10px;
+	box-shadow:
+		inset 0 0 0 2px #2A2A33,
+		0 1px 0 #ECEAE6,
+		0 -1px 0 #A19E98;
+}
+
+/* battery LED on the left of the bezel */
+html[data-theme="gameboy"] body #body-wrapper::before {
+	content: 'BATTERY';
+	position: absolute;
+	top: 34px;
+	left: -18px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #E5312B;
+	box-shadow: 0 0 6px 1px rgba(229, 49, 43, 0.7);
+	font: 4px/1 'Press Start 2P', monospace;
+	color: transparent;
+	pointer-events: none;
+}
+
+/* the wordmark below the screen, on the shell */
+html[data-theme="gameboy"] body #body-wrapper::after {
+	content: 'JQ BOY';
+	position: absolute;
+	left: 8px;
+	bottom: -82px;
+	font: 13px/1 'Press Start 2P', monospace;
+	letter-spacing: 0.02em;
+	color: #2C2C7A;
+	text-transform: none;
+	pointer-events: none;
+}
+
+html[data-theme="gameboy"] body * {
+	box-shadow: none;
+	text-shadow: none !important;
+}
+
+html[data-theme="gameboy"] body img {
+	image-rendering: pixelated;
+	filter: grayscale(1) sepia(1) hue-rotate(48deg) saturate(3) brightness(0.9) contrast(1.35);
+}
+
+html[data-theme="gameboy"] body .hero {
+	min-height: 0;
+	padding: 46px 18px 34px;
+}
+
+html[data-theme="gameboy"] body .hero-name {
+	font-weight: 400;
+	font-size: clamp(18px, 4.4vw, 30px);
+	line-height: 1.5;
+	letter-spacing: 0;
+}
+
+html[data-theme="gameboy"] body .hero-name::before,
+html[data-theme="gameboy"] body .hero-name::after {
+	display: none;
+}
+
+html[data-theme="gameboy"] body .hero-rule {
+	width: 96px;
+	height: 4px;
+	margin: 18px auto 20px;
+}
+
+html[data-theme="gameboy"] body .hero-tagline {
+	margin-bottom: 40px;
+	font-size: clamp(7px, 2.1vw, 11px);
+	color: var(--gb-0);
+}
+
+/* the ▶ menu cursor, and a solid block caret */
+html[data-theme="gameboy"] body .hero-tagline .prompt {
+	position: relative;
+	display: inline-block;
+	width: 1.6em;
+	color: transparent;
+}
+
+/* the cursor glyph comes from a fallback font, so pin it to the text's vertical center */
+html[data-theme="gameboy"] body .hero-tagline .prompt::before {
+	content: '\25B6';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-72%);
+	font-size: 0.85em;
+	line-height: 1;
+	color: var(--gb-0);
+	animation: dos-blink 1s step-end infinite;
+}
+
+html[data-theme="gameboy"] body .hero-tagline .typed {
+	border-right-width: 0.55em;
+	animation-name: typing, caret-blink;
+	animation-duration: 1.6s, 1s;
+	animation-delay: 0.75s, 0.75s;
+	animation-timing-function: steps(34, end), step-end;
+	animation-fill-mode: both, none;
+	animation-iteration-count: 1, infinite;
+}
+
+html[data-theme="gameboy"] body .link-grid {
+	gap: 10px;
+}
+
+html[data-theme="gameboy"] body .link-card {
+	padding: 18px 12px 14px;
+	background: var(--gb-3);
+	border: 3px solid var(--gb-0);
+	border-radius: 0;
+	color: var(--gb-0);
+}
+
+html[data-theme="gameboy"] body .link-card::before,
+html[data-theme="gameboy"] body .link-card::after {
+	display: none;
+}
+
+html[data-theme="gameboy"] body .link-card .icon {
+	width: 20px;
+	height: 20px;
+}
+
+html[data-theme="gameboy"] body .link-card .label {
+	font-size: 8px;
+	font-weight: 400;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+
+html[data-theme="gameboy"] body .link-card .label::before {
+	content: '';
+}
+
+html[data-theme="gameboy"] body .link-card:hover,
+html[data-theme="gameboy"] body .link-card:focus-visible {
+	transform: none;
+	background: var(--gb-0);
+	color: var(--gb-3);
+}
+
+html[data-theme="gameboy"] body .link-card:hover .icon,
+html[data-theme="gameboy"] body .link-card:focus-visible .icon {
+	color: var(--gb-3);
+	transform: none;
+}
+
+html[data-theme="gameboy"] body nav#menu a,
+html[data-theme="gameboy"] body .panel [data-tip]::after {
+	font-size: 8px;
+}
+
+html[data-theme="gameboy"] body header.site-header .site-home-link {
+	font-size: 11px;
+}
+
+html[data-theme="gameboy"] body h1 {
+	font-size: 16px;
+}
+
+html[data-theme="gameboy"] body h2 {
+	font-size: 11px;
+}
+
+html[data-theme="gameboy"] body .project-card,
+html[data-theme="gameboy"] body .status-banner,
+html[data-theme="gameboy"] body .status-list {
+	background: var(--gb-3);
+	border: 3px solid var(--gb-0);
+	border-radius: 0;
+}
+
+html[data-theme="gameboy"] body .project-card::before,
+html[data-theme="gameboy"] body .project-card::after,
+html[data-theme="gameboy"] body .status-banner::before,
+html[data-theme="gameboy"] body .status-banner::after,
+html[data-theme="gameboy"] body .status-list::before,
+html[data-theme="gameboy"] body .status-list::after {
+	display: none;
+}
+
+html[data-theme="gameboy"] body .project-card-description,
+html[data-theme="gameboy"] body .projects-subtitle,
+html[data-theme="gameboy"] body footer#contentinfo {
+	font-size: 8px;
+	line-height: 2;
+}
+
+html[data-theme="gameboy"] body .status-ok,
+html[data-theme="gameboy"] body .status-warn,
+html[data-theme="gameboy"] body .status-err {
+	color: var(--gb-0);
+}
+
+/* the panel becomes the face buttons: A/B-style rounds for modes, SELECT/START pills for the rest */
+html[data-theme="gameboy"] body .panel {
+	gap: 10px;
+	padding: 0;
+	background: none;
+	border: 0;
+	align-items: center;
+}
+
+html[data-theme="gameboy"] body .panel-btn {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: var(--gb-button);
+	color: #3D1230;
+	font-size: 11px;
+	box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.28), 0 2px 0 #8E8A84;
+}
+
+html[data-theme="gameboy"] body .panel-btn-dpad {
+	font-size: 32px;
+	padding-bottom: 12px;
+}
+
+html[data-theme="gameboy"] body .panel-btn:hover,
+html[data-theme="gameboy"] body .panel-btn:focus-visible {
+	background: #B94489;
+	color: #3D1230;
+}
+
+html[data-theme="gameboy"] body .panel-btn[aria-pressed="true"] {
+	background: #7E2459;
+	color: #F4D6E8;
+	box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="gameboy"] body .panel-btn:not([data-theme]) {
+	width: 44px;
+	height: 15px;
+	margin-left: 6px;
+	border-radius: 8px;
+	background: #7B7776;
+	color: #D8D5D0;
+	font-size: 9px;
+	transform: rotate(-25deg);
+	box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3), 0 1px 0 #8E8A84;
+}
+
+html[data-theme="gameboy"] body .panel-btn:not([data-theme]):hover {
+	background: #8A8685;
+}
+
+html[data-theme="gameboy"] body .panel [data-tip]::after {
+	background: var(--gb-3);
+	border: 2px solid var(--gb-0);
+	color: var(--gb-0);
+	text-transform: uppercase;
+}
+
+/* the boot happens on the LCD, and the logo drops in from the top like the Nintendo® scroll */
+html[data-theme="gameboy"] body .boot:not(.shutdown) {
+	background: var(--gb-3);
+	color: var(--gb-0);
+	font-size: 8px;
+	line-height: 2.1;
+}
+
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ok,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-warn,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-tag,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ts,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-banner,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-bar,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-pct {
+	color: var(--gb-0);
+}
+
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo {
+	margin-bottom: 18px;
+	font-size: 10px;
+	line-height: 1.05;
+	color: var(--gb-0);
+	transition: none;
+}
+
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo.is-on {
+	animation: gb-logo-drop 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@keyframes gb-logo-drop {
+	from { transform: translateY(-140px); opacity: 1; }
+	to   { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 520px) {
+	html[data-theme="gameboy"] body {
+		padding: 44px 8px 100px;
+	}
+
+	html[data-theme="gameboy"] body #body-wrapper {
+		border-width: 30px 12px 28px;
+		border-radius: 8px 8px 36px 8px;
+	}
+
+	html[data-theme="gameboy"] body::before {
+		top: 52px;
+		left: 26px;
+		font-size: 5px;
+	}
+
+	html[data-theme="gameboy"] body #body-wrapper::before {
+		left: -9px;
+		top: 20px;
+		width: 5px;
+		height: 5px;
+	}
+
+	html[data-theme="gameboy"] body #body-wrapper::after {
+		bottom: -64px;
+		font-size: 10px;
+	}
+
+	html[data-theme="gameboy"] body .hero {
+		padding-left: 8px;
+		padding-right: 8px;
+	}
 }
 
 * {
@@ -556,6 +1432,17 @@ html.booting body::before {
 	transition: color var(--transition), background var(--transition);
 }
 
+.panel-btn-text {
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+}
+
+.panel-btn-dpad {
+	font-size: 24px;
+	padding-bottom: 4px; /* the cross glyph's metrics sit low; nudge it to optical center */
+}
+
 .panel-btn:hover,
 .panel-btn:focus-visible {
 	color: var(--color-accent);
@@ -593,96 +1480,6 @@ html.booting body::before {
 	transform: translate(-50%, 0);
 }
 
-/* blueprint mode: a fixed grid layer that fades in over the ambient backdrop, plus dimension callouts */
-.bp-grid {
-	position: fixed;
-	inset: 0;
-	z-index: -1;
-	pointer-events: none;
-	background-image:
-		radial-gradient(900px 600px at 50% 40%, rgba(56, 189, 248, 0.07), transparent 70%),
-		linear-gradient(rgba(56, 189, 248, 0.16) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(56, 189, 248, 0.16) 1px, transparent 1px),
-		linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
-	background-size: auto, 44px 44px, 44px 44px, 11px 11px, 11px 11px;
-	background-position: center top;
-	opacity: 0;
-	transition: opacity 0.6s ease-out;
-}
-
-html.blueprint .bp-grid {
-	opacity: 1;
-}
-
-.bp-layer {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 5;
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.6s ease-out 0.15s;
-}
-
-html.blueprint .bp-layer {
-	opacity: 1;
-}
-
-.bp-box {
-	position: absolute;
-	outline: 1px dashed rgba(56, 189, 248, 0.55);
-	outline-offset: 2px;
-}
-
-.bp-box::before,
-.bp-box::after {
-	content: '';
-	position: absolute;
-	background: var(--color-accent-2);
-}
-
-/* dimension ticks: a horizontal line under the box with end caps */
-.bp-box::before {
-	left: 0;
-	right: 0;
-	bottom: -9px;
-	height: 1px;
-	opacity: 0.6;
-}
-
-.bp-box::after {
-	left: -1px;
-	bottom: -12px;
-	width: 1px;
-	height: 7px;
-	box-shadow: calc(100% + 2px) 0 0 var(--color-accent-2);
-	opacity: 0.6;
-}
-
-.bp-tag {
-	position: absolute;
-	top: -18px;
-	left: -1px;
-	padding: 1px 5px;
-	background: var(--color-bg);
-	font-family: var(--font-mono);
-	font-size: 10px;
-	letter-spacing: 0.02em;
-	line-height: 1.4;
-	color: var(--color-accent-2);
-	white-space: nowrap;
-}
-
-/* containers label below-right, under the dimension ticks, so they never collide with a child's label */
-.bp-box-outer .bp-tag {
-	top: auto;
-	bottom: -32px;
-	left: auto;
-	right: -1px;
-}
-
 .crt-overlay {
 	display: none;
 	position: fixed;
@@ -691,7 +1488,7 @@ html.blueprint .bp-layer {
 	pointer-events: none;
 }
 
-html.crt .crt-overlay {
+html[data-theme="apple2"] .crt-overlay {
 	display: block;
 	background:
 		repeating-linear-gradient(0deg, transparent 0 2px, rgba(0, 0, 0, 0.28) 2px 4px),
@@ -701,7 +1498,7 @@ html.crt .crt-overlay {
 }
 
 /* slow rolling brightness band */
-html.crt .crt-overlay::after {
+html[data-theme="apple2"] .crt-overlay::after {
 	content: '';
 	position: absolute;
 	inset: 0;
@@ -711,7 +1508,7 @@ html.crt .crt-overlay::after {
 	animation: crt-roll 7s linear infinite;
 }
 
-html.crt #body-wrapper {
+html[data-theme="apple2"] #body-wrapper {
 	text-shadow:
 		0 0 2px rgba(var(--accent-rgb), 0.35),
 		1px 0 0 rgba(255, 0, 0, 0.12),

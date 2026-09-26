@@ -26,10 +26,23 @@
   <link rel="apple-touch-icon" href="{{ "/img/apple-touch-icon.png" | prepend: site.baseurl }}">
   <script>
     try {
-      if (localStorage.getItem('crt') === '1') document.documentElement.classList.add('crt');
-      if (localStorage.getItem('blueprint') === '1') document.documentElement.classList.add('blueprint');
-      if (localStorage.getItem('amber') === '1') document.documentElement.classList.add('amber');
-      if (localStorage.getItem('green') === '1') document.documentElement.classList.add('green');
+      // era fonts load only when a theme that needs them is active
+      window.themeFont = function (theme) {
+        var fam = { apple2: 'VT323', dos: 'VT323', gameboy: 'Press+Start+2P' }[theme];
+        if (!fam) return;
+        var id = 'theme-font-' + fam.replace(/\W/g, '');
+        if (document.getElementById(id)) return;
+        var link = document.createElement('link');
+        link.id = id;
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=' + fam + '&display=swap';
+        document.head.appendChild(link);
+      };
+      var theme = localStorage.getItem('theme');
+      if (theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        window.themeFont(theme);
+      }
     } catch (e) {}
     console.log(
       '%c$ whoami%c\njacob quatier · software engineer · portland, or\n\n' +
