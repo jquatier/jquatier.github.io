@@ -4,6 +4,7 @@
 <div class="panel" role="toolbar" aria-label="Site controls">
   <button class="panel-btn" type="button" data-action="crt" data-tip="crt: off" aria-pressed="false" aria-label="Toggle CRT mode">&#8803;</button>
   <button class="panel-btn" type="button" data-action="amber" data-tip="amber: off" aria-pressed="false" aria-label="Toggle amber phosphor">&#9680;</button>
+  <button class="panel-btn" type="button" data-action="green" data-tip="green: off" aria-pressed="false" aria-label="Toggle green phosphor">&#9681;</button>
   <button class="panel-btn" type="button" data-action="grid" data-tip="grid: off" aria-pressed="false" aria-label="Toggle blueprint grid">&#8983;</button>
   <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence">&#8635;</button>
   <button class="panel-btn" type="button" data-action="shutdown" data-tip="shutdown" aria-label="Shut down">&#x23FB;</button>
@@ -29,6 +30,7 @@
     var root = document.documentElement;
     var crt = document.querySelector('[data-action="crt"]');
     var amber = document.querySelector('[data-action="amber"]');
+    var green = document.querySelector('[data-action="green"]');
     var grid = document.querySelector('[data-action="grid"]');
     var reboot = document.querySelector('[data-action="reboot"]');
     var layer = document.querySelector('.bp-layer');
@@ -40,16 +42,28 @@
       var a = root.classList.contains('amber');
       amber.setAttribute('data-tip', 'amber: ' + (a ? 'on' : 'off'));
       amber.setAttribute('aria-pressed', String(a));
+      var gr = root.classList.contains('green');
+      green.setAttribute('data-tip', 'green: ' + (gr ? 'on' : 'off'));
+      green.setAttribute('aria-pressed', String(gr));
       var g = root.classList.contains('blueprint');
       grid.setAttribute('data-tip', 'grid: ' + (g ? 'on' : 'off'));
       grid.setAttribute('aria-pressed', String(g));
     }
 
-    amber.addEventListener('click', function () {
-      var on = root.classList.toggle('amber');
-      try { localStorage.setItem('amber', on ? '1' : '0'); } catch (e) {}
-      render();
-    });
+    /* one phosphor at a time: switching amber or green on turns the other off */
+    function phosphor(btn, name, other) {
+      btn.addEventListener('click', function () {
+        var on = root.classList.toggle(name);
+        if (on) root.classList.remove(other);
+        try {
+          localStorage.setItem(name, on ? '1' : '0');
+          if (on) localStorage.setItem(other, '0');
+        } catch (e) {}
+        render();
+      });
+    }
+    phosphor(amber, 'amber', 'green');
+    phosphor(green, 'green', 'amber');
 
     crt.addEventListener('click', function () {
       var on = root.classList.toggle('crt');

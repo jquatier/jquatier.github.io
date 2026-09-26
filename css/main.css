@@ -40,6 +40,22 @@ html.amber {
 	--accent-2-rgb: 255, 154, 31;
 }
 
+/* green mode: P1 phosphor, the IBM 5151 look — same single-color treatment as amber */
+html.green {
+	--color-bg: #040904;
+	--color-surface: #081108;
+	--color-surface-2: #0C170C;
+	--color-fg: #3BF23B;
+	--color-muted: #2DB82D;
+	--color-faint: #1E7A1E;
+	--color-border: rgba(59, 242, 59, 0.14);
+	--color-border-strong: rgba(59, 242, 59, 0.28);
+	--color-accent: #A6FFA6;
+	--color-accent-2: #5CFF5C;
+	--accent-rgb: 166, 255, 166;
+	--accent-2-rgb: 92, 255, 92;
+}
+
 * {
 	box-sizing: border-box;
 }
