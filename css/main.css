@@ -530,7 +530,8 @@ html[data-theme="dos"] body .boot-logo {
 	}
 }
 
-/* ---------- game boy : DMG-01. four shades of green, a dark bezel, the shell around it ---------- */
+/* ---------- game boy : a DMG-01 at true proportions. body 90×148mm, LCD 47×43mm.
+   everything is positioned in millimetres via --u (1mm in px), so the shell scales as one object ---------- */
 
 html[data-theme="gameboy"] {
 	--gb-0: #0F380F;   /* darkest */
@@ -538,8 +539,10 @@ html[data-theme="gameboy"] {
 	--gb-2: #8BAC0F;
 	--gb-3: #9BBC0F;   /* lightest, the lit LCD */
 	--gb-shell: #C9C6BF;
-	--gb-bezel: #3B3B46;
+	--gb-bezel: #5B586A;
+	--gb-ink: #4A44A6;   /* the blue-violet used for every printed label */
 	--gb-button: #A9367A;
+	--gb-dark: #2A2A2E;
 	--color-bg: var(--gb-3);
 	--color-surface: var(--gb-3);
 	--color-surface-2: var(--gb-2);
@@ -557,88 +560,142 @@ html[data-theme="gameboy"] {
 	--font-ui: 'Press Start 2P', 'JetBrains Mono', monospace;
 	--font-mono: 'Press Start 2P', 'JetBrains Mono', monospace;
 	--transition: 0s;
+	--shell-w: min(92vw, calc((100vh - 32px) * 0.608), 640px);
+	--u: calc(var(--shell-w) / 90);
+	min-height: 100vh;
+	background: #26262B;
 }
 
-/* the shell */
+/* "BATTERY" under the LED. the bezel pseudo already carries one string, so this one hangs off <html>
+   and is placed relative to where the centered shell lands */
+html[data-theme="gameboy"]::before {
+	content: 'BATTERY';
+	position: absolute;
+	top: calc(16px + 34.6 * var(--u));
+	left: calc(50% - var(--shell-w) / 2 + 11.4 * var(--u));
+	transform: translateX(-50%);
+	z-index: 1;
+	font: 600 calc(1.15 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+	letter-spacing: 0.06em;
+	color: #3B3785;
+	pointer-events: none;
+}
+
+/* "PHONES" with the three slashes over the headphone jack, bottom-left of the front face */
+/* the power switch label molded into the top edge; the idle crt-overlay element carries it */
+html[data-theme="gameboy"] .crt-overlay {
+	display: block;
+	position: absolute;
+	inset: auto;
+	top: calc(1.1 * var(--u));
+	left: calc(11 * var(--u));
+	z-index: 1;
+}
+
+html[data-theme="gameboy"] .crt-overlay::before {
+	content: '\25C1 OFF\00B7ON \25B7';
+	font: 700 calc(1.1 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+	letter-spacing: 0.12em;
+	color: #ADA9A6;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* the shell: fit the viewport height, keep the 90:148 ratio */
 html[data-theme="gameboy"] body {
-	padding: 58px 16px 110px;
+	position: relative;
+	width: var(--shell-w);
+	min-height: 0;
+	aspect-ratio: 90 / 148;
+	margin: 16px auto;
+	padding: 0;
 	background: var(--gb-shell);
-	font-size: 10px;
-	line-height: 1.9;
+	border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(20 * var(--u)) calc(3 * var(--u));
+	box-shadow:
+		inset 0 calc(-0.6 * var(--u)) 0 rgba(0, 0, 0, 0.14),
+		inset 0 calc(0.4 * var(--u)) 0 rgba(255, 255, 255, 0.5),
+		0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0, 0, 0, 0.55);
+	font-size: calc(1.6 * var(--u));
+	line-height: 1.8;
 	text-transform: uppercase;
 	-webkit-font-smoothing: none;
+	overflow: visible;
 }
 
-html[data-theme="gameboy"] body::after {
-	display: none;
-}
-
-/* "DOT MATRIX WITH STEREO SOUND", printed on the bezel above the screen */
+/* the bezel: dark panel with the big rounded lower-right corner, the label, and the battery LED */
 html[data-theme="gameboy"] body::before {
 	content: 'DOT MATRIX WITH STEREO SOUND';
 	position: absolute;
-	top: 72px;
-	left: max(60px, calc(50% - 336px));
+	top: calc(8 * var(--u));
+	left: calc(6 * var(--u));
 	right: auto;
 	bottom: auto;
-	z-index: 2;
+	width: calc(78 * var(--u));
+	height: calc(58 * var(--u));
+	z-index: 0;
 	display: block;
-	background: none;
+	padding: calc(2.9 * var(--u)) 0 0 calc(26 * var(--u));
+	background:
+		radial-gradient(circle at calc(5.4 * var(--u)) calc(23.5 * var(--u)), #FF3B4E calc(0.9 * var(--u)), rgba(255, 59, 78, 0.55) calc(1.4 * var(--u)), transparent calc(2.3 * var(--u))),
+		linear-gradient(#A5262E, #A5262E) calc(3 * var(--u)) calc(2.95 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+		linear-gradient(#2F3F9B, #2F3F9B) calc(3 * var(--u)) calc(4.45 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+		linear-gradient(#A5262E, #A5262E) calc(62 * var(--u)) calc(2.95 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+		linear-gradient(#2F3F9B, #2F3F9B) calc(62 * var(--u)) calc(4.45 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+		var(--gb-bezel);
+	border-radius: calc(2 * var(--u)) calc(2 * var(--u)) calc(14 * var(--u)) calc(2 * var(--u));
 	mask-image: none;
 	-webkit-mask-image: none;
 	animation: none;
-	font: 6px/1 'Press Start 2P', monospace;
-	letter-spacing: 0.12em;
-	color: #A9A6A0;
+	font: 500 calc(1.7 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+	letter-spacing: 0.08em;
+	text-transform: none;
+	color: #E9E7F0;
+	box-sizing: border-box;
 }
 
-/* the screen: bezel with the angled lower-right corner, LCD inside with a faint pixel grid */
-html[data-theme="gameboy"] body #body-wrapper {
-	position: relative;
-	min-height: 0;
-	max-width: 760px;
-	margin: 0 auto;
-	background:
-		linear-gradient(rgba(15, 56, 15, 0.07) 1px, transparent 1px) 0 0 / 3px 3px,
-		linear-gradient(90deg, rgba(15, 56, 15, 0.07) 1px, transparent 1px) 0 0 / 3px 3px,
-		var(--gb-3);
-	border: 24px solid var(--gb-bezel);
-	border-top-width: 44px;
-	border-bottom-width: 40px;
-	border-radius: 10px 10px 54px 10px;
-	box-shadow:
-		inset 0 0 0 2px #2A2A33,
-		0 1px 0 #ECEAE6,
-		0 -1px 0 #A19E98;
-}
-
-/* battery LED on the left of the bezel */
-html[data-theme="gameboy"] body #body-wrapper::before {
-	content: 'BATTERY';
-	position: absolute;
-	top: 34px;
-	left: -18px;
-	width: 7px;
-	height: 7px;
-	border-radius: 50%;
-	background: #E5312B;
-	box-shadow: 0 0 6px 1px rgba(229, 49, 43, 0.7);
-	font: 4px/1 'Press Start 2P', monospace;
-	color: transparent;
-	pointer-events: none;
-}
-
-/* the wordmark below the screen, on the shell */
-html[data-theme="gameboy"] body #body-wrapper::after {
+/* the wordmark, printed on the shell under the bezel */
+html[data-theme="gameboy"] body::after {
 	content: 'JQ BOY';
 	position: absolute;
-	left: 8px;
-	bottom: -82px;
-	font: 13px/1 'Press Start 2P', monospace;
+	top: calc(72.5 * var(--u));
+	left: calc(6 * var(--u));
+	right: auto;
+	bottom: auto;
+	z-index: 0;
+	display: block;
+	background: none;
+	animation: none;
+	font: calc(3.4 * var(--u)) / 1 'Press Start 2P', monospace;
 	letter-spacing: 0.02em;
-	color: #2C2C7A;
 	text-transform: none;
-	pointer-events: none;
+	color: var(--gb-ink);
+}
+
+/* the LCD: 47×43mm, the site scrolls inside it */
+html[data-theme="gameboy"] body #body-wrapper {
+	position: absolute;
+	top: calc(15.5 * var(--u));
+	left: calc(21.5 * var(--u));
+	width: calc(47 * var(--u));
+	height: calc(43 * var(--u));
+	z-index: 1;
+	display: block;
+	min-height: 0;
+	overflow: auto;
+	scrollbar-width: none;
+	background:
+		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		var(--gb-3);
+	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
+}
+
+html[data-theme="gameboy"] body #body-wrapper::-webkit-scrollbar {
+	display: none;
+}
+
+html[data-theme="gameboy"] body #body-wrapper::before,
+html[data-theme="gameboy"] body #body-wrapper::after {
+	display: none;
 }
 
 html[data-theme="gameboy"] body * {
@@ -651,16 +708,19 @@ html[data-theme="gameboy"] body img {
 	filter: grayscale(1) sepia(1) hue-rotate(48deg) saturate(3) brightness(0.9) contrast(1.35);
 }
 
+/* ---- what's on the screen ---- */
+
 html[data-theme="gameboy"] body .hero {
 	min-height: 0;
-	padding: 46px 18px 34px;
+	padding: calc(2.6 * var(--u)) calc(2.5 * var(--u)) calc(2 * var(--u));
 }
 
 html[data-theme="gameboy"] body .hero-name {
 	font-weight: 400;
-	font-size: clamp(18px, 4.4vw, 30px);
-	line-height: 1.5;
+	font-size: calc(2.9 * var(--u));
+	line-height: 1.45;
 	letter-spacing: 0;
+	white-space: nowrap;
 }
 
 html[data-theme="gameboy"] body .hero-name::before,
@@ -669,18 +729,17 @@ html[data-theme="gameboy"] body .hero-name::after {
 }
 
 html[data-theme="gameboy"] body .hero-rule {
-	width: 96px;
-	height: 4px;
-	margin: 18px auto 20px;
+	width: calc(12 * var(--u));
+	height: calc(0.6 * var(--u));
+	margin: calc(1.2 * var(--u)) auto calc(1.4 * var(--u));
 }
 
 html[data-theme="gameboy"] body .hero-tagline {
-	margin-bottom: 40px;
-	font-size: clamp(7px, 2.1vw, 11px);
+	margin-bottom: calc(2.2 * var(--u));
+	font-size: calc(1.15 * var(--u));
 	color: var(--gb-0);
 }
 
-/* the ▶ menu cursor, and a solid block caret */
 html[data-theme="gameboy"] body .hero-tagline .prompt {
 	position: relative;
 	display: inline-block;
@@ -703,24 +762,30 @@ html[data-theme="gameboy"] body .hero-tagline .prompt::before {
 	animation: dos-blink 1s step-end infinite;
 }
 
+/* no block caret here: the ▶ is the cursor */
 html[data-theme="gameboy"] body .hero-tagline .typed {
-	border-right-width: 0.55em;
-	animation-name: typing, caret-blink;
-	animation-duration: 1.6s, 1s;
-	animation-delay: 0.75s, 0.75s;
-	animation-timing-function: steps(34, end), step-end;
-	animation-fill-mode: both, none;
-	animation-iteration-count: 1, infinite;
+	border-right: 0;
+	padding-left: 0;
+	padding-right: 0;
+	animation-name: typing;
+	animation-duration: 1.6s;
+	animation-delay: 0.75s;
+	animation-timing-function: steps(34, end);
+	animation-fill-mode: both;
+	animation-iteration-count: 1;
 }
 
 html[data-theme="gameboy"] body .link-grid {
-	gap: 10px;
+	grid-template-columns: repeat(2, 1fr);
+	gap: calc(1 * var(--u));
+	width: 100%;
 }
 
 html[data-theme="gameboy"] body .link-card {
-	padding: 18px 12px 14px;
+	gap: calc(0.6 * var(--u));
+	padding: calc(1.1 * var(--u)) calc(0.8 * var(--u)) calc(0.9 * var(--u));
 	background: var(--gb-3);
-	border: 3px solid var(--gb-0);
+	border: calc(0.45 * var(--u)) solid var(--gb-0);
 	border-radius: 0;
 	color: var(--gb-0);
 }
@@ -731,12 +796,12 @@ html[data-theme="gameboy"] body .link-card::after {
 }
 
 html[data-theme="gameboy"] body .link-card .icon {
-	width: 20px;
-	height: 20px;
+	width: calc(2.6 * var(--u));
+	height: calc(2.6 * var(--u));
 }
 
 html[data-theme="gameboy"] body .link-card .label {
-	font-size: 8px;
+	font-size: calc(1.05 * var(--u));
 	font-weight: 400;
 	letter-spacing: 0;
 	text-transform: uppercase;
@@ -759,28 +824,48 @@ html[data-theme="gameboy"] body .link-card:focus-visible .icon {
 	transform: none;
 }
 
-html[data-theme="gameboy"] body nav#menu a,
-html[data-theme="gameboy"] body .panel [data-tip]::after {
-	font-size: 8px;
+/* inner pages inside the screen */
+html[data-theme="gameboy"] body #page-wrapper {
+	width: 100%;
+	padding: 0 calc(2 * var(--u));
+}
+
+html[data-theme="gameboy"] body header.site-header {
+	padding: calc(2 * var(--u)) 0;
+	gap: calc(1 * var(--u));
 }
 
 html[data-theme="gameboy"] body header.site-header .site-home-link {
-	font-size: 11px;
+	font-size: calc(1.5 * var(--u));
+}
+
+html[data-theme="gameboy"] body nav#menu a {
+	padding: calc(0.5 * var(--u)) calc(1 * var(--u));
+	font-size: calc(1.2 * var(--u));
+}
+
+html[data-theme="gameboy"] body .page-content {
+	padding: calc(1.5 * var(--u)) 0 calc(3 * var(--u));
 }
 
 html[data-theme="gameboy"] body h1 {
-	font-size: 16px;
+	font-size: calc(2.4 * var(--u));
 }
 
 html[data-theme="gameboy"] body h2 {
-	font-size: 11px;
+	font-size: calc(1.5 * var(--u));
+}
+
+html[data-theme="gameboy"] body .project-grid {
+	grid-template-columns: 1fr;
+	gap: calc(2 * var(--u));
 }
 
 html[data-theme="gameboy"] body .project-card,
 html[data-theme="gameboy"] body .status-banner,
 html[data-theme="gameboy"] body .status-list {
 	background: var(--gb-3);
-	border: 3px solid var(--gb-0);
+	border: calc(0.45 * var(--u)) solid var(--gb-0);
 	border-radius: 0;
 }
 
@@ -795,9 +880,14 @@ html[data-theme="gameboy"] body .status-list::after {
 
 html[data-theme="gameboy"] body .project-card-description,
 html[data-theme="gameboy"] body .projects-subtitle,
+html[data-theme="gameboy"] body .status-list li,
 html[data-theme="gameboy"] body footer#contentinfo {
-	font-size: 8px;
-	line-height: 2;
+	font-size: calc(1.15 * var(--u));
+	line-height: 1.9;
+}
+
+html[data-theme="gameboy"] body .status-headline {
+	font-size: calc(1.6 * var(--u));
 }
 
 html[data-theme="gameboy"] body .status-ok,
@@ -806,28 +896,82 @@ html[data-theme="gameboy"] body .status-err {
 	color: var(--gb-0);
 }
 
-/* the panel becomes the face buttons: A/B-style rounds for modes, SELECT/START pills for the rest */
+html[data-theme="gameboy"] body footer#contentinfo {
+	padding: calc(2 * var(--u)) 0;
+}
+
+/* ---- the controls: the panel covers the lower half of the shell and lays the buttons out like the real thing ---- */
+
 html[data-theme="gameboy"] body .panel {
-	gap: 10px;
+	position: absolute;
+	top: calc(78 * var(--u));
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: auto;
+	display: block;
 	padding: 0;
+	transform: none;
 	background: none;
 	border: 0;
-	align-items: center;
+	box-shadow: none;
+	animation: none;
+	z-index: 2;
+}
+
+/* d-pad */
+html[data-theme="gameboy"] body .panel::before {
+	content: '';
+	position: absolute;
+	top: calc(11 * var(--u));
+	left: calc(7 * var(--u));
+	width: calc(22 * var(--u));
+	height: calc(22 * var(--u));
+	background:
+		radial-gradient(circle, #3A3A40 19%, transparent 20%) center / 100% 100% no-repeat,
+		linear-gradient(var(--gb-dark), var(--gb-dark)) center / 34% 100% no-repeat,
+		linear-gradient(var(--gb-dark), var(--gb-dark)) center / 100% 34% no-repeat;
+	filter: drop-shadow(0 calc(0.4 * var(--u)) 0 rgba(0, 0, 0, 0.35));
+}
+
+/* speaker grille: six slanted slots, bottom right */
+html[data-theme="gameboy"] body .panel::after {
+	content: '';
+	position: absolute;
+	right: calc(9 * var(--u));
+	bottom: calc(6 * var(--u));
+	width: calc(21 * var(--u));
+	height: calc(16 * var(--u));
+	background: repeating-linear-gradient(90deg, #8A867F 0 calc(1.6 * var(--u)), transparent calc(1.6 * var(--u)) calc(3.6 * var(--u)));
+	transform: rotate(-28deg);
+	border-radius: calc(1 * var(--u));
 }
 
 html[data-theme="gameboy"] body .panel-btn {
-	width: 40px;
-	height: 40px;
+	position: absolute;
+	width: calc(11 * var(--u));
+	height: calc(11 * var(--u));
 	border-radius: 50%;
 	background: var(--gb-button);
 	color: #3D1230;
-	font-size: 11px;
-	box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.28), 0 2px 0 #8E8A84;
+	font-size: calc(3 * var(--u));
+	box-shadow:
+		inset 0 calc(-0.9 * var(--u)) 0 rgba(0, 0, 0, 0.28),
+		0 calc(0.5 * var(--u)) 0 #8E8A84;
 }
 
+/* the mode buttons take the A/B diagonal (plus one more up the same line) */
+html[data-theme="gameboy"] body .panel-btn[data-theme="apple2"]  { right: calc(8 * var(--u));  top: calc(5 * var(--u)); }
+html[data-theme="gameboy"] body .panel-btn[data-theme="gameboy"] { right: calc(22 * var(--u)); top: calc(11.5 * var(--u)); }
+html[data-theme="gameboy"] body .panel-btn[data-theme="dos"]     { right: calc(36 * var(--u)); top: calc(18 * var(--u)); }
+
 html[data-theme="gameboy"] body .panel-btn-dpad {
-	font-size: 32px;
-	padding-bottom: 12px;
+	font-size: calc(4.2 * var(--u));
+	padding-bottom: calc(1.4 * var(--u));
+}
+
+html[data-theme="gameboy"] body .panel-btn-text {
+	font-size: calc(2.2 * var(--u));
 }
 
 html[data-theme="gameboy"] body .panel-btn:hover,
@@ -839,38 +983,63 @@ html[data-theme="gameboy"] body .panel-btn:focus-visible {
 html[data-theme="gameboy"] body .panel-btn[aria-pressed="true"] {
 	background: #7E2459;
 	color: #F4D6E8;
-	box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+	box-shadow: inset 0 calc(0.8 * var(--u)) 0 rgba(0, 0, 0, 0.3);
 }
 
+/* select / start */
 html[data-theme="gameboy"] body .panel-btn:not([data-theme]) {
-	width: 44px;
-	height: 15px;
-	margin-left: 6px;
-	border-radius: 8px;
+	width: calc(12 * var(--u));
+	height: calc(4.4 * var(--u));
+	border-radius: calc(3 * var(--u));
 	background: #7B7776;
 	color: #D8D5D0;
-	font-size: 9px;
+	font-size: calc(2.2 * var(--u));
 	transform: rotate(-25deg);
-	box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3), 0 1px 0 #8E8A84;
+	box-shadow:
+		inset 0 calc(-0.5 * var(--u)) 0 rgba(0, 0, 0, 0.3),
+		0 calc(0.3 * var(--u)) 0 #8E8A84;
 }
+
+html[data-theme="gameboy"] body .panel-btn[data-action="reboot"]   { left: calc(24.5 * var(--u)); top: calc(44.8 * var(--u)); }
+html[data-theme="gameboy"] body .panel-btn[data-action="shutdown"] { left: calc(40.5 * var(--u)); top: calc(44.8 * var(--u)); }
 
 html[data-theme="gameboy"] body .panel-btn:not([data-theme]):hover {
 	background: #8A8685;
 }
 
-html[data-theme="gameboy"] body .panel [data-tip]::after {
-	background: var(--gb-3);
-	border: 2px solid var(--gb-0);
-	color: var(--gb-0);
-	text-transform: uppercase;
+html[data-theme="gameboy"] body .panel-btn:not([data-theme])::before {
+	position: absolute;
+	top: calc(100% + 0.9 * var(--u));
+	left: 50%;
+	transform: translateX(-50%);
+	font: 700 calc(1.9 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+	letter-spacing: 0.16em;
+	color: #3B3785;
+	pointer-events: none;
 }
 
-/* the boot happens on the LCD, and the logo drops in from the top like the Nintendo® scroll */
+html[data-theme="gameboy"] body .panel-btn[data-action="reboot"]::before   { content: 'SELECT'; }
+html[data-theme="gameboy"] body .panel-btn[data-action="shutdown"]::before { content: 'START'; }
+
+html[data-theme="gameboy"] body .panel [data-tip]::after {
+	bottom: calc(100% + calc(1.5 * var(--u)));
+	padding: calc(0.6 * var(--u)) calc(1 * var(--u));
+	background: var(--gb-3);
+	border: calc(0.35 * var(--u)) solid var(--gb-0);
+	color: var(--gb-0);
+	font-size: calc(1.3 * var(--u));
+	text-transform: uppercase;
+	transform: translate(-50%, 0) rotate(0);
+}
+
+/* the boot plays inside the LCD; the logo drops in like the Nintendo® scroll */
 html[data-theme="gameboy"] body .boot:not(.shutdown) {
+	position: absolute;
+	padding: calc(2 * var(--u));
 	background: var(--gb-3);
 	color: var(--gb-0);
-	font-size: 8px;
-	line-height: 2.1;
+	font-size: calc(1.1 * var(--u));
+	line-height: 2;
 }
 
 html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ok,
@@ -883,9 +1052,19 @@ html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-pct {
 	color: var(--gb-0);
 }
 
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ts,
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-arch {
+	display: none;
+}
+
+html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-line {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
 html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo {
-	margin-bottom: 18px;
-	font-size: 10px;
+	margin-bottom: calc(1.5 * var(--u));
+	font-size: calc(1.3 * var(--u));
 	line-height: 1.05;
 	color: var(--gb-0);
 	transition: none;
@@ -896,42 +1075,8 @@ html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo.is-on {
 }
 
 @keyframes gb-logo-drop {
-	from { transform: translateY(-140px); opacity: 1; }
+	from { transform: translateY(calc(-12 * var(--u))); opacity: 1; }
 	to   { transform: translateY(0); opacity: 1; }
-}
-
-@media (max-width: 520px) {
-	html[data-theme="gameboy"] body {
-		padding: 44px 8px 100px;
-	}
-
-	html[data-theme="gameboy"] body #body-wrapper {
-		border-width: 30px 12px 28px;
-		border-radius: 8px 8px 36px 8px;
-	}
-
-	html[data-theme="gameboy"] body::before {
-		top: 52px;
-		left: 26px;
-		font-size: 5px;
-	}
-
-	html[data-theme="gameboy"] body #body-wrapper::before {
-		left: -9px;
-		top: 20px;
-		width: 5px;
-		height: 5px;
-	}
-
-	html[data-theme="gameboy"] body #body-wrapper::after {
-		bottom: -64px;
-		font-size: 10px;
-	}
-
-	html[data-theme="gameboy"] body .hero {
-		padding-left: 8px;
-		padding-right: 8px;
-	}
 }
 
 * {
