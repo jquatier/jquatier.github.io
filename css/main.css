@@ -166,6 +166,11 @@ html[data-theme="apple2"] body .panel-btn {
 	font-size: 22px;
 }
 
+html[data-theme="apple2"] body .panel-btn .icon {
+	width: 20px;
+	height: 20px;
+}
+
 html[data-theme="apple2"] body .panel-btn:hover,
 html[data-theme="apple2"] body .panel-btn:focus-visible,
 html[data-theme="apple2"] body .panel-btn[aria-pressed="true"] {
@@ -330,7 +335,9 @@ html[data-theme="dos"] body .hero-tagline .typed::after {
 /* the link grid becomes a DIR listing inside one dialog */
 html[data-theme="dos"] body .link-grid {
 	display: block;
-	width: min(100%, 520px);
+	width: max-content;
+	max-width: 100%;
+	overflow: hidden;
 	padding: 8px 16px 10px;
 	border: 3px double #FFFFFF;
 	box-shadow: 10px 10px 0 #000000;
@@ -965,13 +972,9 @@ html[data-theme="gameboy"] body .panel-btn[data-theme="apple2"]  { right: calc(8
 html[data-theme="gameboy"] body .panel-btn[data-theme="gameboy"] { right: calc(22 * var(--u)); top: calc(11.5 * var(--u)); }
 html[data-theme="gameboy"] body .panel-btn[data-theme="dos"]     { right: calc(36 * var(--u)); top: calc(18 * var(--u)); }
 
-html[data-theme="gameboy"] body .panel-btn-dpad {
-	font-size: calc(4.2 * var(--u));
-	padding-bottom: calc(1.4 * var(--u));
-}
-
-html[data-theme="gameboy"] body .panel-btn-text {
-	font-size: calc(2.2 * var(--u));
+html[data-theme="gameboy"] body .panel-btn .icon {
+	width: calc(5.8 * var(--u));
+	height: calc(5.8 * var(--u));
 }
 
 html[data-theme="gameboy"] body .panel-btn:hover,
@@ -1579,15 +1582,9 @@ html.booting body::before {
 	transition: color var(--transition), background var(--transition);
 }
 
-.panel-btn-text {
-	font-size: 13px;
-	font-weight: 700;
-	letter-spacing: -0.02em;
-}
-
-.panel-btn-dpad {
-	font-size: 24px;
-	padding-bottom: 4px; /* the cross glyph's metrics sit low; nudge it to optical center */
+.panel-btn .icon {
+	width: 18px;
+	height: 18px;
 }
 
 .panel-btn:hover,
