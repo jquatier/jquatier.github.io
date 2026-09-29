@@ -1082,6 +1082,91 @@ html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo.is-on {
 	to   { transform: translateY(0); opacity: 1; }
 }
 
+/* ---- shutdown stays on the LCD: no tube collapse, no full-screen takeover ---- */
+
+/* the shell and its buttons don't move; only what's on the screen fades, like the contrast dropping */
+html[data-theme="gameboy"].powering-off body #body-wrapper,
+html[data-theme="gameboy"].powering-off body .panel {
+	animation: none;
+}
+
+html[data-theme="gameboy"].powering-off body #body-wrapper > * {
+	animation: gb-lcd-fade 0.4s ease-in both;
+}
+
+@keyframes gb-lcd-fade {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+/* the teardown log and the halt screen occupy the LCD's exact 47×43mm box */
+html[data-theme="gameboy"] body .boot.shutdown {
+	position: absolute;
+	inset: auto;
+	top: calc(15.5 * var(--u));
+	left: calc(21.5 * var(--u));
+	width: calc(47 * var(--u));
+	height: calc(43 * var(--u));
+	z-index: 3;
+	padding: calc(2 * var(--u));
+	overflow: hidden;
+	background:
+		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		var(--gb-3);
+	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
+	color: var(--gb-0);
+	font-size: calc(1.1 * var(--u));
+	line-height: 2;
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-ok,
+html[data-theme="gameboy"] body .boot.shutdown .boot-warn,
+html[data-theme="gameboy"] body .boot.shutdown .boot-tag,
+html[data-theme="gameboy"] body .boot.shutdown .boot-banner {
+	color: var(--gb-0);
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-ts {
+	display: none;
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-line {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-halt {
+	gap: calc(2.4 * var(--u));
+	padding: 0 calc(3 * var(--u));
+	background:
+		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		var(--gb-3);
+	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-halt-msg {
+	padding: 0;
+	font-size: calc(1.5 * var(--u));
+	font-weight: 400;
+	line-height: 1.9;
+	letter-spacing: 0;
+	color: var(--gb-0);
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-halt-hint {
+	font-size: calc(1.05 * var(--u));
+	line-height: 1.6;
+	color: var(--gb-1);
+}
+
+html[data-theme="gameboy"] body .boot.shutdown .boot-cursor {
+	width: calc(0.9 * var(--u));
+	margin-left: calc(0.6 * var(--u));
+	background: var(--gb-1);
+}
+
 * {
 	box-sizing: border-box;
 }
