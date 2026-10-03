@@ -5,6 +5,12 @@
   <button class="panel-btn" type="button" data-theme="dos" data-tip="mode: dos" aria-pressed="false" aria-label="DOS theme">{% include icons/computer.svg %}</button>
   <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence">&#8635;</button>
   <button class="panel-btn" type="button" data-action="shutdown" data-tip="shutdown" aria-label="Shut down">&#x23FB;</button>
+  <div class="dpad" role="group" aria-label="Move between cards">
+    <button class="dpad-btn" type="button" data-dir="up" aria-label="Card above"></button>
+    <button class="dpad-btn" type="button" data-dir="left" aria-label="Previous card"></button>
+    <button class="dpad-btn" type="button" data-dir="right" aria-label="Next card"></button>
+    <button class="dpad-btn" type="button" data-dir="down" aria-label="Card below"></button>
+  </div>
 </div>
 <div class="boot shutdown" aria-hidden="true">
   <p class="boot-line boot-banner" data-delay="120"><span class="boot-ts"></span> jq-os: received SIGTERM &middot; shutting down</p>
@@ -94,5 +100,105 @@
     });
 
     render();
+  })();
+</script>
+<script>
+  /* card navigation: arrow keys on every theme, plus the d-pad in game boy mode.
+     the selection is the focused card; .is-selected mirrors :focus-visible so a d-pad tap (which
+     browsers don't count as keyboard focus) still draws the highlight */
+  (function () {
+    var root = document.documentElement;
+    var SELECTOR = '.link-card, a.project-card, a.card-link';
+    var DIRS = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+    var last = null;
+
+    function cards() {
+      return Array.prototype.filter.call(document.querySelectorAll(SELECTOR), function (el) {
+        return el.getClientRects().length > 0;
+      });
+    }
+
+    function center(r) { return r.left + r.width / 2; }
+
+    function select(el) {
+      Array.prototype.forEach.call(document.querySelectorAll('.is-selected'), function (n) {
+        if (n !== el) n.classList.remove('is-selected');
+      });
+      el.classList.add('is-selected');
+      last = el;
+      el.focus({ preventScroll: true });
+      el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+
+    /* up/down pick the card in the neighbouring row whose centre is closest; left/right walk reading
+       order. both wrap, like a menu */
+    function move(dir) {
+      var list = cards();
+      if (!list.length) return false;
+
+      var cur = list.indexOf(document.activeElement);
+      if (cur < 0) cur = list.indexOf(last);
+      if (cur < 0) {
+        select(list[dir === 'up' || dir === 'left' ? list.length - 1 : 0]);
+        return true;
+      }
+      if (dir === 'left' || dir === 'right') {
+        select(list[(cur + (dir === 'right' ? 1 : -1) + list.length) % list.length]);
+        return true;
+      }
+
+      var rects = list.map(function (el) { return el.getBoundingClientRect(); });
+      var rows = [];
+      rects.forEach(function (r, i) {
+        for (var k = 0; k < rows.length; k++) {
+          if (Math.abs(rects[rows[k][0]].top - r.top) < 4) { rows[k].push(i); return; }
+        }
+        rows.push([i]);
+      });
+      rows.sort(function (a, b) { return rects[a[0]].top - rects[b[0]].top; });
+
+      var ri = -1;
+      rows.forEach(function (row, k) { if (row.indexOf(cur) >= 0) ri = k; });
+      var target = rows[(ri + (dir === 'down' ? 1 : -1) + rows.length) % rows.length];
+      var cx = center(rects[cur]);
+      var best = target[0];
+      target.forEach(function (i) {
+        if (Math.abs(center(rects[i]) - cx) < Math.abs(center(rects[best]) - cx)) best = i;
+      });
+      select(list[best]);
+      return true;
+    }
+
+    /* the highlight follows focus: once focus leaves a card, drop it */
+    document.addEventListener('focusout', function (e) {
+      if (e.target && e.target.classList && e.target.classList.contains('is-selected')) {
+        e.target.classList.remove('is-selected');
+      }
+    });
+
+    function pad(dir) { return document.querySelector('.dpad-btn[data-dir="' + dir + '"]'); }
+
+    document.addEventListener('keydown', function (e) {
+      var dir = DIRS[e.key];
+      if (!dir || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.defaultPrevented) return;
+      if (root.classList.contains('powering-off')) return;
+      var t = e.target;
+      if (t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName))) return;
+      if (move(dir)) {
+        e.preventDefault();
+        var btn = pad(dir);
+        if (btn) btn.classList.add('is-pressed');
+      }
+    });
+
+    document.addEventListener('keyup', function (e) {
+      var dir = DIRS[e.key];
+      var btn = dir && pad(dir);
+      if (btn) btn.classList.remove('is-pressed');
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.dpad-btn'), function (btn) {
+      btn.addEventListener('click', function () { move(btn.getAttribute('data-dir')); });
+    });
   })();
 </script>

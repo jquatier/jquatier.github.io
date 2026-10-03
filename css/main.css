@@ -133,7 +133,7 @@ html[data-theme="apple2"] body .link-card .label {
 }
 
 html[data-theme="apple2"] body .link-card:hover,
-html[data-theme="apple2"] body .link-card:focus-visible {
+html[data-theme="apple2"] body .link-card:is(:focus-visible, .is-selected) {
 	transform: none;
 	background: var(--color-fg);
 	color: #040904;
@@ -141,8 +141,8 @@ html[data-theme="apple2"] body .link-card:focus-visible {
 
 html[data-theme="apple2"] body .link-card:hover .icon,
 html[data-theme="apple2"] body .link-card:hover .label::before,
-html[data-theme="apple2"] body .link-card:focus-visible .icon,
-html[data-theme="apple2"] body .link-card:focus-visible .label::before {
+html[data-theme="apple2"] body .link-card:is(:focus-visible, .is-selected) .icon,
+html[data-theme="apple2"] body .link-card:is(:focus-visible, .is-selected) .label::before {
 	color: #040904;
 	transform: none;
 }
@@ -404,7 +404,7 @@ html[data-theme="dos"] body .link-card .label::after {
 
 /* the cursor bar */
 html[data-theme="dos"] body .link-card:hover,
-html[data-theme="dos"] body .link-card:focus-visible {
+html[data-theme="dos"] body .link-card:is(:focus-visible, .is-selected) {
 	transform: none;
 	background: var(--dos-teal);
 	color: #000000;
@@ -412,7 +412,7 @@ html[data-theme="dos"] body .link-card:focus-visible {
 }
 
 html[data-theme="dos"] body .link-card:hover .label::after,
-html[data-theme="dos"] body .link-card:focus-visible .label::after {
+html[data-theme="dos"] body .link-card:is(:focus-visible, .is-selected) .label::after {
 	color: #000000;
 }
 
@@ -819,14 +819,14 @@ html[data-theme="gameboy"] body .link-card .label::before {
 }
 
 html[data-theme="gameboy"] body .link-card:hover,
-html[data-theme="gameboy"] body .link-card:focus-visible {
+html[data-theme="gameboy"] body .link-card:is(:focus-visible, .is-selected) {
 	transform: none;
 	background: var(--gb-0);
 	color: var(--gb-3);
 }
 
 html[data-theme="gameboy"] body .link-card:hover .icon,
-html[data-theme="gameboy"] body .link-card:focus-visible .icon {
+html[data-theme="gameboy"] body .link-card:is(:focus-visible, .is-selected) .icon {
 	color: var(--gb-3);
 	transform: none;
 }
@@ -926,9 +926,9 @@ html[data-theme="gameboy"] body .panel {
 	z-index: 2;
 }
 
-/* d-pad */
-html[data-theme="gameboy"] body .panel::before {
-	content: '';
+/* d-pad: the cross is one element, each arm is a button that moves the selection on the LCD */
+html[data-theme="gameboy"] body .dpad {
+	display: block;
 	position: absolute;
 	top: calc(11 * var(--u));
 	left: calc(7 * var(--u));
@@ -939,6 +939,76 @@ html[data-theme="gameboy"] body .panel::before {
 		linear-gradient(var(--gb-dark), var(--gb-dark)) center / 34% 100% no-repeat,
 		linear-gradient(var(--gb-dark), var(--gb-dark)) center / 100% 34% no-repeat;
 	filter: drop-shadow(0 calc(0.4 * var(--u)) 0 rgba(0, 0, 0, 0.35));
+	transition: transform 0.08s ease-out;
+}
+
+/* the whole pad rocks toward the arm being pressed */
+html[data-theme="gameboy"] body .dpad:has([data-dir="up"]:is(:active, .is-pressed))    { transform: perspective(calc(40 * var(--u))) rotateX(10deg); }
+html[data-theme="gameboy"] body .dpad:has([data-dir="down"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateX(-10deg); }
+html[data-theme="gameboy"] body .dpad:has([data-dir="left"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateY(-10deg); }
+html[data-theme="gameboy"] body .dpad:has([data-dir="right"]:is(:active, .is-pressed)) { transform: perspective(calc(40 * var(--u))) rotateY(10deg); }
+
+html[data-theme="gameboy"] body .dpad-btn {
+	position: absolute;
+	display: block;
+	width: 34%;
+	height: 33%;
+	padding: 0;
+	border: 0;
+	border-radius: calc(0.6 * var(--u));
+	background: none;
+	color: transparent;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+}
+
+html[data-theme="gameboy"] body .dpad-btn[data-dir="up"]    { top: 0;    left: 33%; }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="down"]  { bottom: 0; left: 33%; }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="left"]  { top: 33%;  left: 0;  width: 33%; height: 34%; }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="right"] { top: 33%;  right: 0; width: 33%; height: 34%; }
+
+/* a faint arrow on each arm so the pad reads as a control */
+html[data-theme="gameboy"] body .dpad-btn::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: calc(1.1 * var(--u)) solid transparent;
+	transform: translate(-50%, -50%);
+}
+
+html[data-theme="gameboy"] body .dpad-btn[data-dir="up"]::before    { border-bottom-color: rgba(255, 255, 255, 0.14); margin-top: calc(-0.55 * var(--u)); }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="down"]::before  { border-top-color: rgba(255, 255, 255, 0.14);    margin-top: calc(0.55 * var(--u)); }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="left"]::before  { border-right-color: rgba(255, 255, 255, 0.14);  margin-left: calc(-0.55 * var(--u)); }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="right"]::before { border-left-color: rgba(255, 255, 255, 0.14);   margin-left: calc(0.55 * var(--u)); }
+
+html[data-theme="gameboy"] body .dpad-btn:hover::before {
+	border-color: transparent;
+}
+
+html[data-theme="gameboy"] body .dpad-btn[data-dir="up"]:hover::before    { border-bottom-color: rgba(255, 255, 255, 0.32); }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="down"]:hover::before  { border-top-color: rgba(255, 255, 255, 0.32); }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="left"]:hover::before  { border-right-color: rgba(255, 255, 255, 0.32); }
+html[data-theme="gameboy"] body .dpad-btn[data-dir="right"]:hover::before { border-left-color: rgba(255, 255, 255, 0.32); }
+
+html[data-theme="gameboy"] body .dpad-btn:active,
+html[data-theme="gameboy"] body .dpad-btn.is-pressed {
+	background: rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="gameboy"] body .dpad-btn:focus-visible {
+	outline: calc(0.35 * var(--u)) solid #F4D6E8;
+	outline-offset: calc(-0.35 * var(--u));
+}
+
+/* inside the LCD the margins are tight */
+html[data-theme="gameboy"] body .link-card,
+html[data-theme="gameboy"] body .project-card,
+html[data-theme="gameboy"] body a.card-link {
+	scroll-margin: calc(1.5 * var(--u)) 0;
 }
 
 /* speaker grille: six slanted slots, bottom right */
@@ -1709,6 +1779,11 @@ html.booting body::before {
 	transform: translate(-50%, 0);
 }
 
+/* the d-pad is drawn by the game boy theme; everywhere else the arrow keys do the job */
+.dpad {
+	display: none;
+}
+
 .crt-overlay {
 	display: none;
 	position: fixed;
@@ -1913,7 +1988,7 @@ html.crt-power #body-wrapper {
 }
 
 .link-card:hover,
-.link-card:focus-visible {
+.link-card:is(:focus-visible, .is-selected) {
 	transform: translateY(-3px);
 	border-color: rgba(var(--accent-rgb), 0.5);
 	box-shadow:
@@ -1925,21 +2000,21 @@ html.crt-power #body-wrapper {
 
 .link-card:hover::before,
 .link-card:hover::after,
-.link-card:focus-visible::before,
-.link-card:focus-visible::after {
+.link-card:is(:focus-visible, .is-selected)::before,
+.link-card:is(:focus-visible, .is-selected)::after {
 	border-color: var(--color-accent);
 	width: 13px;
 	height: 13px;
 }
 
 .link-card:hover .icon,
-.link-card:focus-visible .icon {
+.link-card:is(:focus-visible, .is-selected) .icon {
 	color: var(--color-accent);
 	transform: scale(1.1);
 }
 
 .link-card:hover .label::before,
-.link-card:focus-visible .label::before {
+.link-card:is(:focus-visible, .is-selected) .label::before {
 	color: var(--color-accent);
 }
 
@@ -1947,7 +2022,7 @@ html.crt-power #body-wrapper {
 	transform: translateY(-1px);
 }
 
-.link-card:focus-visible {
+.link-card:is(:focus-visible, .is-selected) {
 	outline: 2px solid var(--color-accent);
 	outline-offset: 2px;
 }
@@ -2013,6 +2088,35 @@ a.card-link {
 	border-color: var(--color-accent);
 	width: 13px;
 	height: 13px;
+}
+
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) {
+	outline: none;
+}
+
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) .card {
+	transform: translateY(-3px);
+	border-color: rgba(var(--accent-rgb), 0.5);
+	box-shadow:
+		0 12px 32px -14px rgba(0, 0, 0, 0.6),
+		0 0 28px -6px rgba(var(--accent-rgb), 0.22),
+		inset 0 0 22px -14px rgba(var(--accent-rgb), 0.4);
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) .card::before,
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) .card::after {
+	border-color: var(--color-accent);
+	width: 13px;
+	height: 13px;
+}
+
+/* keep a selected card clear of the viewport edge (and the fixed panel) when it scrolls into view */
+.link-card,
+.project-card,
+a.card-link {
+	scroll-margin: 24px 0 72px;
 }
 
 #post-list {
@@ -2206,7 +2310,7 @@ a.card-link {
 }
 
 .project-card:hover,
-.project-card:focus-visible {
+.project-card:is(:focus-visible, .is-selected) {
 	transform: translateY(-3px);
 	border-color: rgba(var(--accent-rgb), 0.5);
 	box-shadow:
@@ -2218,19 +2322,19 @@ a.card-link {
 
 .project-card:hover::before,
 .project-card:hover::after,
-.project-card:focus-visible::before,
-.project-card:focus-visible::after {
+.project-card:is(:focus-visible, .is-selected)::before,
+.project-card:is(:focus-visible, .is-selected)::after {
 	border-color: var(--color-accent);
 	width: 13px;
 	height: 13px;
 }
 
 .project-card:hover .project-card-title::before,
-.project-card:focus-visible .project-card-title::before {
+.project-card:is(:focus-visible, .is-selected) .project-card-title::before {
 	color: var(--color-accent);
 }
 
-.project-card:focus-visible {
+.project-card:is(:focus-visible, .is-selected) {
 	outline: 2px solid var(--color-accent);
 	outline-offset: 2px;
 }
