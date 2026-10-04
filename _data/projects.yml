@@ -1,0 +1,17 @@
+# Featured project cards on /projects/, in display order.
+#   title        card heading
+#   description  card text (HTML allowed)
+#   url          where the card links
+#   image        site path of the card image
+#   image_alt    alt text for the image
+#   secret       true for the unlinked "top secret" placeholder (no url or image)
+
+- title: squinch.cc
+  url: https://squinch.cc
+  image: /img/projects/squinch-og.png
+  image_alt: "The Squinch mark — an S standing on three stacked isometric planes — beside the wordmark"
+  description: "A skill for coding agents that draws clean architecture diagrams as code — real cloud icons, zoomable from the landscape down to one service, exported as SVG, PNG or interactive HTML."
+
+- title: "████████.██"
+  secret: true
+  description: "[redacted] &mdash; declassification pending. check back soon."

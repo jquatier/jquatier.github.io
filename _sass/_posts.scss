@@ -1,0 +1,100 @@
+/* ==========================================================================
+   Posts: the post list and article content
+   ========================================================================== */
+
+#post-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.entry-title {
+	margin: 0 0 6px 0;
+	font-size: 19px;
+}
+
+h1.entry-title,
+.post .entry-title {
+	font-size: 23px;
+}
+
+.entry-title a {
+	background-image: var(--gradient-accent);
+	background-size: 0% 2px;
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size var(--transition), color var(--transition);
+	padding-bottom: 2px;
+}
+
+.entry-title a:hover {
+	background-size: 100% 2px;
+}
+
+.entry-summary {
+	color: var(--color-muted);
+	font-size: 15px;
+}
+
+.entry-content {
+	margin-bottom: 0;
+}
+
+.entry-content-page {
+	margin: 16px 0 0 0;
+}
+
+.entry-content p {
+	margin: 0 0 14px 0;
+	color: #C4CAD6;
+}
+
+.entry-content a {
+	color: var(--color-accent-2);
+}
+
+.entry-content a:hover {
+	color: var(--color-accent);
+}
+
+.entry-content p img {
+	border: 1px solid var(--color-border-strong);
+	border-radius: 3px;
+	float: right;
+	margin: 6px 0 12px 18px;
+	max-width: 100%;
+}
+
+.entry-content p img.center {
+	border: 1px solid var(--color-border-strong);
+	border-radius: 3px;
+	float: none;
+	margin: 8px auto;
+	display: block;
+}
+
+.entry-content h3 {
+	font-size: 15px;
+	margin: 24px 0 10px;
+}
+
+.entry-content ol {
+	list-style-type: decimal;
+	margin-left: 22px;
+}
+
+.entry-content li p {
+	margin: 0;
+}
+
+.entry-content li {
+	margin: 8px 0 8px 14px;
+	color: #C4CAD6;
+}
+
+.post-info,
+.index-post-info {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: var(--color-faint);
+	margin-bottom: 10px;
+}

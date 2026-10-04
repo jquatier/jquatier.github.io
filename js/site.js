@@ -158,7 +158,7 @@
      the selection is the focused card; .is-selected mirrors :focus-visible so a d-pad tap (which
      browsers don't count as keyboard focus) still draws the highlight ---- */
   (function () {
-    var SELECTOR = '.link-card, a.project-card, a.card-link';
+    var SELECTOR = '[data-nav-card]';
     var DIRS = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
     var last = null;
 

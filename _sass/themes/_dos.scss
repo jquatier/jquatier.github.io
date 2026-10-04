@@ -172,7 +172,7 @@ html[data-theme="dos"] {
 		}
 
 		.link-grid::after {
-			content: '\A        6 file(s)        9,001 bytes\A        0 dir(s)   640,000 bytes free';
+			content: '\A        ' attr(data-files) ' file(s)        9,001 bytes\A        0 dir(s)   640,000 bytes free';
 			display: block;
 			margin-top: 4px;
 			white-space: pre;
@@ -209,15 +209,9 @@ html[data-theme="dos"] {
 			content: '';
 		}
 
-		// name padded to 8.3, then size and a date, like a real listing
-		.link-card:nth-child(1) .label::after { content: '     EXE      4,096  04-01-13   9:41a'; }
-		.link-card:nth-child(2) .label::after { content: '    EXE     65,536  06-27-16   2:14p'; }
-		.link-card:nth-child(3) .label::after { content: '  EXE     32,768  11-05-14  10:02a'; }
-		.link-card:nth-child(4) .label::after { content: '   EXE        512  08-13-19  11:11p'; }
-		.link-card:nth-child(5) .label::after { content: '       XML      1,337  12-01-14   8:00a'; }
-		.link-card:nth-child(6) .label::after { content: '  <DIR>            09-25-26   3:33p'; }
-
+		// name padded to 8.3, then size and a date, like a real listing (the columns live in _data/links.yml)
 		.link-card .label::after {
+			content: attr(data-dos);
 			color: var(--dos-grey);
 		}
 
@@ -347,7 +341,7 @@ html[data-theme="dos"] {
 			}
 
 			.link-grid::after {
-				content: '\A        6 file(s)';
+				content: '\A        ' attr(data-files) ' file(s)';
 			}
 
 			.panel-btn {

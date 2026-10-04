@@ -471,9 +471,7 @@ html[data-theme="gameboy"] {
 		}
 
 		// inside the LCD the margins are tight
-		.link-card,
-		.project-card,
-		a.card-link {
+		[data-nav-card] {
 			scroll-margin: calc(1.5 * var(--u)) 0;
 		}
 

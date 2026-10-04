@@ -1,0 +1,46 @@
+# Homepage link cards, in display order.
+#   label  card text
+#   icon   file in _includes/icons/ (without .svg)
+#   url    link target; paths starting with / are site-relative
+#   email  true links to mailto:<site.email> instead of url
+#   title  optional tooltip
+#   rel    optional rel attribute
+#   dos    size and date columns in the DOS theme's DIR listing, padded so they line up after the label
+# Profile URLs are also listed under social.links in _config.yml, for jekyll-seo-tag and the homepage JSON-LD.
+
+- label: Email
+  icon: mail
+  email: true
+  dos: "     EXE      4,096  04-01-13   9:41a"
+
+- label: GitHub
+  icon: github
+  url: https://github.com/jquatier
+  title: GitHub
+  rel: me
+  dos: "    EXE     65,536  06-27-16   2:14p"
+
+- label: LinkedIn
+  icon: linkedin
+  url: https://www.linkedin.com/in/jacobquatier
+  title: LinkedIn
+  rel: me
+  dos: "  EXE     32,768  11-05-14  10:02a"
+
+- label: Twitter
+  icon: twitter
+  url: https://twitter.com/jquatier
+  title: Twitter / X
+  rel: me
+  dos: "   EXE        512  08-13-19  11:11p"
+
+- label: RSS
+  icon: rss
+  url: /feed.xml
+  title: RSS Feed
+  dos: "       XML      1,337  12-01-14   8:00a"
+
+- label: Projects
+  icon: code
+  url: /projects/
+  dos: "  <DIR>            09-25-26   3:33p"

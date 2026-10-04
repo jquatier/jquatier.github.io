@@ -9,52 +9,18 @@
 	margin-bottom: 40px;
 }
 
-.project-grid-item {
-	--stagger: 0;
-	animation: rise-in 0.5s ease-out both;
-	animation-delay: calc(var(--stagger) * 0.07s);
-}
-
 .project-card {
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	background:
-		linear-gradient(180deg, rgba(230, 234, 242, 0.02), transparent 40%),
-		var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 3px;
 	overflow: hidden;
 	color: var(--color-muted);
-	transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
-/* HUD corner brackets */
+/* keep the brackets above the card image */
 .project-card::before,
 .project-card::after {
-	content: '';
-	position: absolute;
 	z-index: 1;
-	width: 9px;
-	height: 9px;
-	border: 1px solid var(--color-border-strong);
-	transition: border-color var(--transition), width var(--transition), height var(--transition);
-	pointer-events: none;
-}
-
-.project-card::before {
-	top: 5px;
-	left: 5px;
-	border-right: 0;
-	border-bottom: 0;
-}
-
-.project-card::after {
-	bottom: 5px;
-	right: 5px;
-	border-left: 0;
-	border-top: 0;
 }
 
 .project-card-image {
@@ -90,24 +56,10 @@
 	color: var(--color-muted);
 }
 
+/* the text stays muted rather than taking the link hover color */
 .project-card:hover,
 .project-card:is(:focus-visible, .is-selected) {
-	transform: translateY(-3px);
-	border-color: rgba(var(--accent-rgb), 0.5);
-	box-shadow:
-		0 12px 32px -14px rgba(0, 0, 0, 0.6),
-		0 0 28px -6px rgba(var(--accent-rgb), 0.22),
-		inset 0 0 22px -14px rgba(var(--accent-rgb), 0.4);
 	color: var(--color-muted);
-}
-
-.project-card:hover::before,
-.project-card:hover::after,
-.project-card:is(:focus-visible, .is-selected)::before,
-.project-card:is(:focus-visible, .is-selected)::after {
-	border-color: var(--color-accent);
-	width: 13px;
-	height: 13px;
 }
 
 .project-card:hover .project-card-title::before,
@@ -115,27 +67,11 @@
 	color: var(--color-accent);
 }
 
-.project-card:is(:focus-visible, .is-selected) {
-	outline: 2px solid var(--color-accent);
-	outline-offset: 2px;
-}
+/* Top secret placeholder card (not a link, so not .card-interactive: no lift or glow) */
 
-/* Top secret placeholder card (not a link, so no lift/glow) */
-
-.project-card-secret,
-.project-card-secret:hover {
-	transform: none;
-	border-color: var(--color-border);
-	box-shadow: none;
+.project-card-secret {
 	cursor: default;
 	user-select: none;
-}
-
-.project-card-secret:hover::before,
-.project-card-secret:hover::after {
-	border-color: var(--color-border-strong);
-	width: 9px;
-	height: 9px;
 }
 
 .project-card-image-secret {
@@ -170,42 +106,4 @@
 .project-card-secret .project-card-title {
 	color: var(--color-faint);
 	letter-spacing: -0.06em;
-}
-
-.projects-intro {
-	margin: 34px 0 26px;
-}
-
-.projects-intro h1 {
-	font-size: 24px;
-	margin: 0;
-	display: inline-block;
-}
-
-.projects-intro h1::after {
-	content: '';
-	display: block;
-	width: 40px;
-	height: 2px;
-	margin-top: 8px;
-	background: var(--gradient-accent);
-	border-radius: 2px;
-}
-
-.projects-subtitle {
-	font-family: var(--font-mono);
-	font-size: 13px;
-	color: var(--color-faint);
-	margin: 10px 0 0;
-}
-
-.projects-subtitle::before {
-	content: '// ';
-	color: var(--color-accent);
-	opacity: 0.7;
-}
-
-h1.entry-title,
-.post .entry-title {
-	font-size: 23px;
 }

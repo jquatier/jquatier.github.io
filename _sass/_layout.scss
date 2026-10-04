@@ -18,3 +18,42 @@
 	padding: 24px 0 64px 0;
 	animation: rise-in 0.5s ease-out both;
 }
+
+/* section headings on inner pages: a short accent rule under the title, a // comment under that */
+.projects-intro {
+	margin: 34px 0 26px;
+}
+
+.projects-intro h1 {
+	font-size: 24px;
+	margin: 0;
+	display: inline-block;
+}
+
+.projects-intro h1::after {
+	content: '';
+	display: block;
+	width: 40px;
+	height: 2px;
+	margin-top: 8px;
+	background: var(--gradient-accent);
+	border-radius: 2px;
+}
+
+.projects-subtitle {
+	font-family: var(--font-mono);
+	font-size: 13px;
+	color: var(--color-faint);
+	margin: 10px 0 0;
+}
+
+.projects-subtitle::before {
+	content: '// ';
+	color: var(--color-accent);
+	opacity: 0.7;
+}
+
+h1.entry-title,
+.post .entry-title {
+	font-size: 23px;
+}

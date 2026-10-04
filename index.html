@@ -35,31 +35,14 @@ title: Jacob Quatier
     <span class="typed"><span class="prompt">$&nbsp;</span>software engineer&nbsp;&middot;&nbsp;portland, or</span>
   </p>
 
-  <nav class="link-grid" aria-label="Links">
-    <a class="link-card" style="--stagger: 0" href="mailto:{{ site.email }}">
-      {% include icons/mail.svg %}
-      <span class="label">Email</span>
+  <nav class="link-grid" aria-label="Links" data-files="{{ site.data.links | size }}">
+    {%- for link in site.data.links %}
+    {%- if link.email %}{% assign href = site.email | prepend: "mailto:" %}{% else %}{% assign href = link.url | relative_url %}{% endif %}
+    <a class="card card-interactive link-card" style="--stagger: {{ forloop.index0 }}" href="{{ href }}"{% if link.title %} title="{{ link.title }}"{% endif %}{% if link.rel %} rel="{{ link.rel }}"{% endif %} data-nav-card>
+      {% include icons/{{ link.icon }}.svg %}
+      <span class="label" data-dos="{{ link.dos | escape }}">{{ link.label }}</span>
     </a>
-    <a class="link-card" style="--stagger: 1" href="https://github.com/jquatier" title="GitHub" rel="me">
-      {% include icons/github.svg %}
-      <span class="label">GitHub</span>
-    </a>
-    <a class="link-card" style="--stagger: 2" href="https://www.linkedin.com/in/jacobquatier" title="LinkedIn" rel="me">
-      {% include icons/linkedin.svg %}
-      <span class="label">LinkedIn</span>
-    </a>
-    <a class="link-card" style="--stagger: 3" href="https://twitter.com/jquatier" title="Twitter / X" rel="me">
-      {% include icons/twitter.svg %}
-      <span class="label">Twitter</span>
-    </a>
-    <a class="link-card" style="--stagger: 4" href="{{ "/feed.xml" | prepend: site.baseurl }}" title="RSS Feed">
-      {% include icons/rss.svg %}
-      <span class="label">RSS</span>
-    </a>
-    <a class="link-card" style="--stagger: 5" href="{{ "/projects/" | prepend: site.baseurl }}">
-      {% include icons/code.svg %}
-      <span class="label">Projects</span>
-    </a>
+    {%- endfor %}
   </nav>
 </section>
 
@@ -77,10 +60,6 @@ title: Jacob Quatier
     "addressRegion": "OR",
     "addressCountry": "US"
   },
-  "sameAs": [
-    "https://github.com/jquatier",
-    "https://www.linkedin.com/in/jacobquatier",
-    "https://twitter.com/jquatier"
-  ]
+  "sameAs": {{ site.social.links | jsonify }}
 }
 </script>
