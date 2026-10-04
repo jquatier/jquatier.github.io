@@ -1,0 +1,154 @@
+/* ---------- apple ][ : 40-column green phosphor, uppercase, inverse-video hover ---------- */
+
+html[data-theme="apple2"] {
+	--color-bg: #040904;
+	--color-surface: #040904;
+	--color-surface-2: #0A150A;
+	--color-fg: #3BF23B;
+	--color-muted: #33D433;
+	--color-faint: #1E7A1E;
+	--color-border: rgba(59, 242, 59, 0.55);
+	--color-border-strong: #3BF23B;
+	--color-accent: #A6FFA6;
+	--color-accent-2: #5CFF5C;
+	--accent-rgb: 166, 255, 166;
+	--accent-2-rgb: 92, 255, 92;
+	--gradient-accent: linear-gradient(#3BF23B, #3BF23B);
+	--font-display: 'VT323', 'JetBrains Mono', monospace;
+	--font-ui: 'VT323', 'JetBrains Mono', monospace;
+	--font-mono: 'VT323', 'JetBrains Mono', monospace;
+	--transition: 0s;
+}
+
+html[data-theme="apple2"] body {
+	font-size: 20px;
+	text-transform: uppercase;
+	-webkit-font-smoothing: none;
+}
+
+html[data-theme="apple2"] body::before,
+html[data-theme="apple2"] body::after {
+	display: none;
+}
+
+html[data-theme="apple2"] body * {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+html[data-theme="apple2"] body .hero-name {
+	font-weight: 400;
+	font-size: clamp(40px, 9vw, 88px);
+	line-height: 1.1;
+	letter-spacing: 0.02em;
+	text-shadow: 0 0 14px rgba(59, 242, 59, 0.55);
+}
+
+html[data-theme="apple2"] body .hero-name::before,
+html[data-theme="apple2"] body .hero-name::after {
+	display: none;
+}
+
+html[data-theme="apple2"] body .hero-rule {
+	height: 3px;
+}
+
+html[data-theme="apple2"] body .hero-tagline {
+	font-size: clamp(18px, 4.2vw, 26px);
+	color: var(--color-fg);
+}
+
+/* the ] prompt and a fat blinking block cursor that never stops */
+html[data-theme="apple2"] body .hero-tagline .prompt {
+	position: relative;
+	color: transparent;
+}
+
+html[data-theme="apple2"] body .hero-tagline .prompt::before {
+	content: ']';
+	position: absolute;
+	left: 0;
+	color: var(--color-fg);
+}
+
+/* longhands, not the shorthand: the shorthand would reset animation-play-state and
+   defeat the boot's pause on hero animations */
+html[data-theme="apple2"] body .hero-tagline .typed {
+	border-right-width: 0.6em;
+	animation-name: typing, caret-blink;
+	animation-duration: 1.6s, 1s;
+	animation-delay: 0.75s, 0.75s;
+	animation-timing-function: steps(34, end), step-end;
+	animation-fill-mode: both, none;
+	animation-iteration-count: 1, infinite;
+}
+
+html[data-theme="apple2"] body .link-card {
+	background: var(--color-bg);
+	border: 2px solid var(--color-fg);
+}
+
+html[data-theme="apple2"] body .link-card::before,
+html[data-theme="apple2"] body .link-card::after {
+	display: none;
+}
+
+html[data-theme="apple2"] body .link-card .label {
+	font-size: 20px;
+	font-weight: 400;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+html[data-theme="apple2"] body .link-card:hover,
+html[data-theme="apple2"] body .link-card:is(:focus-visible, .is-selected) {
+	transform: none;
+	background: var(--color-fg);
+	color: #040904;
+}
+
+html[data-theme="apple2"] body .link-card:hover .icon,
+html[data-theme="apple2"] body .link-card:hover .label::before,
+html[data-theme="apple2"] body .link-card:is(:focus-visible, .is-selected) .icon,
+html[data-theme="apple2"] body .link-card:is(:focus-visible, .is-selected) .label::before {
+	color: #040904;
+	transform: none;
+}
+
+html[data-theme="apple2"] body nav#menu a,
+html[data-theme="apple2"] body .boot,
+html[data-theme="apple2"] body .panel [data-tip]::after {
+	font-size: 18px;
+}
+
+html[data-theme="apple2"] body .boot-logo {
+	font-size: 14px;
+}
+
+html[data-theme="apple2"] body .panel {
+	background: var(--color-bg);
+	border: 2px solid var(--color-fg);
+}
+
+html[data-theme="apple2"] body .panel-btn {
+	font-size: 22px;
+}
+
+html[data-theme="apple2"] body .panel-btn .icon {
+	width: 20px;
+	height: 20px;
+}
+
+html[data-theme="apple2"] body .panel-btn:hover,
+html[data-theme="apple2"] body .panel-btn:focus-visible,
+html[data-theme="apple2"] body .panel-btn[aria-pressed="true"] {
+	background: var(--color-fg);
+	color: #040904;
+}
+
+html[data-theme="apple2"] body .project-card,
+html[data-theme="apple2"] body .status-banner,
+html[data-theme="apple2"] body .status-list {
+	background: var(--color-bg);
+	border: 2px solid var(--color-fg);
+}

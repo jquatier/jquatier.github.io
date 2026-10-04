@@ -1,0 +1,120 @@
+/* ==========================================================================
+   Link grid (homepage buttons)
+   ========================================================================== */
+
+.link-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(150px, 172px));
+	gap: 14px;
+	max-width: 100%;
+}
+
+.link-card {
+	--stagger: 0;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 22px 16px 18px;
+	background:
+		linear-gradient(180deg, rgba(230, 234, 242, 0.02), transparent 40%),
+		var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 3px;
+	color: var(--color-muted);
+	animation: rise-in 0.55s ease-out both;
+	animation-delay: calc(0.55s + var(--stagger) * 0.07s);
+	transition:
+		transform var(--transition),
+		border-color var(--transition),
+		box-shadow var(--transition),
+		background-color var(--transition),
+		color var(--transition);
+}
+
+/* HUD corner brackets */
+.link-card::before,
+.link-card::after {
+	content: '';
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	border: 1px solid var(--color-border-strong);
+	transition: border-color var(--transition), width var(--transition), height var(--transition);
+	pointer-events: none;
+}
+
+.link-card::before {
+	top: 5px;
+	left: 5px;
+	border-right: 0;
+	border-bottom: 0;
+}
+
+.link-card::after {
+	bottom: 5px;
+	right: 5px;
+	border-left: 0;
+	border-top: 0;
+}
+
+.link-card .icon {
+	width: 22px;
+	height: 22px;
+	transition: transform var(--transition), color var(--transition);
+}
+
+.link-card .label {
+	font-family: var(--font-mono);
+	font-size: 12.5px;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	text-transform: lowercase;
+}
+
+.link-card .label::before {
+	content: './';
+	color: var(--color-faint);
+	transition: color var(--transition);
+}
+
+.link-card:hover,
+.link-card:is(:focus-visible, .is-selected) {
+	transform: translateY(-3px);
+	border-color: rgba(var(--accent-rgb), 0.5);
+	box-shadow:
+		0 12px 32px -12px rgba(0, 0, 0, 0.6),
+		0 0 28px -6px rgba(var(--accent-rgb), 0.28),
+		inset 0 0 22px -14px rgba(var(--accent-rgb), 0.5);
+	color: var(--color-fg);
+}
+
+.link-card:hover::before,
+.link-card:hover::after,
+.link-card:is(:focus-visible, .is-selected)::before,
+.link-card:is(:focus-visible, .is-selected)::after {
+	border-color: var(--color-accent);
+	width: 13px;
+	height: 13px;
+}
+
+.link-card:hover .icon,
+.link-card:is(:focus-visible, .is-selected) .icon {
+	color: var(--color-accent);
+	transform: scale(1.1);
+}
+
+.link-card:hover .label::before,
+.link-card:is(:focus-visible, .is-selected) .label::before {
+	color: var(--color-accent);
+}
+
+.link-card:active {
+	transform: translateY(-1px);
+}
+
+.link-card:is(:focus-visible, .is-selected) {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}

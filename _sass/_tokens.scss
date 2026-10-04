@@ -1,0 +1,21 @@
+:root {
+	--color-bg: #0A0E14;
+	--color-surface: #10151F;
+	--color-surface-2: #151B27;
+	--color-fg: #E6EAF2;
+	--color-muted: #8B93A7;
+	--color-faint: #5A6273;
+	--color-border: rgba(230, 234, 242, 0.08);
+	--color-border-strong: rgba(230, 234, 242, 0.16);
+	--color-accent: #5EEAD4;
+	--color-accent-2: #38BDF8;
+	--accent-rgb: 94, 234, 212;
+	--accent-2-rgb: 56, 189, 248;
+	--gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+
+	--font-display: 'Rock Salt', cursive;
+	--font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--font-mono: 'JetBrains Mono', Consolas, Menlo, Monaco, monospace;
+
+	--transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}

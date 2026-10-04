@@ -1,0 +1,63 @@
+/* ==========================================================================
+   Status page
+   ========================================================================== */
+
+.status-banner {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.status-headline {
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: clamp(16px, 3.4vw, 22px);
+	letter-spacing: 0.04em;
+	color: var(--color-fg);
+}
+
+.status-dot {
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: var(--color-accent);
+	flex-shrink: 0;
+	animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+	0%, 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.5); }
+	50%      { box-shadow: 0 0 0 9px rgba(var(--accent-rgb), 0); }
+}
+
+.status-list li {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	font-family: var(--font-mono);
+	font-size: 14px;
+	padding: 9px 0;
+}
+
+.status-list li + li {
+	border-top: 1px solid var(--color-border);
+}
+
+.status-name {
+	color: var(--color-fg);
+	white-space: nowrap;
+}
+
+.status-leader {
+	flex: 1;
+	border-bottom: 1px dotted var(--color-faint);
+	transform: translateY(-4px);
+}
+
+.status-state {
+	white-space: nowrap;
+}
+
+.status-ok { color: var(--color-accent); }
+.status-warn { color: #FBBF24; }
+.status-err { color: #F87171; }

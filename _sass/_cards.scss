@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Cards (projects list, post/page content)
+   ========================================================================== */
+
+.card {
+	position: relative;
+	background:
+		linear-gradient(180deg, rgba(230, 234, 242, 0.02), transparent 40%),
+		var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 3px;
+	padding: 28px 32px;
+	margin-bottom: 20px;
+	transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+/* HUD corner brackets */
+.card::before,
+.card::after {
+	content: '';
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	border: 1px solid var(--color-border-strong);
+	transition: border-color var(--transition), width var(--transition), height var(--transition);
+	pointer-events: none;
+}
+
+.card::before {
+	top: 5px;
+	left: 5px;
+	border-right: 0;
+	border-bottom: 0;
+}
+
+.card::after {
+	bottom: 5px;
+	right: 5px;
+	border-left: 0;
+	border-top: 0;
+}
+
+a.card-link {
+	display: block;
+	color: inherit;
+}
+
+#post-list li.post-list-item .card:hover {
+	transform: translateY(-3px);
+	border-color: rgba(var(--accent-rgb), 0.5);
+	box-shadow:
+		0 12px 32px -14px rgba(0, 0, 0, 0.6),
+		0 0 28px -6px rgba(var(--accent-rgb), 0.22),
+		inset 0 0 22px -14px rgba(var(--accent-rgb), 0.4);
+}
+
+#post-list li.post-list-item .card:hover::before,
+#post-list li.post-list-item .card:hover::after {
+	border-color: var(--color-accent);
+	width: 13px;
+	height: 13px;
+}
+
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) {
+	outline: none;
+}
+
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) .card {
+	transform: translateY(-3px);
+	border-color: rgba(var(--accent-rgb), 0.5);
+	box-shadow:
+		0 12px 32px -14px rgba(0, 0, 0, 0.6),
+		0 0 28px -6px rgba(var(--accent-rgb), 0.22),
+		inset 0 0 22px -14px rgba(var(--accent-rgb), 0.4);
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) .card::before,
+#post-list li.post-list-item .card-link:is(:focus-visible, .is-selected) .card::after {
+	border-color: var(--color-accent);
+	width: 13px;
+	height: 13px;
+}
+
+/* keep a selected card clear of the viewport edge (and the fixed panel) when it scrolls into view */
+.link-card,
+.project-card,
+a.card-link {
+	scroll-margin: 24px 0 72px;
+}
+
+#post-list {
+	display: flex;
+	flex-direction: column;
+}
+
+#post-list li.post-list-item {
+	--stagger: 0;
+	animation: rise-in 0.5s ease-out both;
+	animation-delay: calc(var(--stagger) * 0.07s);
+}
+
+.entry-title {
+	margin: 0 0 6px 0;
+	font-size: 19px;
+}
+
+.entry-title a {
+	background-image: var(--gradient-accent);
+	background-size: 0% 2px;
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size var(--transition), color var(--transition);
+	padding-bottom: 2px;
+}
+
+.entry-title a:hover {
+	background-size: 100% 2px;
+}
+
+.entry-summary {
+	color: var(--color-muted);
+	font-size: 15px;
+}
+
+.entry-content {
+	margin-bottom: 0;
+}
+
+.entry-content-page {
+	margin: 16px 0 0 0;
+}
+
+.entry-content p {
+	margin: 0 0 14px 0;
+	color: #C4CAD6;
+}
+
+.entry-content a {
+	color: var(--color-accent-2);
+}
+
+.entry-content a:hover {
+	color: var(--color-accent);
+}
+
+.entry-content p img {
+	border: 1px solid var(--color-border-strong);
+	border-radius: 3px;
+	float: right;
+	margin: 6px 0 12px 18px;
+	max-width: 100%;
+}
+
+.entry-content p img.center {
+	border: 1px solid var(--color-border-strong);
+	border-radius: 3px;
+	float: none;
+	margin: 8px auto;
+	display: block;
+}
+
+.entry-content h3 {
+	font-size: 15px;
+	margin: 24px 0 10px;
+}
+
+.entry-content ol {
+	list-style-type: decimal;
+	margin-left: 22px;
+}
+
+.entry-content li p {
+	margin: 0;
+}
+
+.entry-content li {
+	margin: 8px 0 8px 14px;
+	color: #C4CAD6;
+}
+
+.post-info,
+.index-post-info {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: var(--color-faint);
+	margin-bottom: 10px;
+}

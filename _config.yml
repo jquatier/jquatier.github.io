@@ -46,6 +46,10 @@ theme: null
 # Build settings
 markdown: kramdown
 
+# css/main.scss pulls in the partials under _sass/; keep the output readable for view-source
+sass:
+  style: expanded
+
 plugins:
   - jekyll-redirect-from
   - jekyll-seo-tag

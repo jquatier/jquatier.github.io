@@ -1,0 +1,38 @@
+---
+---
+/* ==========================================================================
+   jacobquatier.com — clean, modern, technical
+   ========================================================================== */
+
+// Partials live in _sass/ and compile into this one file. Order matters: the theme overrides come first
+// and win on specificity, then the base rules in page order.
+
+@import "tokens";
+
+/* ==========================================================================
+   Themes (one at a time, picked from the panel)
+   Component overrides are written as `html[data-theme] body .x` so they outrank
+   the hover/state rules further down the sheet.
+   ========================================================================== */
+
+@import
+  "themes/apple2",
+  "themes/dos",
+  "themes/gameboy";
+
+@import
+  "base",
+  "animations",
+  "layout",
+  "header",
+  "hero",
+  "boot",
+  "panel",
+  "terminal-404",
+  "link-grid",
+  "cards",
+  "projects",
+  "status",
+  "footer",
+  "responsive",
+  "syntax";

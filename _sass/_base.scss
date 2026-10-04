@@ -1,0 +1,89 @@
+/* ==========================================================================
+   Base elements
+   ========================================================================== */
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--color-bg);
+	color: var(--color-fg);
+	width: 100%;
+	min-height: 100vh;
+	margin: 0;
+	font-family: var(--font-ui);
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+/* Subtle engineering-grid backdrop + soft accent glows */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: -2;
+	background-image:
+		linear-gradient(rgba(230, 234, 242, 0.025) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(230, 234, 242, 0.025) 1px, transparent 1px);
+	background-size: 44px 44px;
+	background-position: center top; /* keep grid lines symmetric about the viewport center */
+	mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 75%);
+	-webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 75%);
+	animation: grid-wipe 1.5s ease-out both;
+}
+
+/* grid sweeps in radially from the upper-left corner on load */
+@keyframes grid-wipe {
+	from { clip-path: circle(0% at 0% 0%); opacity: 0.3; }
+	to   { clip-path: circle(150% at 0% 0%); opacity: 1; }
+}
+
+body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: -3;
+	background:
+		radial-gradient(600px 400px at 20% 10%, rgba(var(--accent-rgb), 0.055), transparent 65%),
+		radial-gradient(700px 500px at 85% 85%, rgba(var(--accent-2-rgb), 0.055), transparent 65%);
+	animation: glow-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes glow-drift {
+	from { transform: translate3d(0, 0, 0) scale(1); }
+	to   { transform: translate3d(0, -30px, 0) scale(1.06); }
+}
+
+a {
+	color: var(--color-fg);
+	text-decoration: none;
+	transition: color var(--transition);
+}
+
+a:hover {
+	color: var(--color-accent);
+}
+
+ul, ol {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+}
+
+h1, h2, h3 {
+	font-family: var(--font-mono);
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+
+::selection {
+	background: rgba(var(--accent-rgb), 0.25);
+	color: var(--color-fg);
+}

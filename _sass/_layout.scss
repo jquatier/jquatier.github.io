@@ -1,0 +1,20 @@
+/* ==========================================================================
+   Layout shells
+   ========================================================================== */
+
+#body-wrapper {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+#page-wrapper {
+	margin: 0 auto;
+	max-width: 860px;
+	width: 92%;
+}
+
+.page-content {
+	padding: 24px 0 64px 0;
+	animation: rise-in 0.5s ease-out both;
+}
