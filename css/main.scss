@@ -11,8 +11,8 @@
 
 /* ==========================================================================
    Themes (one at a time, picked from the panel)
-   Component overrides are written as `html[data-theme] body .x` so they outrank
-   the hover/state rules further down the sheet.
+   Each theme nests its overrides under html[data-theme="..."] body, which gives
+   them the specificity to outrank the hover/state rules further down the sheet.
    ========================================================================== */
 
 @import

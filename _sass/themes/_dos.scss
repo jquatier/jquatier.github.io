@@ -1,5 +1,11 @@
 /* ---------- dos : the blue TUI. menubar, double-line dialogs with drop shadows, a DIR listing, F-key bar ---------- */
 
+// a TUI dialog: double rule, hard black shadow one cell down and right
+@mixin dos-dialog {
+	border: 3px double #FFFFFF;
+	box-shadow: 10px 10px 0 #000000;
+}
+
 html[data-theme="dos"] {
 	--dos-blue: #0000AA;
 	--dos-cyan: #55FFFF;
@@ -23,329 +29,328 @@ html[data-theme="dos"] {
 	--font-ui: 'VT323', 'JetBrains Mono', monospace;
 	--font-mono: 'VT323', 'JetBrains Mono', monospace;
 	--transition: 0s;
-}
 
-html[data-theme="dos"] body {
-	padding: 26px 0 40px;
-	font-size: 20px;
-	-webkit-font-smoothing: none;
-}
+	body {
+		padding: 26px 0 40px;
+		font-size: 20px;
+		-webkit-font-smoothing: none;
 
-html[data-theme="dos"] body * {
-	border-radius: 0 !important;
-	text-shadow: none !important;
-}
+		* {
+			border-radius: 0 !important;
+			text-shadow: none !important;
+		}
 
-/* menubar: light bar across the top, hot letters in red */
-html[data-theme="dos"] body::before {
-	content: 'File   Options   View   Tree   Help';
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: auto;
-	height: 26px;
-	z-index: 25;
-	display: block;
-	padding-left: 16px;
-	background: var(--dos-grey);
-	background-image: none;
-	mask-image: none;
-	-webkit-mask-image: none;
-	animation: none;
-	font: 20px/26px var(--font-mono);
-	word-spacing: 0.1em;
-	color: #000000;
-}
+		// menubar: light bar across the top, hot letters in red
+		&::before {
+			content: 'File   Options   View   Tree   Help';
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: auto;
+			height: 26px;
+			z-index: 25;
+			display: block;
+			padding-left: 16px;
+			background: var(--dos-grey);
+			background-image: none;
+			mask-image: none;
+			-webkit-mask-image: none;
+			animation: none;
+			font: 20px/26px var(--font-mono);
+			word-spacing: 0.1em;
+			color: #000000;
+		}
 
-html[data-theme="dos"] body::after {
-	content: 'JQ-OS 2026.09';
-	position: fixed;
-	top: 0;
-	right: 16px;
-	left: auto;
-	bottom: auto;
-	height: 26px;
-	z-index: 26;
-	display: block;
-	background: none;
-	animation: none;
-	font: 20px/26px var(--font-mono);
-	color: #000000;
-}
+		&::after {
+			content: 'JQ-OS 2026.09';
+			position: fixed;
+			top: 0;
+			right: 16px;
+			left: auto;
+			bottom: auto;
+			height: 26px;
+			z-index: 26;
+			display: block;
+			background: none;
+			animation: none;
+			font: 20px/26px var(--font-mono);
+			color: #000000;
+		}
 
-html[data-theme="dos"] body .hero {
-	padding-top: 40px;
-	padding-bottom: 80px;
-}
+		.hero {
+			padding-top: 40px;
+			padding-bottom: 80px;
+		}
 
-/* the name is a dialog: double rule, hard black shadow one cell down and right */
-html[data-theme="dos"] body .hero-name {
-	font-weight: 400;
-	font-size: clamp(30px, 6.5vw, 60px);
-	line-height: 1.1;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--dos-yellow);
-	padding: 12px 34px;
-	border: 3px double #FFFFFF;
-	box-shadow: 10px 10px 0 #000000;
-}
+		// the name is a dialog: double rule, hard black shadow one cell down and right
+		.hero-name {
+			font-weight: 400;
+			font-size: clamp(30px, 6.5vw, 60px);
+			line-height: 1.1;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--dos-yellow);
+			padding: 12px 34px;
+			@include dos-dialog;
+		}
 
-html[data-theme="dos"] body .hero-name::before,
-html[data-theme="dos"] body .hero-name::after {
-	display: none;
-}
+		.hero-name::before,
+		.hero-name::after {
+			display: none;
+		}
 
-html[data-theme="dos"] body .hero-rule {
-	display: none;
-}
+		.hero-rule {
+			display: none;
+		}
 
-html[data-theme="dos"] body .hero-tagline {
-	margin: 34px 0 40px;
-	font-size: clamp(18px, 4.2vw, 24px);
-	color: #FFFFFF;
-}
+		.hero-tagline {
+			margin: 34px 0 40px;
+			font-size: clamp(18px, 4.2vw, 24px);
+			color: #FFFFFF;
+		}
 
-/* C:\JQ> prompt with a blinking underscore */
-html[data-theme="dos"] body .hero-tagline .prompt {
-	position: relative;
-	display: inline-block;
-	width: 6.4ch;
-	color: transparent;
-}
+		// C:\JQ> prompt with a blinking underscore
+		.hero-tagline .prompt {
+			position: relative;
+			display: inline-block;
+			width: 6.4ch;
+			color: transparent;
+		}
 
-html[data-theme="dos"] body .hero-tagline .prompt::before {
-	content: 'C:\\JQ>';
-	position: absolute;
-	left: 0;
-	color: #FFFFFF;
-}
+		.hero-tagline .prompt::before {
+			content: 'C:\\JQ>';
+			position: absolute;
+			left: 0;
+			color: #FFFFFF;
+		}
 
-html[data-theme="dos"] body .hero-tagline .typed {
-	border-right: 0;
-	padding-right: 0;
-	padding-left: 0;
-	animation-name: typing;
-	animation-duration: 1.6s;
-	animation-delay: 0.75s;
-	animation-timing-function: steps(38, end);
-	animation-fill-mode: both;
-	animation-iteration-count: 1;
-}
+		.hero-tagline .typed {
+			border-right: 0;
+			padding-right: 0;
+			padding-left: 0;
+			animation-name: typing;
+			animation-duration: 1.6s;
+			animation-delay: 0.75s;
+			animation-timing-function: steps(38, end);
+			animation-fill-mode: both;
+			animation-iteration-count: 1;
+		}
 
-html[data-theme="dos"] body .hero-tagline .typed::after {
-	content: '_';
-	color: #FFFFFF;
-	animation: dos-blink 1s step-end infinite;
-}
-
-@keyframes dos-blink {
-	0%, 49%  { opacity: 1; }
-	50%, 100% { opacity: 0; }
-}
-
-/* the link grid becomes a DIR listing inside one dialog */
-html[data-theme="dos"] body .link-grid {
-	display: block;
-	width: max-content;
-	max-width: 100%;
-	overflow: hidden;
-	padding: 8px 16px 10px;
-	border: 3px double #FFFFFF;
-	box-shadow: 10px 10px 0 #000000;
-	text-align: left;
-}
-
-html[data-theme="dos"] body .link-grid::before {
-	content: ' Volume in drive C is JQ-OS\A Directory of C:\\JQ\A ';
-	display: block;
-	margin-bottom: 4px;
-	white-space: pre;
-	color: var(--dos-grey);
-}
-
-html[data-theme="dos"] body .link-grid::after {
-	content: '\A        6 file(s)        9,001 bytes\A        0 dir(s)   640,000 bytes free';
-	display: block;
-	margin-top: 4px;
-	white-space: pre;
-	color: var(--dos-grey);
-}
-
-html[data-theme="dos"] body .link-card {
-	display: block;
-	padding: 0 6px;
-	background: none;
-	border: 0;
-	box-shadow: none;
-	color: var(--dos-cyan);
-	animation: none;
-	opacity: 1;
-	transform: none;
-}
-
-html[data-theme="dos"] body .link-card::before,
-html[data-theme="dos"] body .link-card::after,
-html[data-theme="dos"] body .link-card .icon {
-	display: none;
-}
-
-html[data-theme="dos"] body .link-card .label {
-	font-size: 20px;
-	font-weight: 400;
-	letter-spacing: 0;
-	text-transform: uppercase;
-	white-space: pre;
-}
-
-html[data-theme="dos"] body .link-card .label::before {
-	content: '';
-}
-
-/* name padded to 8.3, then size and a date, like a real listing */
-html[data-theme="dos"] body .link-card:nth-child(1) .label::after { content: '     EXE      4,096  04-01-13   9:41a'; }
-html[data-theme="dos"] body .link-card:nth-child(2) .label::after { content: '    EXE     65,536  06-27-16   2:14p'; }
-html[data-theme="dos"] body .link-card:nth-child(3) .label::after { content: '  EXE     32,768  11-05-14  10:02a'; }
-html[data-theme="dos"] body .link-card:nth-child(4) .label::after { content: '   EXE        512  08-13-19  11:11p'; }
-html[data-theme="dos"] body .link-card:nth-child(5) .label::after { content: '       XML      1,337  12-01-14   8:00a'; }
-html[data-theme="dos"] body .link-card:nth-child(6) .label::after { content: '  <DIR>            09-25-26   3:33p'; }
-
-html[data-theme="dos"] body .link-card .label::after {
-	color: var(--dos-grey);
-}
-
-/* the cursor bar */
-html[data-theme="dos"] body .link-card:hover,
-html[data-theme="dos"] body .link-card:is(:focus-visible, .is-selected) {
-	transform: none;
-	background: var(--dos-teal);
-	color: #000000;
-	box-shadow: none;
-}
-
-html[data-theme="dos"] body .link-card:hover .label::after,
-html[data-theme="dos"] body .link-card:is(:focus-visible, .is-selected) .label::after {
-	color: #000000;
-}
-
-/* inner pages: same dialog treatment */
-html[data-theme="dos"] body #page-wrapper {
-	padding-top: 20px;
-}
-
-html[data-theme="dos"] body nav#menu a {
-	font-size: 20px;
-	color: var(--dos-cyan);
-}
-
-html[data-theme="dos"] body header.site-header {
-	border-bottom: 3px double #FFFFFF;
-}
-
-html[data-theme="dos"] body .project-card,
-html[data-theme="dos"] body .status-banner,
-html[data-theme="dos"] body .status-list {
-	background: var(--dos-blue);
-	border: 3px double #FFFFFF;
-	box-shadow: 10px 10px 0 #000000;
-}
-
-html[data-theme="dos"] body .project-card::before,
-html[data-theme="dos"] body .project-card::after,
-html[data-theme="dos"] body .status-banner::before,
-html[data-theme="dos"] body .status-banner::after,
-html[data-theme="dos"] body .status-list::before,
-html[data-theme="dos"] body .status-list::after {
-	display: none;
-}
-
-html[data-theme="dos"] body .status-ok   { color: #55FF55; }
-html[data-theme="dos"] body .status-warn { color: var(--dos-yellow); }
-html[data-theme="dos"] body .status-err  { color: #FF5555; }
-
-/* the panel is the F-key bar along the bottom */
-html[data-theme="dos"] body .panel {
-	left: 0;
-	right: 0;
-	bottom: 0;
-	width: 100%;
-	gap: 0;
-	padding: 0 8px;
-	transform: none;
-	justify-content: flex-start;
-	background: var(--dos-teal);
-	border: 0;
-	box-shadow: none;
-}
-
-html[data-theme="dos"] body .panel-btn {
-	width: auto;
-	height: 26px;
-	padding: 0 12px 0 4px;
-	font-size: 20px;
-	line-height: 26px;
-	color: #000000;
-}
-
-html[data-theme="dos"] body .panel-btn::before {
-	display: inline-block;
-	margin-right: 6px;
-	padding: 0 3px;
-	background: #000000;
-	color: #FFFFFF;
-	font-size: 20px;
-}
-
-html[data-theme="dos"] body .panel-btn:nth-child(1)::before { content: 'F1'; }
-html[data-theme="dos"] body .panel-btn:nth-child(2)::before { content: 'F2'; }
-html[data-theme="dos"] body .panel-btn:nth-child(3)::before { content: 'F3'; }
-html[data-theme="dos"] body .panel-btn:nth-child(4)::before { content: 'F5'; }
-html[data-theme="dos"] body .panel-btn:nth-child(5)::before { content: 'F10'; }
-
-html[data-theme="dos"] body .panel-btn:hover,
-html[data-theme="dos"] body .panel-btn:focus-visible,
-html[data-theme="dos"] body .panel-btn[aria-pressed="true"] {
-	background: #000000;
-	color: var(--dos-yellow);
-}
-
-html[data-theme="dos"] body .panel [data-tip]::after {
-	bottom: calc(100% + 8px);
-	background: var(--dos-grey);
-	border: 0;
-	color: #000000;
-	box-shadow: 6px 6px 0 #000000;
-}
-
-html[data-theme="dos"] body footer#contentinfo {
-	padding-bottom: 60px;
-}
-
-/* the boot keeps the black screen — that part happened before the TUI loaded */
-html[data-theme="dos"] body .boot,
-html[data-theme="dos"] body .boot .boot-banner {
-	font-size: 18px;
-}
-
-html[data-theme="dos"] body .boot-logo {
-	font-size: 14px;
-}
-
-@media (max-width: 520px) {
-	html[data-theme="dos"] body::before {
-		content: 'File   View   Help';
+		.hero-tagline .typed::after {
+			content: '_';
+			color: #FFFFFF;
+			animation: dos-blink 1s step-end infinite;
+		}
 	}
 
-	html[data-theme="dos"] body .link-card .label::after {
-		display: none;
+	@keyframes dos-blink {
+		0%, 49%  { opacity: 1; }
+		50%, 100% { opacity: 0; }
 	}
 
-	html[data-theme="dos"] body .link-grid::after {
-		content: '\A        6 file(s)';
-	}
+	body {
+		// the link grid becomes a DIR listing inside one dialog
+		.link-grid {
+			display: block;
+			width: max-content;
+			max-width: 100%;
+			overflow: hidden;
+			padding: 8px 16px 10px;
+			@include dos-dialog;
+			text-align: left;
+		}
 
-	html[data-theme="dos"] body .panel-btn {
-		padding-right: 6px;
+		.link-grid::before {
+			content: ' Volume in drive C is JQ-OS\A Directory of C:\\JQ\A ';
+			display: block;
+			margin-bottom: 4px;
+			white-space: pre;
+			color: var(--dos-grey);
+		}
+
+		.link-grid::after {
+			content: '\A        6 file(s)        9,001 bytes\A        0 dir(s)   640,000 bytes free';
+			display: block;
+			margin-top: 4px;
+			white-space: pre;
+			color: var(--dos-grey);
+		}
+
+		.link-card {
+			display: block;
+			padding: 0 6px;
+			background: none;
+			border: 0;
+			box-shadow: none;
+			color: var(--dos-cyan);
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+
+		.link-card::before,
+		.link-card::after,
+		.link-card .icon {
+			display: none;
+		}
+
+		.link-card .label {
+			font-size: 20px;
+			font-weight: 400;
+			letter-spacing: 0;
+			text-transform: uppercase;
+			white-space: pre;
+		}
+
+		.link-card .label::before {
+			content: '';
+		}
+
+		// name padded to 8.3, then size and a date, like a real listing
+		.link-card:nth-child(1) .label::after { content: '     EXE      4,096  04-01-13   9:41a'; }
+		.link-card:nth-child(2) .label::after { content: '    EXE     65,536  06-27-16   2:14p'; }
+		.link-card:nth-child(3) .label::after { content: '  EXE     32,768  11-05-14  10:02a'; }
+		.link-card:nth-child(4) .label::after { content: '   EXE        512  08-13-19  11:11p'; }
+		.link-card:nth-child(5) .label::after { content: '       XML      1,337  12-01-14   8:00a'; }
+		.link-card:nth-child(6) .label::after { content: '  <DIR>            09-25-26   3:33p'; }
+
+		.link-card .label::after {
+			color: var(--dos-grey);
+		}
+
+		// the cursor bar
+		.link-card:hover,
+		.link-card:is(:focus-visible, .is-selected) {
+			transform: none;
+			background: var(--dos-teal);
+			color: #000000;
+			box-shadow: none;
+		}
+
+		.link-card:hover .label::after,
+		.link-card:is(:focus-visible, .is-selected) .label::after {
+			color: #000000;
+		}
+
+		// inner pages: same dialog treatment
+		#page-wrapper {
+			padding-top: 20px;
+		}
+
+		nav#menu a {
+			font-size: 20px;
+			color: var(--dos-cyan);
+		}
+
+		header.site-header {
+			border-bottom: 3px double #FFFFFF;
+		}
+
+		.project-card,
+		.status-banner,
+		.status-list {
+			background: var(--dos-blue);
+			@include dos-dialog;
+		}
+
+		.project-card::before,
+		.project-card::after,
+		.status-banner::before,
+		.status-banner::after,
+		.status-list::before,
+		.status-list::after {
+			display: none;
+		}
+
+		.status-ok   { color: #55FF55; }
+		.status-warn { color: var(--dos-yellow); }
+		.status-err  { color: #FF5555; }
+
+		// the panel is the F-key bar along the bottom
+		.panel {
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: 100%;
+			gap: 0;
+			padding: 0 8px;
+			transform: none;
+			justify-content: flex-start;
+			background: var(--dos-teal);
+			border: 0;
+			box-shadow: none;
+		}
+
+		.panel-btn {
+			width: auto;
+			height: 26px;
+			padding: 0 12px 0 4px;
+			font-size: 20px;
+			line-height: 26px;
+			color: #000000;
+		}
+
+		.panel-btn::before {
+			display: inline-block;
+			margin-right: 6px;
+			padding: 0 3px;
+			background: #000000;
+			color: #FFFFFF;
+			font-size: 20px;
+		}
+
+		.panel-btn:nth-child(1)::before { content: 'F1'; }
+		.panel-btn:nth-child(2)::before { content: 'F2'; }
+		.panel-btn:nth-child(3)::before { content: 'F3'; }
+		.panel-btn:nth-child(4)::before { content: 'F5'; }
+		.panel-btn:nth-child(5)::before { content: 'F10'; }
+
+		.panel-btn:hover,
+		.panel-btn:focus-visible,
+		.panel-btn[aria-pressed="true"] {
+			background: #000000;
+			color: var(--dos-yellow);
+		}
+
+		.panel [data-tip]::after {
+			bottom: calc(100% + 8px);
+			background: var(--dos-grey);
+			border: 0;
+			color: #000000;
+			box-shadow: 6px 6px 0 #000000;
+		}
+
+		footer#contentinfo {
+			padding-bottom: 60px;
+		}
+
+		// the boot keeps the black screen — that part happened before the TUI loaded
+		.boot,
+		.boot .boot-banner {
+			font-size: 18px;
+		}
+
+		.boot-logo {
+			font-size: 14px;
+		}
+
+		@media (max-width: 520px) {
+			&::before {
+				content: 'File   View   Help';
+			}
+
+			.link-card .label::after {
+				display: none;
+			}
+
+			.link-grid::after {
+				content: '\A        6 file(s)';
+			}
+
+			.panel-btn {
+				padding-right: 6px;
+			}
+		}
 	}
 }

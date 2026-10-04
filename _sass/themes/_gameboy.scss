@@ -1,6 +1,15 @@
 /* ---------- game boy : a DMG-01 at true proportions. body 90×148mm, LCD 47×43mm.
    everything is positioned in millimetres via --u (1mm in px), so the shell scales as one object ---------- */
 
+// the lit LCD: a faint pixel grid over the lightest green, inside the glass's dark edge
+@mixin gb-lcd {
+	background:
+		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+		var(--gb-3);
+	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
+}
+
 html[data-theme="gameboy"] {
 	--gb-0: #0F380F;   /* darkest */
 	--gb-1: #306230;
@@ -32,668 +41,658 @@ html[data-theme="gameboy"] {
 	--u: calc(var(--shell-w) / 90);
 	min-height: 100vh;
 	background: #26262B;
-}
-
-/* "BATTERY" under the LED. the bezel pseudo already carries one string, so this one hangs off <html>
-   and is placed relative to where the centered shell lands */
-html[data-theme="gameboy"]::before {
-	content: 'BATTERY';
-	position: absolute;
-	top: calc(16px + 34.6 * var(--u));
-	left: calc(50% - var(--shell-w) / 2 + 11.4 * var(--u));
-	transform: translateX(-50%);
-	z-index: 1;
-	font: 600 calc(1.15 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
-	letter-spacing: 0.06em;
-	color: #3B3785;
-	pointer-events: none;
-}
-
-/* "PHONES" with the three slashes over the headphone jack, bottom-left of the front face */
-/* the power switch label molded into the top edge; the idle crt-overlay element carries it */
-html[data-theme="gameboy"] .crt-overlay {
-	display: block;
-	position: absolute;
-	inset: auto;
-	top: calc(1.1 * var(--u));
-	left: calc(11 * var(--u));
-	z-index: 1;
-}
-
-html[data-theme="gameboy"] .crt-overlay::before {
-	content: '\25C1 OFF\00B7ON \25B7';
-	font: 700 calc(1.1 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
-	letter-spacing: 0.12em;
-	color: #ADA9A6;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-/* the shell: fit the viewport height, keep the 90:148 ratio */
-html[data-theme="gameboy"] body {
-	position: relative;
-	width: var(--shell-w);
-	min-height: 0;
-	aspect-ratio: 90 / 148;
-	margin: 16px auto;
-	padding: 0;
-	background: var(--gb-shell);
-	border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(20 * var(--u)) calc(3 * var(--u));
-	box-shadow:
-		inset 0 calc(-0.6 * var(--u)) 0 rgba(0, 0, 0, 0.14),
-		inset 0 calc(0.4 * var(--u)) 0 rgba(255, 255, 255, 0.5),
-		0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0, 0, 0, 0.55);
-	font-size: calc(1.6 * var(--u));
-	line-height: 1.8;
-	text-transform: uppercase;
-	-webkit-font-smoothing: none;
-	overflow: visible;
-}
-
-/* the bezel: dark panel with the big rounded lower-right corner, the label, and the battery LED */
-html[data-theme="gameboy"] body::before {
-	content: 'DOT MATRIX WITH STEREO SOUND';
-	position: absolute;
-	top: calc(8 * var(--u));
-	left: calc(6 * var(--u));
-	right: auto;
-	bottom: auto;
-	width: calc(78 * var(--u));
-	height: calc(58 * var(--u));
-	z-index: 0;
-	display: block;
-	padding: calc(2.9 * var(--u)) 0 0 calc(26 * var(--u));
-	background:
-		radial-gradient(circle at calc(5.4 * var(--u)) calc(23.5 * var(--u)), #FF3B4E calc(0.9 * var(--u)), rgba(255, 59, 78, 0.55) calc(1.4 * var(--u)), transparent calc(2.3 * var(--u))),
-		linear-gradient(#A5262E, #A5262E) calc(3 * var(--u)) calc(2.95 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
-		linear-gradient(#2F3F9B, #2F3F9B) calc(3 * var(--u)) calc(4.45 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
-		linear-gradient(#A5262E, #A5262E) calc(62 * var(--u)) calc(2.95 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
-		linear-gradient(#2F3F9B, #2F3F9B) calc(62 * var(--u)) calc(4.45 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
-		var(--gb-bezel);
-	border-radius: calc(2 * var(--u)) calc(2 * var(--u)) calc(14 * var(--u)) calc(2 * var(--u));
-	mask-image: none;
-	-webkit-mask-image: none;
-	animation: none;
-	font: 500 calc(1.7 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
-	letter-spacing: 0.08em;
-	text-transform: none;
-	color: #E9E7F0;
-	box-sizing: border-box;
-}
-
-/* the wordmark, printed on the shell under the bezel */
-html[data-theme="gameboy"] body::after {
-	content: 'JQ BOY';
-	position: absolute;
-	top: calc(72.5 * var(--u));
-	left: calc(6 * var(--u));
-	right: auto;
-	bottom: auto;
-	z-index: 0;
-	display: block;
-	background: none;
-	animation: none;
-	font: calc(3.4 * var(--u)) / 1 'Press Start 2P', monospace;
-	letter-spacing: 0.02em;
-	text-transform: none;
-	color: var(--gb-ink);
-}
-
-/* the LCD: 47×43mm, the site scrolls inside it */
-html[data-theme="gameboy"] body #body-wrapper {
-	position: absolute;
-	top: calc(15.5 * var(--u));
-	left: calc(21.5 * var(--u));
-	width: calc(47 * var(--u));
-	height: calc(43 * var(--u));
-	z-index: 1;
-	display: block;
-	min-height: 0;
-	overflow: auto;
-	scrollbar-width: none;
-	background:
-		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
-		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
-		var(--gb-3);
-	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
-}
-
-html[data-theme="gameboy"] body #body-wrapper::-webkit-scrollbar {
-	display: none;
-}
-
-html[data-theme="gameboy"] body #body-wrapper::before,
-html[data-theme="gameboy"] body #body-wrapper::after {
-	display: none;
-}
-
-html[data-theme="gameboy"] body * {
-	box-shadow: none;
-	text-shadow: none !important;
-}
-
-html[data-theme="gameboy"] body img {
-	image-rendering: pixelated;
-	filter: grayscale(1) sepia(1) hue-rotate(48deg) saturate(3) brightness(0.9) contrast(1.35);
-}
-
-/* ---- what's on the screen ---- */
-
-html[data-theme="gameboy"] body .hero {
-	min-height: 0;
-	padding: calc(2.6 * var(--u)) calc(2.5 * var(--u)) calc(2 * var(--u));
-}
-
-html[data-theme="gameboy"] body .hero-name {
-	font-weight: 400;
-	font-size: calc(2.9 * var(--u));
-	line-height: 1.45;
-	letter-spacing: 0;
-	white-space: nowrap;
-}
-
-html[data-theme="gameboy"] body .hero-name::before,
-html[data-theme="gameboy"] body .hero-name::after {
-	display: none;
-}
-
-html[data-theme="gameboy"] body .hero-rule {
-	width: calc(12 * var(--u));
-	height: calc(0.6 * var(--u));
-	margin: calc(1.2 * var(--u)) auto calc(1.4 * var(--u));
-}
-
-html[data-theme="gameboy"] body .hero-tagline {
-	margin-bottom: calc(2.2 * var(--u));
-	font-size: calc(1.15 * var(--u));
-	color: var(--gb-0);
-}
-
-html[data-theme="gameboy"] body .hero-tagline .prompt {
-	position: relative;
-	display: inline-block;
-	width: 1.6em;
-	color: transparent;
-}
-
-/* a drawn triangle, not a glyph: U+25B6 turns into an emoji on iOS */
-html[data-theme="gameboy"] body .hero-tagline .prompt::before {
-	content: '';
-	position: absolute;
-	left: 0.1em;
-	top: 50%;
-	width: 0;
-	height: 0;
-	border-left: 0.7em solid var(--gb-0);
-	border-top: 0.45em solid transparent;
-	border-bottom: 0.45em solid transparent;
-	transform: translateY(-72%);
-	animation: dos-blink 1s step-end infinite;
-}
-
-/* no block caret here: the ▶ is the cursor */
-html[data-theme="gameboy"] body .hero-tagline .typed {
-	border-right: 0;
-	padding-left: 0;
-	padding-right: 0;
-	animation-name: typing;
-	animation-duration: 1.6s;
-	animation-delay: 0.75s;
-	animation-timing-function: steps(34, end);
-	animation-fill-mode: both;
-	animation-iteration-count: 1;
-}
-
-html[data-theme="gameboy"] body .link-grid {
-	grid-template-columns: repeat(2, 1fr);
-	gap: calc(1 * var(--u));
-	width: 100%;
-}
-
-html[data-theme="gameboy"] body .link-card {
-	gap: calc(0.6 * var(--u));
-	padding: calc(1.1 * var(--u)) calc(0.8 * var(--u)) calc(0.9 * var(--u));
-	background: var(--gb-3);
-	border: calc(0.45 * var(--u)) solid var(--gb-0);
-	border-radius: 0;
-	color: var(--gb-0);
-}
-
-html[data-theme="gameboy"] body .link-card::before,
-html[data-theme="gameboy"] body .link-card::after {
-	display: none;
-}
-
-html[data-theme="gameboy"] body .link-card .icon {
-	width: calc(2.6 * var(--u));
-	height: calc(2.6 * var(--u));
-}
-
-html[data-theme="gameboy"] body .link-card .label {
-	font-size: calc(1.05 * var(--u));
-	font-weight: 400;
-	letter-spacing: 0;
-	text-transform: uppercase;
-}
-
-html[data-theme="gameboy"] body .link-card .label::before {
-	content: '';
-}
-
-html[data-theme="gameboy"] body .link-card:hover,
-html[data-theme="gameboy"] body .link-card:is(:focus-visible, .is-selected) {
-	transform: none;
-	background: var(--gb-0);
-	color: var(--gb-3);
-}
-
-html[data-theme="gameboy"] body .link-card:hover .icon,
-html[data-theme="gameboy"] body .link-card:is(:focus-visible, .is-selected) .icon {
-	color: var(--gb-3);
-	transform: none;
-}
-
-/* inner pages inside the screen */
-html[data-theme="gameboy"] body #page-wrapper {
-	width: 100%;
-	padding: 0 calc(2 * var(--u));
-}
-
-html[data-theme="gameboy"] body header.site-header {
-	padding: calc(2 * var(--u)) 0;
-	gap: calc(1 * var(--u));
-}
-
-html[data-theme="gameboy"] body header.site-header .site-home-link {
-	font-size: calc(1.5 * var(--u));
-}
-
-html[data-theme="gameboy"] body nav#menu a {
-	padding: calc(0.5 * var(--u)) calc(1 * var(--u));
-	font-size: calc(1.2 * var(--u));
-}
-
-html[data-theme="gameboy"] body .page-content {
-	padding: calc(1.5 * var(--u)) 0 calc(3 * var(--u));
-}
-
-html[data-theme="gameboy"] body h1 {
-	font-size: calc(2.4 * var(--u));
-}
-
-html[data-theme="gameboy"] body h2 {
-	font-size: calc(1.5 * var(--u));
-}
-
-html[data-theme="gameboy"] body .project-grid {
-	grid-template-columns: 1fr;
-	gap: calc(2 * var(--u));
-}
-
-html[data-theme="gameboy"] body .project-card,
-html[data-theme="gameboy"] body .status-banner,
-html[data-theme="gameboy"] body .status-list {
-	background: var(--gb-3);
-	border: calc(0.45 * var(--u)) solid var(--gb-0);
-	border-radius: 0;
-}
-
-html[data-theme="gameboy"] body .project-card::before,
-html[data-theme="gameboy"] body .project-card::after,
-html[data-theme="gameboy"] body .status-banner::before,
-html[data-theme="gameboy"] body .status-banner::after,
-html[data-theme="gameboy"] body .status-list::before,
-html[data-theme="gameboy"] body .status-list::after {
-	display: none;
-}
-
-html[data-theme="gameboy"] body .project-card-description,
-html[data-theme="gameboy"] body .projects-subtitle,
-html[data-theme="gameboy"] body .status-list li,
-html[data-theme="gameboy"] body footer#contentinfo {
-	font-size: calc(1.15 * var(--u));
-	line-height: 1.9;
-}
-
-html[data-theme="gameboy"] body .status-headline {
-	font-size: calc(1.6 * var(--u));
-}
-
-html[data-theme="gameboy"] body .status-ok,
-html[data-theme="gameboy"] body .status-warn,
-html[data-theme="gameboy"] body .status-err {
-	color: var(--gb-0);
-}
-
-html[data-theme="gameboy"] body footer#contentinfo {
-	padding: calc(2 * var(--u)) 0;
-}
-
-/* ---- the controls: the panel covers the lower half of the shell and lays the buttons out like the real thing ---- */
-
-html[data-theme="gameboy"] body .panel {
-	position: absolute;
-	top: calc(78 * var(--u));
-	left: 0;
-	right: 0;
-	bottom: 0;
-	width: auto;
-	display: block;
-	padding: 0;
-	transform: none;
-	background: none;
-	border: 0;
-	box-shadow: none;
-	animation: none;
-	z-index: 2;
-}
-
-/* d-pad: the cross is one element, each arm is a button that moves the selection on the LCD */
-html[data-theme="gameboy"] body .dpad {
-	display: block;
-	position: absolute;
-	top: calc(11 * var(--u));
-	left: calc(7 * var(--u));
-	width: calc(22 * var(--u));
-	height: calc(22 * var(--u));
-	background:
-		radial-gradient(circle, #3A3A40 19%, transparent 20%) center / 100% 100% no-repeat,
-		linear-gradient(var(--gb-dark), var(--gb-dark)) center / 34% 100% no-repeat,
-		linear-gradient(var(--gb-dark), var(--gb-dark)) center / 100% 34% no-repeat;
-	filter: drop-shadow(0 calc(0.4 * var(--u)) 0 rgba(0, 0, 0, 0.35));
-	transition: transform 0.08s ease-out;
-}
-
-/* the whole pad rocks toward the arm being pressed */
-html[data-theme="gameboy"] body .dpad:has([data-dir="up"]:is(:active, .is-pressed))    { transform: perspective(calc(40 * var(--u))) rotateX(10deg); }
-html[data-theme="gameboy"] body .dpad:has([data-dir="down"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateX(-10deg); }
-html[data-theme="gameboy"] body .dpad:has([data-dir="left"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateY(-10deg); }
-html[data-theme="gameboy"] body .dpad:has([data-dir="right"]:is(:active, .is-pressed)) { transform: perspective(calc(40 * var(--u))) rotateY(10deg); }
-
-html[data-theme="gameboy"] body .dpad-btn {
-	position: absolute;
-	display: block;
-	width: 34%;
-	height: 33%;
-	padding: 0;
-	border: 0;
-	border-radius: calc(0.6 * var(--u));
-	background: none;
-	color: transparent;
-	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
-	touch-action: manipulation;
-}
-
-html[data-theme="gameboy"] body .dpad-btn[data-dir="up"]    { top: 0;    left: 33%; }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="down"]  { bottom: 0; left: 33%; }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="left"]  { top: 33%;  left: 0;  width: 33%; height: 34%; }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="right"] { top: 33%;  right: 0; width: 33%; height: 34%; }
-
-/* a faint arrow on each arm so the pad reads as a control */
-html[data-theme="gameboy"] body .dpad-btn::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 0;
-	height: 0;
-	border: calc(1.1 * var(--u)) solid transparent;
-	transform: translate(-50%, -50%);
-}
-
-html[data-theme="gameboy"] body .dpad-btn[data-dir="up"]::before    { border-bottom-color: rgba(255, 255, 255, 0.14); margin-top: calc(-0.55 * var(--u)); }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="down"]::before  { border-top-color: rgba(255, 255, 255, 0.14);    margin-top: calc(0.55 * var(--u)); }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="left"]::before  { border-right-color: rgba(255, 255, 255, 0.14);  margin-left: calc(-0.55 * var(--u)); }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="right"]::before { border-left-color: rgba(255, 255, 255, 0.14);   margin-left: calc(0.55 * var(--u)); }
-
-html[data-theme="gameboy"] body .dpad-btn:hover::before {
-	border-color: transparent;
-}
-
-html[data-theme="gameboy"] body .dpad-btn[data-dir="up"]:hover::before    { border-bottom-color: rgba(255, 255, 255, 0.32); }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="down"]:hover::before  { border-top-color: rgba(255, 255, 255, 0.32); }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="left"]:hover::before  { border-right-color: rgba(255, 255, 255, 0.32); }
-html[data-theme="gameboy"] body .dpad-btn[data-dir="right"]:hover::before { border-left-color: rgba(255, 255, 255, 0.32); }
-
-html[data-theme="gameboy"] body .dpad-btn:active,
-html[data-theme="gameboy"] body .dpad-btn.is-pressed {
-	background: rgba(0, 0, 0, 0.28);
-}
-
-html[data-theme="gameboy"] body .dpad-btn:focus-visible {
-	outline: calc(0.35 * var(--u)) solid #F4D6E8;
-	outline-offset: calc(-0.35 * var(--u));
-}
-
-/* inside the LCD the margins are tight */
-html[data-theme="gameboy"] body .link-card,
-html[data-theme="gameboy"] body .project-card,
-html[data-theme="gameboy"] body a.card-link {
-	scroll-margin: calc(1.5 * var(--u)) 0;
-}
-
-/* speaker grille: six slanted slots, bottom right */
-html[data-theme="gameboy"] body .panel::after {
-	content: '';
-	position: absolute;
-	right: calc(9 * var(--u));
-	bottom: calc(6 * var(--u));
-	width: calc(21 * var(--u));
-	height: calc(16 * var(--u));
-	background: repeating-linear-gradient(90deg, #8A867F 0 calc(1.6 * var(--u)), transparent calc(1.6 * var(--u)) calc(3.6 * var(--u)));
-	transform: rotate(-28deg);
-	border-radius: calc(1 * var(--u));
-}
-
-html[data-theme="gameboy"] body .panel-btn {
-	position: absolute;
-	width: calc(11 * var(--u));
-	height: calc(11 * var(--u));
-	border-radius: 50%;
-	background: var(--gb-button);
-	color: #3D1230;
-	font-size: calc(3 * var(--u));
-	box-shadow:
-		inset 0 calc(-0.9 * var(--u)) 0 rgba(0, 0, 0, 0.28),
-		0 calc(0.5 * var(--u)) 0 #8E8A84;
-}
-
-/* the mode buttons take the A/B diagonal (plus one more up the same line) */
-html[data-theme="gameboy"] body .panel-btn[data-theme="apple2"]  { right: calc(8 * var(--u));  top: calc(5 * var(--u)); }
-html[data-theme="gameboy"] body .panel-btn[data-theme="gameboy"] { right: calc(22 * var(--u)); top: calc(11.5 * var(--u)); }
-html[data-theme="gameboy"] body .panel-btn[data-theme="dos"]     { right: calc(36 * var(--u)); top: calc(18 * var(--u)); }
-
-html[data-theme="gameboy"] body .panel-btn .icon {
-	width: calc(5.8 * var(--u));
-	height: calc(5.8 * var(--u));
-}
-
-html[data-theme="gameboy"] body .panel-btn:hover,
-html[data-theme="gameboy"] body .panel-btn:focus-visible {
-	background: #B94489;
-	color: #3D1230;
-}
-
-html[data-theme="gameboy"] body .panel-btn[aria-pressed="true"] {
-	background: #7E2459;
-	color: #F4D6E8;
-	box-shadow: inset 0 calc(0.8 * var(--u)) 0 rgba(0, 0, 0, 0.3);
-}
-
-/* select / start */
-html[data-theme="gameboy"] body .panel-btn:not([data-theme]) {
-	width: calc(12 * var(--u));
-	height: calc(4.4 * var(--u));
-	border-radius: calc(3 * var(--u));
-	background: #7B7776;
-	color: #D8D5D0;
-	font-size: calc(2.2 * var(--u));
-	transform: rotate(-25deg);
-	box-shadow:
-		inset 0 calc(-0.5 * var(--u)) 0 rgba(0, 0, 0, 0.3),
-		0 calc(0.3 * var(--u)) 0 #8E8A84;
-}
-
-html[data-theme="gameboy"] body .panel-btn[data-action="reboot"]   { left: calc(24.5 * var(--u)); top: calc(44.8 * var(--u)); }
-html[data-theme="gameboy"] body .panel-btn[data-action="shutdown"] { left: calc(40.5 * var(--u)); top: calc(44.8 * var(--u)); }
-
-html[data-theme="gameboy"] body .panel-btn:not([data-theme]):hover {
-	background: #8A8685;
-}
-
-html[data-theme="gameboy"] body .panel-btn:not([data-theme])::before {
-	position: absolute;
-	top: calc(100% + 0.9 * var(--u));
-	left: 50%;
-	transform: translateX(-50%);
-	font: 700 calc(1.9 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
-	letter-spacing: 0.16em;
-	color: #3B3785;
-	pointer-events: none;
-}
-
-html[data-theme="gameboy"] body .panel-btn[data-action="reboot"]::before   { content: 'SELECT'; }
-html[data-theme="gameboy"] body .panel-btn[data-action="shutdown"]::before { content: 'START'; }
-
-html[data-theme="gameboy"] body .panel [data-tip]::after {
-	bottom: calc(100% + calc(1.5 * var(--u)));
-	padding: calc(0.6 * var(--u)) calc(1 * var(--u));
-	background: var(--gb-3);
-	border: calc(0.35 * var(--u)) solid var(--gb-0);
-	color: var(--gb-0);
-	font-size: calc(1.3 * var(--u));
-	text-transform: uppercase;
-	transform: translate(-50%, 0) rotate(0);
-}
-
-/* the boot plays inside the LCD; the logo drops in like the Nintendo® scroll */
-html[data-theme="gameboy"] body .boot:not(.shutdown) {
-	position: absolute;
-	padding: calc(2 * var(--u));
-	background: var(--gb-3);
-	color: var(--gb-0);
-	font-size: calc(1.1 * var(--u));
-	line-height: 2;
-}
-
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ok,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-warn,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-tag,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ts,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-banner,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-bar,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-pct {
-	color: var(--gb-0);
-}
-
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-ts,
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-arch {
-	display: none;
-}
-
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-line {
-	white-space: pre-wrap;
-	overflow-wrap: anywhere;
-}
-
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo {
-	margin-bottom: calc(1.5 * var(--u));
-	font-size: calc(1.3 * var(--u));
-	line-height: 1.05;
-	color: var(--gb-0);
-	transition: none;
-}
-
-html[data-theme="gameboy"] body .boot:not(.shutdown) .boot-logo.is-on {
-	animation: gb-logo-drop 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) both;
-}
-
-@keyframes gb-logo-drop {
-	from { transform: translateY(calc(-12 * var(--u))); opacity: 1; }
-	to   { transform: translateY(0); opacity: 1; }
-}
-
-/* ---- shutdown stays on the LCD: no tube collapse, no full-screen takeover ---- */
-
-/* the shell and its buttons don't move; only what's on the screen fades, like the contrast dropping */
-html[data-theme="gameboy"].powering-off body #body-wrapper,
-html[data-theme="gameboy"].powering-off body .panel {
-	animation: none;
-}
-
-html[data-theme="gameboy"].powering-off body #body-wrapper > * {
-	animation: gb-lcd-fade 0.4s ease-in both;
-}
-
-@keyframes gb-lcd-fade {
-	from { opacity: 1; }
-	to   { opacity: 0; }
-}
-
-/* the teardown log and the halt screen occupy the LCD's exact 47×43mm box */
-html[data-theme="gameboy"] body .boot.shutdown {
-	position: absolute;
-	inset: auto;
-	top: calc(15.5 * var(--u));
-	left: calc(21.5 * var(--u));
-	width: calc(47 * var(--u));
-	height: calc(43 * var(--u));
-	z-index: 3;
-	padding: calc(2 * var(--u));
-	overflow: hidden;
-	background:
-		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
-		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
-		var(--gb-3);
-	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
-	color: var(--gb-0);
-	font-size: calc(1.1 * var(--u));
-	line-height: 2;
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-ok,
-html[data-theme="gameboy"] body .boot.shutdown .boot-warn,
-html[data-theme="gameboy"] body .boot.shutdown .boot-tag,
-html[data-theme="gameboy"] body .boot.shutdown .boot-banner {
-	color: var(--gb-0);
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-ts {
-	display: none;
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-line {
-	white-space: pre-wrap;
-	overflow-wrap: anywhere;
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-halt {
-	gap: calc(2.4 * var(--u));
-	padding: 0 calc(3 * var(--u));
-	background:
-		linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
-		linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
-		var(--gb-3);
-	box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-halt-msg {
-	padding: 0;
-	font-size: calc(1.5 * var(--u));
-	font-weight: 400;
-	line-height: 1.9;
-	letter-spacing: 0;
-	color: var(--gb-0);
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-halt-hint {
-	font-size: calc(1.05 * var(--u));
-	line-height: 1.6;
-	color: var(--gb-1);
-}
-
-html[data-theme="gameboy"] body .boot.shutdown .boot-cursor {
-	width: calc(0.9 * var(--u));
-	margin-left: calc(0.6 * var(--u));
-	background: var(--gb-1);
+
+	// "BATTERY" under the LED. the bezel pseudo already carries one string, so this one hangs off <html>
+	// and is placed relative to where the centered shell lands
+	&::before {
+		content: 'BATTERY';
+		position: absolute;
+		top: calc(16px + 34.6 * var(--u));
+		left: calc(50% - var(--shell-w) / 2 + 11.4 * var(--u));
+		transform: translateX(-50%);
+		z-index: 1;
+		font: 600 calc(1.15 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+		letter-spacing: 0.06em;
+		color: #3B3785;
+		pointer-events: none;
+	}
+
+	// "PHONES" with the three slashes over the headphone jack, bottom-left of the front face
+	// the power switch label molded into the top edge; the idle crt-overlay element carries it
+	.crt-overlay {
+		display: block;
+		position: absolute;
+		inset: auto;
+		top: calc(1.1 * var(--u));
+		left: calc(11 * var(--u));
+		z-index: 1;
+	}
+
+	.crt-overlay::before {
+		content: '\25C1 OFF\00B7ON \25B7';
+		font: 700 calc(1.1 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+		letter-spacing: 0.12em;
+		color: #ADA9A6;
+		text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+	}
+
+	// the shell: fit the viewport height, keep the 90:148 ratio
+	body {
+		position: relative;
+		width: var(--shell-w);
+		min-height: 0;
+		aspect-ratio: 90 / 148;
+		margin: 16px auto;
+		padding: 0;
+		background: var(--gb-shell);
+		border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(20 * var(--u)) calc(3 * var(--u));
+		box-shadow:
+			inset 0 calc(-0.6 * var(--u)) 0 rgba(0, 0, 0, 0.14),
+			inset 0 calc(0.4 * var(--u)) 0 rgba(255, 255, 255, 0.5),
+			0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0, 0, 0, 0.55);
+		font-size: calc(1.6 * var(--u));
+		line-height: 1.8;
+		text-transform: uppercase;
+		-webkit-font-smoothing: none;
+		overflow: visible;
+
+		// the bezel: dark panel with the big rounded lower-right corner, the label, and the battery LED
+		&::before {
+			content: 'DOT MATRIX WITH STEREO SOUND';
+			position: absolute;
+			top: calc(8 * var(--u));
+			left: calc(6 * var(--u));
+			right: auto;
+			bottom: auto;
+			width: calc(78 * var(--u));
+			height: calc(58 * var(--u));
+			z-index: 0;
+			display: block;
+			padding: calc(2.9 * var(--u)) 0 0 calc(26 * var(--u));
+			background:
+				radial-gradient(circle at calc(5.4 * var(--u)) calc(23.5 * var(--u)), #FF3B4E calc(0.9 * var(--u)), rgba(255, 59, 78, 0.55) calc(1.4 * var(--u)), transparent calc(2.3 * var(--u))),
+				linear-gradient(#A5262E, #A5262E) calc(3 * var(--u)) calc(2.95 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+				linear-gradient(#2F3F9B, #2F3F9B) calc(3 * var(--u)) calc(4.45 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+				linear-gradient(#A5262E, #A5262E) calc(62 * var(--u)) calc(2.95 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+				linear-gradient(#2F3F9B, #2F3F9B) calc(62 * var(--u)) calc(4.45 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
+				var(--gb-bezel);
+			border-radius: calc(2 * var(--u)) calc(2 * var(--u)) calc(14 * var(--u)) calc(2 * var(--u));
+			mask-image: none;
+			-webkit-mask-image: none;
+			animation: none;
+			font: 500 calc(1.7 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+			letter-spacing: 0.08em;
+			text-transform: none;
+			color: #E9E7F0;
+			box-sizing: border-box;
+		}
+
+		// the wordmark, printed on the shell under the bezel
+		&::after {
+			content: 'JQ BOY';
+			position: absolute;
+			top: calc(72.5 * var(--u));
+			left: calc(6 * var(--u));
+			right: auto;
+			bottom: auto;
+			z-index: 0;
+			display: block;
+			background: none;
+			animation: none;
+			font: calc(3.4 * var(--u)) / 1 'Press Start 2P', monospace;
+			letter-spacing: 0.02em;
+			text-transform: none;
+			color: var(--gb-ink);
+		}
+
+		// the LCD: 47×43mm, the site scrolls inside it
+		#body-wrapper {
+			position: absolute;
+			top: calc(15.5 * var(--u));
+			left: calc(21.5 * var(--u));
+			width: calc(47 * var(--u));
+			height: calc(43 * var(--u));
+			z-index: 1;
+			display: block;
+			min-height: 0;
+			overflow: auto;
+			scrollbar-width: none;
+			@include gb-lcd;
+		}
+
+		#body-wrapper::-webkit-scrollbar {
+			display: none;
+		}
+
+		#body-wrapper::before,
+		#body-wrapper::after {
+			display: none;
+		}
+
+		* {
+			box-shadow: none;
+			text-shadow: none !important;
+		}
+
+		img {
+			image-rendering: pixelated;
+			filter: grayscale(1) sepia(1) hue-rotate(48deg) saturate(3) brightness(0.9) contrast(1.35);
+		}
+
+		// ---- what's on the screen ----
+
+		.hero {
+			min-height: 0;
+			padding: calc(2.6 * var(--u)) calc(2.5 * var(--u)) calc(2 * var(--u));
+		}
+
+		.hero-name {
+			font-weight: 400;
+			font-size: calc(2.9 * var(--u));
+			line-height: 1.45;
+			letter-spacing: 0;
+			white-space: nowrap;
+		}
+
+		.hero-name::before,
+		.hero-name::after {
+			display: none;
+		}
+
+		.hero-rule {
+			width: calc(12 * var(--u));
+			height: calc(0.6 * var(--u));
+			margin: calc(1.2 * var(--u)) auto calc(1.4 * var(--u));
+		}
+
+		.hero-tagline {
+			margin-bottom: calc(2.2 * var(--u));
+			font-size: calc(1.15 * var(--u));
+			color: var(--gb-0);
+		}
+
+		.hero-tagline .prompt {
+			position: relative;
+			display: inline-block;
+			width: 1.6em;
+			color: transparent;
+		}
+
+		// a drawn triangle, not a glyph: U+25B6 turns into an emoji on iOS
+		.hero-tagline .prompt::before {
+			content: '';
+			position: absolute;
+			left: 0.1em;
+			top: 50%;
+			width: 0;
+			height: 0;
+			border-left: 0.7em solid var(--gb-0);
+			border-top: 0.45em solid transparent;
+			border-bottom: 0.45em solid transparent;
+			transform: translateY(-72%);
+			animation: dos-blink 1s step-end infinite;
+		}
+
+		// no block caret here: the ▶ is the cursor
+		.hero-tagline .typed {
+			border-right: 0;
+			padding-left: 0;
+			padding-right: 0;
+			animation-name: typing;
+			animation-duration: 1.6s;
+			animation-delay: 0.75s;
+			animation-timing-function: steps(34, end);
+			animation-fill-mode: both;
+			animation-iteration-count: 1;
+		}
+
+		.link-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: calc(1 * var(--u));
+			width: 100%;
+		}
+
+		.link-card {
+			gap: calc(0.6 * var(--u));
+			padding: calc(1.1 * var(--u)) calc(0.8 * var(--u)) calc(0.9 * var(--u));
+			background: var(--gb-3);
+			border: calc(0.45 * var(--u)) solid var(--gb-0);
+			border-radius: 0;
+			color: var(--gb-0);
+		}
+
+		.link-card::before,
+		.link-card::after {
+			display: none;
+		}
+
+		.link-card .icon {
+			width: calc(2.6 * var(--u));
+			height: calc(2.6 * var(--u));
+		}
+
+		.link-card .label {
+			font-size: calc(1.05 * var(--u));
+			font-weight: 400;
+			letter-spacing: 0;
+			text-transform: uppercase;
+		}
+
+		.link-card .label::before {
+			content: '';
+		}
+
+		.link-card:hover,
+		.link-card:is(:focus-visible, .is-selected) {
+			transform: none;
+			background: var(--gb-0);
+			color: var(--gb-3);
+		}
+
+		.link-card:hover .icon,
+		.link-card:is(:focus-visible, .is-selected) .icon {
+			color: var(--gb-3);
+			transform: none;
+		}
+
+		// inner pages inside the screen
+		#page-wrapper {
+			width: 100%;
+			padding: 0 calc(2 * var(--u));
+		}
+
+		header.site-header {
+			padding: calc(2 * var(--u)) 0;
+			gap: calc(1 * var(--u));
+		}
+
+		header.site-header .site-home-link {
+			font-size: calc(1.5 * var(--u));
+		}
+
+		nav#menu a {
+			padding: calc(0.5 * var(--u)) calc(1 * var(--u));
+			font-size: calc(1.2 * var(--u));
+		}
+
+		.page-content {
+			padding: calc(1.5 * var(--u)) 0 calc(3 * var(--u));
+		}
+
+		h1 {
+			font-size: calc(2.4 * var(--u));
+		}
+
+		h2 {
+			font-size: calc(1.5 * var(--u));
+		}
+
+		.project-grid {
+			grid-template-columns: 1fr;
+			gap: calc(2 * var(--u));
+		}
+
+		.project-card,
+		.status-banner,
+		.status-list {
+			background: var(--gb-3);
+			border: calc(0.45 * var(--u)) solid var(--gb-0);
+			border-radius: 0;
+		}
+
+		.project-card::before,
+		.project-card::after,
+		.status-banner::before,
+		.status-banner::after,
+		.status-list::before,
+		.status-list::after {
+			display: none;
+		}
+
+		.project-card-description,
+		.projects-subtitle,
+		.status-list li,
+		footer#contentinfo {
+			font-size: calc(1.15 * var(--u));
+			line-height: 1.9;
+		}
+
+		.status-headline {
+			font-size: calc(1.6 * var(--u));
+		}
+
+		.status-ok,
+		.status-warn,
+		.status-err {
+			color: var(--gb-0);
+		}
+
+		footer#contentinfo {
+			padding: calc(2 * var(--u)) 0;
+		}
+
+		// ---- the controls: the panel covers the lower half of the shell and lays the buttons out like the real thing ----
+
+		.panel {
+			position: absolute;
+			top: calc(78 * var(--u));
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: auto;
+			display: block;
+			padding: 0;
+			transform: none;
+			background: none;
+			border: 0;
+			box-shadow: none;
+			animation: none;
+			z-index: 2;
+		}
+
+		// d-pad: the cross is one element, each arm is a button that moves the selection on the LCD
+		.dpad {
+			display: block;
+			position: absolute;
+			top: calc(11 * var(--u));
+			left: calc(7 * var(--u));
+			width: calc(22 * var(--u));
+			height: calc(22 * var(--u));
+			background:
+				radial-gradient(circle, #3A3A40 19%, transparent 20%) center / 100% 100% no-repeat,
+				linear-gradient(var(--gb-dark), var(--gb-dark)) center / 34% 100% no-repeat,
+				linear-gradient(var(--gb-dark), var(--gb-dark)) center / 100% 34% no-repeat;
+			filter: drop-shadow(0 calc(0.4 * var(--u)) 0 rgba(0, 0, 0, 0.35));
+			transition: transform 0.08s ease-out;
+		}
+
+		// the whole pad rocks toward the arm being pressed
+		.dpad:has([data-dir="up"]:is(:active, .is-pressed))    { transform: perspective(calc(40 * var(--u))) rotateX(10deg); }
+		.dpad:has([data-dir="down"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateX(-10deg); }
+		.dpad:has([data-dir="left"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateY(-10deg); }
+		.dpad:has([data-dir="right"]:is(:active, .is-pressed)) { transform: perspective(calc(40 * var(--u))) rotateY(10deg); }
+
+		.dpad-btn {
+			position: absolute;
+			display: block;
+			width: 34%;
+			height: 33%;
+			padding: 0;
+			border: 0;
+			border-radius: calc(0.6 * var(--u));
+			background: none;
+			color: transparent;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+			touch-action: manipulation;
+		}
+
+		.dpad-btn[data-dir="up"]    { top: 0;    left: 33%; }
+		.dpad-btn[data-dir="down"]  { bottom: 0; left: 33%; }
+		.dpad-btn[data-dir="left"]  { top: 33%;  left: 0;  width: 33%; height: 34%; }
+		.dpad-btn[data-dir="right"] { top: 33%;  right: 0; width: 33%; height: 34%; }
+
+		// a faint arrow on each arm so the pad reads as a control
+		.dpad-btn::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 0;
+			height: 0;
+			border: calc(1.1 * var(--u)) solid transparent;
+			transform: translate(-50%, -50%);
+		}
+
+		.dpad-btn[data-dir="up"]::before    { border-bottom-color: rgba(255, 255, 255, 0.14); margin-top: calc(-0.55 * var(--u)); }
+		.dpad-btn[data-dir="down"]::before  { border-top-color: rgba(255, 255, 255, 0.14);    margin-top: calc(0.55 * var(--u)); }
+		.dpad-btn[data-dir="left"]::before  { border-right-color: rgba(255, 255, 255, 0.14);  margin-left: calc(-0.55 * var(--u)); }
+		.dpad-btn[data-dir="right"]::before { border-left-color: rgba(255, 255, 255, 0.14);   margin-left: calc(0.55 * var(--u)); }
+
+		.dpad-btn:hover::before {
+			border-color: transparent;
+		}
+
+		.dpad-btn[data-dir="up"]:hover::before    { border-bottom-color: rgba(255, 255, 255, 0.32); }
+		.dpad-btn[data-dir="down"]:hover::before  { border-top-color: rgba(255, 255, 255, 0.32); }
+		.dpad-btn[data-dir="left"]:hover::before  { border-right-color: rgba(255, 255, 255, 0.32); }
+		.dpad-btn[data-dir="right"]:hover::before { border-left-color: rgba(255, 255, 255, 0.32); }
+
+		.dpad-btn:active,
+		.dpad-btn.is-pressed {
+			background: rgba(0, 0, 0, 0.28);
+		}
+
+		.dpad-btn:focus-visible {
+			outline: calc(0.35 * var(--u)) solid #F4D6E8;
+			outline-offset: calc(-0.35 * var(--u));
+		}
+
+		// inside the LCD the margins are tight
+		.link-card,
+		.project-card,
+		a.card-link {
+			scroll-margin: calc(1.5 * var(--u)) 0;
+		}
+
+		// speaker grille: six slanted slots, bottom right
+		.panel::after {
+			content: '';
+			position: absolute;
+			right: calc(9 * var(--u));
+			bottom: calc(6 * var(--u));
+			width: calc(21 * var(--u));
+			height: calc(16 * var(--u));
+			background: repeating-linear-gradient(90deg, #8A867F 0 calc(1.6 * var(--u)), transparent calc(1.6 * var(--u)) calc(3.6 * var(--u)));
+			transform: rotate(-28deg);
+			border-radius: calc(1 * var(--u));
+		}
+
+		.panel-btn {
+			position: absolute;
+			width: calc(11 * var(--u));
+			height: calc(11 * var(--u));
+			border-radius: 50%;
+			background: var(--gb-button);
+			color: #3D1230;
+			font-size: calc(3 * var(--u));
+			box-shadow:
+				inset 0 calc(-0.9 * var(--u)) 0 rgba(0, 0, 0, 0.28),
+				0 calc(0.5 * var(--u)) 0 #8E8A84;
+		}
+
+		// the mode buttons take the A/B diagonal (plus one more up the same line)
+		.panel-btn[data-theme="apple2"]  { right: calc(8 * var(--u));  top: calc(5 * var(--u)); }
+		.panel-btn[data-theme="gameboy"] { right: calc(22 * var(--u)); top: calc(11.5 * var(--u)); }
+		.panel-btn[data-theme="dos"]     { right: calc(36 * var(--u)); top: calc(18 * var(--u)); }
+
+		.panel-btn .icon {
+			width: calc(5.8 * var(--u));
+			height: calc(5.8 * var(--u));
+		}
+
+		.panel-btn:hover,
+		.panel-btn:focus-visible {
+			background: #B94489;
+			color: #3D1230;
+		}
+
+		.panel-btn[aria-pressed="true"] {
+			background: #7E2459;
+			color: #F4D6E8;
+			box-shadow: inset 0 calc(0.8 * var(--u)) 0 rgba(0, 0, 0, 0.3);
+		}
+
+		// select / start
+		.panel-btn:not([data-theme]) {
+			width: calc(12 * var(--u));
+			height: calc(4.4 * var(--u));
+			border-radius: calc(3 * var(--u));
+			background: #7B7776;
+			color: #D8D5D0;
+			font-size: calc(2.2 * var(--u));
+			transform: rotate(-25deg);
+			box-shadow:
+				inset 0 calc(-0.5 * var(--u)) 0 rgba(0, 0, 0, 0.3),
+				0 calc(0.3 * var(--u)) 0 #8E8A84;
+		}
+
+		.panel-btn[data-action="reboot"]   { left: calc(24.5 * var(--u)); top: calc(44.8 * var(--u)); }
+		.panel-btn[data-action="shutdown"] { left: calc(40.5 * var(--u)); top: calc(44.8 * var(--u)); }
+
+		.panel-btn:not([data-theme]):hover {
+			background: #8A8685;
+		}
+
+		.panel-btn:not([data-theme])::before {
+			position: absolute;
+			top: calc(100% + 0.9 * var(--u));
+			left: 50%;
+			transform: translateX(-50%);
+			font: 700 calc(1.9 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+			letter-spacing: 0.16em;
+			color: #3B3785;
+			pointer-events: none;
+		}
+
+		.panel-btn[data-action="reboot"]::before   { content: 'SELECT'; }
+		.panel-btn[data-action="shutdown"]::before { content: 'START'; }
+
+		.panel [data-tip]::after {
+			bottom: calc(100% + calc(1.5 * var(--u)));
+			padding: calc(0.6 * var(--u)) calc(1 * var(--u));
+			background: var(--gb-3);
+			border: calc(0.35 * var(--u)) solid var(--gb-0);
+			color: var(--gb-0);
+			font-size: calc(1.3 * var(--u));
+			text-transform: uppercase;
+			transform: translate(-50%, 0) rotate(0);
+		}
+
+		// the boot plays inside the LCD; the logo drops in like the Nintendo® scroll
+		.boot:not(.shutdown) {
+			position: absolute;
+			padding: calc(2 * var(--u));
+			background: var(--gb-3);
+			color: var(--gb-0);
+			font-size: calc(1.1 * var(--u));
+			line-height: 2;
+		}
+
+		.boot:not(.shutdown) .boot-ok,
+		.boot:not(.shutdown) .boot-warn,
+		.boot:not(.shutdown) .boot-tag,
+		.boot:not(.shutdown) .boot-ts,
+		.boot:not(.shutdown) .boot-banner,
+		.boot:not(.shutdown) .boot-bar,
+		.boot:not(.shutdown) .boot-pct {
+			color: var(--gb-0);
+		}
+
+		.boot:not(.shutdown) .boot-ts,
+		.boot:not(.shutdown) .boot-arch {
+			display: none;
+		}
+
+		.boot:not(.shutdown) .boot-line {
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+		}
+
+		.boot:not(.shutdown) .boot-logo {
+			margin-bottom: calc(1.5 * var(--u));
+			font-size: calc(1.3 * var(--u));
+			line-height: 1.05;
+			color: var(--gb-0);
+			transition: none;
+		}
+
+		.boot:not(.shutdown) .boot-logo.is-on {
+			animation: gb-logo-drop 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+		}
+	}
+
+	@keyframes gb-logo-drop {
+		from { transform: translateY(calc(-12 * var(--u))); opacity: 1; }
+		to   { transform: translateY(0); opacity: 1; }
+	}
+
+	// ---- shutdown stays on the LCD: no tube collapse, no full-screen takeover ----
+
+	// the shell and its buttons don't move; only what's on the screen fades, like the contrast dropping
+	&.powering-off body #body-wrapper,
+	&.powering-off body .panel {
+		animation: none;
+	}
+
+	&.powering-off body #body-wrapper > * {
+		animation: gb-lcd-fade 0.4s ease-in both;
+	}
+
+	@keyframes gb-lcd-fade {
+		from { opacity: 1; }
+		to   { opacity: 0; }
+	}
+
+	body {
+		// the teardown log and the halt screen occupy the LCD's exact 47×43mm box
+		.boot.shutdown {
+			position: absolute;
+			inset: auto;
+			top: calc(15.5 * var(--u));
+			left: calc(21.5 * var(--u));
+			width: calc(47 * var(--u));
+			height: calc(43 * var(--u));
+			z-index: 3;
+			padding: calc(2 * var(--u));
+			overflow: hidden;
+			@include gb-lcd;
+			color: var(--gb-0);
+			font-size: calc(1.1 * var(--u));
+			line-height: 2;
+		}
+
+		.boot.shutdown .boot-ok,
+		.boot.shutdown .boot-warn,
+		.boot.shutdown .boot-tag,
+		.boot.shutdown .boot-banner {
+			color: var(--gb-0);
+		}
+
+		.boot.shutdown .boot-ts {
+			display: none;
+		}
+
+		.boot.shutdown .boot-line {
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+		}
+
+		.boot.shutdown .boot-halt {
+			gap: calc(2.4 * var(--u));
+			padding: 0 calc(3 * var(--u));
+			@include gb-lcd;
+		}
+
+		.boot.shutdown .boot-halt-msg {
+			padding: 0;
+			font-size: calc(1.5 * var(--u));
+			font-weight: 400;
+			line-height: 1.9;
+			letter-spacing: 0;
+			color: var(--gb-0);
+		}
+
+		.boot.shutdown .boot-halt-hint {
+			font-size: calc(1.05 * var(--u));
+			line-height: 1.6;
+			color: var(--gb-1);
+		}
+
+		.boot.shutdown .boot-cursor {
+			width: calc(0.9 * var(--u));
+			margin-left: calc(0.6 * var(--u));
+			background: var(--gb-1);
+		}
+	}
 }
