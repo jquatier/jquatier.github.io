@@ -18,13 +18,13 @@ title: Jacob Quatier
 ╚█████╔╝╚██████╔╝
  ╚════╝  ╚══▀▀═╝</pre>
   <p class="boot-line boot-banner" data-delay="420"><span class="boot-ts"></span> jq-os {{ site.time | date: "%Y.%m" }}<span class="boot-arch">-generic</span> (tty1) &middot; booting jacobquatier.com</p>
-  <p class="boot-line" data-delay="140"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> mounting /projects</p>
-  <p class="boot-line" data-delay="45"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> reticulating splines</p>
-  <p class="boot-line" data-delay="40"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> warming up the flux capacitor</p>
-  <p class="boot-line" data-delay="420"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> calibrating hyperdrive</p>
-  <p class="boot-line" data-delay="50"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> rerouting power to shields</p>
-  <p class="boot-line" data-delay="60"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> status.service listening on /status/</p>
-  <p class="boot-line" data-delay="480"><span class="boot-ts"></span> <span class="boot-tag">[</span><span class="boot-warn"> WARN </span><span class="boot-tag">]</span> blog.service: last active 2014</p>
+  {% include boot-line.html delay="140" status="ok" text="mounting /projects" %}
+  {% include boot-line.html delay="45" status="ok" text="reticulating splines" %}
+  {% include boot-line.html delay="40" status="ok" text="warming up the flux capacitor" %}
+  {% include boot-line.html delay="420" status="ok" text="calibrating hyperdrive" %}
+  {% include boot-line.html delay="50" status="ok" text="rerouting power to shields" %}
+  {% include boot-line.html delay="60" status="ok" text="status.service listening on /status/" %}
+  {% include boot-line.html delay="480" status="warn" text="blog.service: last active 2014" %}
   <p class="boot-line boot-progress" data-delay="150"><span class="boot-ts"></span> <span class="boot-status">compiling... <span class="boot-tag">[</span><span class="boot-bar"></span><span class="boot-tag">]</span> <span class="boot-pct">0%</span></span></p>
 </div>
 
@@ -62,88 +62,6 @@ title: Jacob Quatier
     </a>
   </nav>
 </section>
-
-<script>
-  (function () {
-    var root = document.documentElement;
-    var boot = document.querySelector('.boot');
-    if (!root.classList.contains('booting') || !boot) return;
-
-    var lines = boot.querySelectorAll('.boot-line');
-    var status = boot.querySelector('.boot-status');
-    var bar = boot.querySelector('.boot-bar');
-    var pct = boot.querySelector('.boot-pct');
-    var cells = 24;
-    var raceMs = 620;   // 0 -> 87%
-    var hangMs = 320;   // stall
-    var t0;
-
-    function stamp(line) {
-      var s = ((performance.now() - t0) / 1000 + Math.random() * 0.0009).toFixed(6);
-      line.querySelector('.boot-ts').textContent = '[' + new Array(13 - s.length).join(' ') + s + ']';
-      line.classList.add('is-on');
-    }
-
-    function draw(p) {
-      var n = Math.round(p * cells);
-      bar.textContent = new Array(n + 1).join('█') + new Array(cells - n + 1).join('░');
-      pct.textContent = Math.round(p * 100) + '%';
-    }
-
-    function finish(elapsedMs) {
-      status.innerHTML =
-        '<span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> ' +
-        'compiled in ' + (elapsedMs / 1000).toFixed(2) + 's';
-      setTimeout(function () {
-        boot.classList.add('boot-out');
-        root.classList.remove('booting');
-        try { sessionStorage.setItem('booted', '1'); } catch (e) {}
-        setTimeout(function () { boot.remove(); }, 300);
-      }, 450);
-    }
-
-    function race(start) {
-      return function (now) {
-        var t = Math.min((now - start) / raceMs, 1);
-        draw(0.87 * (1 - Math.pow(1 - t, 2)));
-        if (t < 1) return requestAnimationFrame(race(start));
-        setTimeout(function () {
-          draw(1);
-          finish(performance.now() - start);
-        }, hangMs);
-      };
-    }
-
-    function start() {
-      t0 = performance.now();
-      var at = 0;
-      lines.forEach(function (line) {
-        at += Number(line.getAttribute('data-delay'));
-        setTimeout(function () {
-          stamp(line);
-          if (line === lines[lines.length - 1]) {
-            requestAnimationFrame(function (now) { race(now)(now); });
-          }
-        }, at);
-      });
-    }
-
-    // background tabs throttle timers to ~1s ticks, which batches the first lines together;
-    // hold the timeline until the tab is actually on screen
-    if (document.visibilityState === 'visible' && !document.prerendering) {
-      start();
-    } else {
-      var onVisible = function () {
-        if (document.visibilityState !== 'visible' || document.prerendering) return;
-        document.removeEventListener('visibilitychange', onVisible);
-        document.removeEventListener('prerenderingchange', onVisible);
-        start();
-      };
-      document.addEventListener('visibilitychange', onVisible);
-      document.addEventListener('prerenderingchange', onVisible);
-    }
-  })();
-</script>
 
 <script type="application/ld+json">
 {

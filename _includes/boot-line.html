@@ -1,0 +1,5 @@
+{%- comment -%}
+  One line of the boot / shutdown log; js/site.js reveals it after data-delay ms.
+  delay, text, status ("ok", "warn", or none for a plain line), banner (true for a bright header line)
+{%- endcomment -%}
+<p class="boot-line{% if include.banner %} boot-banner{% endif %}" data-delay="{{ include.delay }}"><span class="boot-ts"></span> {% case include.status %}{% when "ok" %}<span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> {% when "warn" %}<span class="boot-tag">[</span><span class="boot-warn"> WARN </span><span class="boot-tag">]</span> {% endcase %}{{ include.text }}</p>
