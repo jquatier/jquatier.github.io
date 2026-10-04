@@ -65,7 +65,7 @@ html[data-theme="dos"] {
 		}
 
 		&::after {
-			content: 'JQ-OS 2026.09';
+			content: var(--os-version);
 			position: fixed;
 			top: 0;
 			right: 16px;

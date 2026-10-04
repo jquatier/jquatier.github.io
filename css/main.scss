@@ -10,6 +10,12 @@
 
 @import "tokens";
 
+// the build date as the OS version, so the DOS menubar matches the boot banner in index.html.
+// set here because this file goes through Liquid and the partials don't
+:root {
+	--os-version: 'JQ-OS {{ site.time | date: "%Y.%m" }}';
+}
+
 /* ==========================================================================
    Themes (one at a time, picked from the panel)
    Each theme nests its overrides under html[data-theme="..."] body, which gives
