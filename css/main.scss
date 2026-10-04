@@ -6,6 +6,7 @@
 
 // Partials live in _sass/ and compile into this one file. Order matters: the theme overrides come first
 // and win on specificity, then the base rules in page order.
+// A partial with non-ASCII characters starts with @charset "UTF-8" so it compiles under any locale.
 
 @import "tokens";
 
