@@ -148,7 +148,7 @@ html[data-theme="gameboy"] {
 		}
 
 		// the LCD: 47×43mm, the site scrolls inside it
-		#body-wrapper {
+		.body-wrapper {
 			position: absolute;
 			top: calc(15.5 * var(--u));
 			left: calc(21.5 * var(--u));
@@ -162,12 +162,12 @@ html[data-theme="gameboy"] {
 			@include gb-lcd;
 		}
 
-		#body-wrapper::-webkit-scrollbar {
+		.body-wrapper::-webkit-scrollbar {
 			display: none;
 		}
 
-		#body-wrapper::before,
-		#body-wrapper::after {
+		.body-wrapper::before,
+		.body-wrapper::after {
 			display: none;
 		}
 
@@ -298,21 +298,21 @@ html[data-theme="gameboy"] {
 		}
 
 		// inner pages inside the screen
-		#page-wrapper {
+		.page-wrapper {
 			width: 100%;
 			padding: 0 calc(2 * var(--u));
 		}
 
-		header.site-header {
+		.site-header {
 			padding: calc(2 * var(--u)) 0;
 			gap: calc(1 * var(--u));
 		}
 
-		header.site-header .site-home-link {
+		.site-home-link {
 			font-size: calc(1.5 * var(--u));
 		}
 
-		nav#menu a {
+		.site-nav a {
 			padding: calc(0.5 * var(--u)) calc(1 * var(--u));
 			font-size: calc(1.2 * var(--u));
 		}
@@ -352,9 +352,9 @@ html[data-theme="gameboy"] {
 		}
 
 		.project-card-description,
-		.projects-subtitle,
+		.section-subtitle,
 		.status-list li,
-		footer#contentinfo {
+		.site-footer {
 			font-size: calc(1.15 * var(--u));
 			line-height: 1.9;
 		}
@@ -369,7 +369,7 @@ html[data-theme="gameboy"] {
 			color: var(--gb-0);
 		}
 
-		footer#contentinfo {
+		.site-footer {
 			padding: calc(2 * var(--u)) 0;
 		}
 
@@ -620,12 +620,12 @@ html[data-theme="gameboy"] {
 	// ---- shutdown stays on the LCD: no tube collapse, no full-screen takeover ----
 
 	// the shell and its buttons don't move; only what's on the screen fades, like the contrast dropping
-	&.powering-off body #body-wrapper,
+	&.powering-off body .body-wrapper,
 	&.powering-off body .panel {
 		animation: none;
 	}
 
-	&.powering-off body #body-wrapper > * {
+	&.powering-off body .body-wrapper > * {
 		animation: gb-lcd-fade 0.4s ease-in both;
 	}
 

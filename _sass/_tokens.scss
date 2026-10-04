@@ -1,16 +1,28 @@
+// breakpoints, for @media queries
+$bp-mobile: 600px;   // one-column cards, stacked header and footer
+$bp-narrow: 520px;   // the boot log and the DOS listing drop their side columns
+
 :root {
+	/* r, g, b triplets for rgba(). --fg-rgb is the default text color, used for faint light tints that
+	   stay the same in every theme; themes override --accent-rgb and the --color-* tokens directly */
+	--fg-rgb: 230, 234, 242;
+	--danger-rgb: 248, 113, 113;
+
 	--color-bg: #0A0E14;
 	--color-surface: #10151F;
 	--color-surface-2: #151B27;
 	--color-fg: #E6EAF2;
+	--color-fg-soft: #C4CAD6;
 	--color-muted: #8B93A7;
 	--color-faint: #5A6273;
-	--color-border: rgba(230, 234, 242, 0.08);
-	--color-border-strong: rgba(230, 234, 242, 0.16);
+	--color-border: rgba(var(--fg-rgb), 0.08);
+	--color-border-strong: rgba(var(--fg-rgb), 0.16);
 	--color-accent: #5EEAD4;
 	--color-accent-2: #38BDF8;
 	--accent-rgb: 94, 234, 212;
 	--accent-2-rgb: 56, 189, 248;
+	--color-danger: #F87171;
+	--color-warn: #FBBF24;
 	--gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
 
 	--font-display: 'Rock Salt', cursive;

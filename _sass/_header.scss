@@ -2,7 +2,7 @@
    Site header / nav (inner pages)
    ========================================================================== */
 
-header.site-header {
+.site-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -12,23 +12,18 @@ header.site-header {
 	border-bottom: 1px solid var(--color-border);
 }
 
-header.site-header .site-home-link {
+.site-home-link {
 	font-family: var(--font-display);
 	font-size: 20px;
-	color: var(--color-fg);
 }
 
-header.site-header .site-home-link:hover {
-	color: var(--color-accent);
-}
-
-nav#menu {
+.site-nav {
 	display: flex;
 	align-items: center;
 	gap: 4px;
 }
 
-nav#menu a {
+.site-nav a {
 	font-family: var(--font-mono);
 	font-size: 13px;
 	color: var(--color-muted);
@@ -37,7 +32,7 @@ nav#menu a {
 	transition: color var(--transition), background var(--transition);
 }
 
-nav#menu a:hover {
+.site-nav a:hover {
 	color: var(--color-accent);
 	background: rgba(var(--accent-rgb), 0.06);
 }

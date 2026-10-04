@@ -230,16 +230,16 @@ html[data-theme="dos"] {
 		}
 
 		// inner pages: same dialog treatment
-		#page-wrapper {
+		.page-wrapper {
 			padding-top: 20px;
 		}
 
-		nav#menu a {
+		.site-nav a {
 			font-size: 20px;
 			color: var(--dos-cyan);
 		}
 
-		header.site-header {
+		.site-header {
 			border-bottom: 3px double #FFFFFF;
 		}
 
@@ -317,7 +317,7 @@ html[data-theme="dos"] {
 			box-shadow: 6px 6px 0 #000000;
 		}
 
-		footer#contentinfo {
+		.site-footer {
 			padding-bottom: 60px;
 		}
 
@@ -331,7 +331,7 @@ html[data-theme="dos"] {
 			font-size: 14px;
 		}
 
-		@media (max-width: 520px) {
+		@media (max-width: $bp-narrow) {
 			&::before {
 				content: 'File   View   Help';
 			}

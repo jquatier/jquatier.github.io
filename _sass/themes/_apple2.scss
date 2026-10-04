@@ -102,18 +102,18 @@ html[data-theme="apple2"] {
 		.link-card:is(:focus-visible, .is-selected) {
 			transform: none;
 			background: var(--color-fg);
-			color: #040904;
+			color: var(--color-bg);
 		}
 
 		.link-card:hover .icon,
 		.link-card:hover .label::before,
 		.link-card:is(:focus-visible, .is-selected) .icon,
 		.link-card:is(:focus-visible, .is-selected) .label::before {
-			color: #040904;
+			color: var(--color-bg);
 			transform: none;
 		}
 
-		nav#menu a,
+		.site-nav a,
 		.boot,
 		.panel [data-tip]::after {
 			font-size: 18px;
@@ -141,7 +141,7 @@ html[data-theme="apple2"] {
 		.panel-btn:focus-visible,
 		.panel-btn[aria-pressed="true"] {
 			background: var(--color-fg);
-			color: #040904;
+			color: var(--color-bg);
 		}
 
 		.project-card,

@@ -5,7 +5,7 @@
 .card {
 	position: relative;
 	background:
-		linear-gradient(180deg, rgba(230, 234, 242, 0.02), transparent 40%),
+		linear-gradient(180deg, rgba(var(--fg-rgb), 0.02), transparent 40%),
 		var(--color-surface);
 	border: 1px solid var(--color-border);
 	border-radius: 3px;

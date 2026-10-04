@@ -30,8 +30,8 @@ body::before {
 	inset: 0;
 	z-index: -2;
 	background-image:
-		linear-gradient(rgba(230, 234, 242, 0.025) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(230, 234, 242, 0.025) 1px, transparent 1px);
+		linear-gradient(rgba(var(--fg-rgb), 0.025) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(var(--fg-rgb), 0.025) 1px, transparent 1px);
 	background-size: 44px 44px;
 	background-position: center top; /* keep grid lines symmetric about the viewport center */
 	mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 75%);

@@ -2,13 +2,13 @@
    Layout shells
    ========================================================================== */
 
-#body-wrapper {
+.body-wrapper {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 }
 
-#page-wrapper {
+.page-wrapper {
 	margin: 0 auto;
 	max-width: 860px;
 	width: 92%;
@@ -20,17 +20,17 @@
 }
 
 /* section headings on inner pages: a short accent rule under the title, a // comment under that */
-.projects-intro {
+.section-intro {
 	margin: 34px 0 26px;
 }
 
-.projects-intro h1 {
+.section-intro h1 {
 	font-size: 24px;
 	margin: 0;
 	display: inline-block;
 }
 
-.projects-intro h1::after {
+.section-intro h1::after {
 	content: '';
 	display: block;
 	width: 40px;
@@ -40,14 +40,14 @@
 	border-radius: 2px;
 }
 
-.projects-subtitle {
+.section-subtitle {
 	font-family: var(--font-mono);
 	font-size: 13px;
 	color: var(--color-faint);
 	margin: 10px 0 0;
 }
 
-.projects-subtitle::before {
+.section-subtitle::before {
 	content: '// ';
 	color: var(--color-accent);
 	opacity: 0.7;

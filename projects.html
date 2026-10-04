@@ -3,53 +3,51 @@ layout: default
 title: Projects
 permalink: /projects/
 ---
-<div id="content">
-  <div class="projects-intro">
-    <h1>projects</h1>
-    <p class="projects-subtitle">side quests that escaped localhost.</p>
-  </div>
-  <ul class="project-grid">
-    {%- for project in site.data.projects %}
-    <li class="stagger" style="--stagger: {{ forloop.index0 }}">
-      {%- if project.secret %}
-      <div class="card project-card project-card-secret">
-        <div class="project-card-image project-card-image-secret" aria-hidden="true">
-          <span class="secret-stamp">top secret</span>
-        </div>
-        <div class="project-card-body">
-          <h2 class="project-card-title">{{ project.title }}</h2>
-          <p class="project-card-description">{{ project.description }}</p>
-        </div>
-      </div>
-      {%- else %}
-      <a class="card card-interactive project-card" href="{{ project.url }}" data-nav-card>
-        <div class="project-card-image">
-          <img src="{{ project.image | relative_url }}" alt="{{ project.image_alt }}" loading="lazy">
-        </div>
-        <div class="project-card-body">
-          <h2 class="project-card-title">{{ project.title }}</h2>
-          <p class="project-card-description">{{ project.description }}</p>
-        </div>
-      </a>
-      {%- endif %}
-    </li>
-    {%- endfor %}
-  </ul>
-  <div class="projects-intro">
-    <h1>posts</h1>
-    <p class="projects-subtitle">writing cadence: ~1 post per decade. see you in the 2030s.</p>
-  </div>
-  <ul id="post-list">
-    {% for post in site.posts %}
-    <li class="stagger" style="--stagger: {{ forloop.index0 }}">
-      <a class="card-link" href="{{ post.url | prepend: site.baseurl }}" data-nav-card>
-        <div class="card card-padded card-interactive">
-          <div class="index-post-info">{{ post.date | date: "%b %-d, %Y" }}</div>
-          <h2 class="entry-title">{{ post.title }}</h2>
-          <div class="entry-summary">{{ post.summary }}</div>
-        </div>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+<div class="section-intro">
+  <h1>projects</h1>
+  <p class="section-subtitle">side quests that escaped localhost.</p>
 </div>
+<ul class="project-grid">
+  {%- for project in site.data.projects %}
+  <li class="stagger" style="--stagger: {{ forloop.index0 }}">
+    {%- if project.secret %}
+    <div class="card project-card project-card-secret">
+      <div class="project-card-image project-card-image-secret" aria-hidden="true">
+        <span class="secret-stamp">top secret</span>
+      </div>
+      <div class="project-card-body">
+        <h2 class="project-card-title">{{ project.title }}</h2>
+        <p class="project-card-description">{{ project.description }}</p>
+      </div>
+    </div>
+    {%- else %}
+    <a class="card card-interactive project-card" href="{{ project.url }}" data-nav-card>
+      <div class="project-card-image">
+        <img src="{{ project.image | relative_url }}" alt="{{ project.image_alt }}" loading="lazy">
+      </div>
+      <div class="project-card-body">
+        <h2 class="project-card-title">{{ project.title }}</h2>
+        <p class="project-card-description">{{ project.description }}</p>
+      </div>
+    </a>
+    {%- endif %}
+  </li>
+  {%- endfor %}
+</ul>
+<div class="section-intro">
+  <h1>posts</h1>
+  <p class="section-subtitle">writing cadence: ~1 post per decade. see you in the 2030s.</p>
+</div>
+<ul class="post-list">
+  {% for post in site.posts %}
+  <li class="stagger" style="--stagger: {{ forloop.index0 }}">
+    <a class="card-link" href="{{ post.url | prepend: site.baseurl }}" data-nav-card>
+      <div class="card card-padded card-interactive">
+        <div class="index-post-info">{{ post.date | date: "%b %-d, %Y" }}</div>
+        <h2 class="entry-title">{{ post.title }}</h2>
+        <div class="entry-summary">{{ post.summary }}</div>
+      </div>
+    </a>
+  </li>
+  {% endfor %}
+</ul>

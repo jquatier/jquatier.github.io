@@ -112,14 +112,14 @@ html[data-theme="apple2"] .crt-overlay::after {
 	animation: crt-roll 7s linear infinite;
 }
 
-html[data-theme="apple2"] #body-wrapper {
+html[data-theme="apple2"] .body-wrapper {
 	text-shadow:
 		0 0 2px rgba(var(--accent-rgb), 0.35),
 		1px 0 0 rgba(255, 0, 0, 0.12),
 		-1px 0 0 rgba(0, 200, 255, 0.12);
 }
 
-html.crt-power #body-wrapper {
+html.crt-power .body-wrapper {
 	transform-origin: center;
 	animation: crt-power-on 0.5s ease-out both;
 }

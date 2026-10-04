@@ -2,7 +2,7 @@
    Posts: the post list and article content
    ========================================================================== */
 
-#post-list {
+.post-list {
 	display: flex;
 	flex-direction: column;
 }
@@ -45,7 +45,7 @@ h1.entry-title,
 
 .entry-content p {
 	margin: 0 0 14px 0;
-	color: #C4CAD6;
+	color: var(--color-fg-soft);
 }
 
 .entry-content a {
@@ -88,7 +88,7 @@ h1.entry-title,
 
 .entry-content li {
 	margin: 8px 0 8px 14px;
-	color: #C4CAD6;
+	color: var(--color-fg-soft);
 }
 
 .post-info,

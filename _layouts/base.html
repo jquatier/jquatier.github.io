@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 {% include source-banner.html %}
-<html>
+<html lang="{{ site.lang | default: "en" | replace: "_", "-" }}">
 
   {% include head.html %}
 
   <body>
-    <div id="body-wrapper">
+    <div class="body-wrapper">
       {{ content }}
     </div>
     {% include panel.html %}

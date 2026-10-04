@@ -59,5 +59,5 @@
 }
 
 .status-ok { color: var(--color-accent); }
-.status-warn { color: #FBBF24; }
-.status-err { color: #F87171; }
+.status-warn { color: var(--color-warn); }
+.status-err { color: var(--color-danger); }

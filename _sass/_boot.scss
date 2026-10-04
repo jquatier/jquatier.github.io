@@ -24,7 +24,7 @@ html.booting .boot:not(.shutdown),
 }
 
 /* shutdown: page collapses to a line, then the halt screen */
-html.powering-off #body-wrapper,
+html.powering-off .body-wrapper,
 html.powering-off .panel {
 	transform-origin: center;
 	animation: tube-off 0.4s ease-in both;
@@ -147,7 +147,7 @@ html.powering-off .panel {
 	color: var(--color-fg);
 }
 
-@media (max-width: 520px) {
+@media (max-width: $bp-narrow) {
 	.boot {
 		padding: 20px 14px;
 		font-size: 11px;
@@ -160,7 +160,7 @@ html.powering-off .panel {
 }
 
 .boot-ok   { color: var(--color-accent); }
-.boot-warn { color: #FBBF24; }
+.boot-warn { color: var(--color-warn); }
 
 /* hold the hero entrance until the overlay is gone */
 html.booting .hero *,

@@ -2,7 +2,7 @@
    Footer
    ========================================================================== */
 
-footer#contentinfo {
+.site-footer {
 	font-family: var(--font-mono);
 	font-size: 12px;
 	text-align: center;
@@ -12,7 +12,7 @@ footer#contentinfo {
 	margin-top: auto;
 }
 
-#disclaimer {
+.footer-disclaimer {
 	font-size: 10px;
 	margin-top: 4px;
 	opacity: 0.7;
