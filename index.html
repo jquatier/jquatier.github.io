@@ -44,6 +44,20 @@ title: Jacob Quatier
     </a>
     {%- endfor %}
   </nav>
+
+  {%- comment -%} the newest post, for 60 days after it's published. js/site.js removes it once that passes, since the site only rebuilds on a push {%- endcomment -%}
+  {%- assign latest = site.posts.first -%}
+  {%- assign latest_expires = latest.date | date: "%s" | plus: 5184000 -%}
+  {%- assign build_time = site.time | date: "%s" | plus: 0 -%}
+  {%- if latest and build_time < latest_expires %}
+  <a class="latest-post" href="{{ latest.url | relative_url }}" data-expires="{{ latest_expires }}">
+    <span class="latest-post-dot" aria-hidden="true"></span>
+    <span class="latest-post-tag">new post</span>
+    <span class="latest-post-sep" aria-hidden="true"></span>
+    <span class="latest-post-title">{{ latest.title }}</span>
+    <span class="latest-post-arrow" aria-hidden="true">&rarr;</span>
+  </a>
+  {%- endif %}
 </section>
 
 <script type="application/ld+json">

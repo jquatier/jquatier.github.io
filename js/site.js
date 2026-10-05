@@ -34,6 +34,13 @@
     location.href = '{{ site.baseurl }}/';
   }
 
+  /* ---- latest-post pill (homepage): drop it once the post is 60 days old. the build leaves it out
+     past then too, but the site only rebuilds on a push ---- */
+  (function () {
+    var pill = document.querySelector('.latest-post');
+    if (pill && Date.now() / 1000 > Number(pill.getAttribute('data-expires'))) pill.remove();
+  })();
+
   /* ---- boot sequence (homepage, once per session) ---- */
   (function () {
     var boot = document.querySelector('.boot:not(.shutdown)');

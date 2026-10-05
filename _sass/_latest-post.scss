@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Latest post (homepage pill under the link grid, default theme only)
+   ========================================================================== */
+
+/* the entrance plays like a news flash once the tagline has finished typing:
+   2.30s  a scan line sweeps left to right, drawing the pill in behind it
+   2.85s  the pill flashes and a sheen runs across it
+   2.75s+ the tag flickers on, the title glitches in, the dot pings three times */
+$flash-at: 2.3s;
+$scan-time: 0.55s;
+$scan-ease: cubic-bezier(0.5, 0, 0.2, 1);
+
+.latest-post {
+	position: relative;
+	overflow: hidden;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	max-width: 100%;
+	margin-top: 36px;
+	padding: 7px 14px 7px 12px;
+	border: 1px solid rgba(var(--accent-rgb), 0.28);
+	border-radius: 3px;
+	background-color: rgba(var(--accent-rgb), 0.05);
+	color: var(--color-fg-soft);
+	font-size: 13px;
+	line-height: 1.4;
+	text-align: left;
+	animation:
+		latest-scan-reveal $scan-time $flash-at $scan-ease both,
+		latest-flash 0.9s ($flash-at + $scan-time) ease-out;
+	transition: border-color var(--transition), background-color var(--transition), box-shadow var(--transition), color var(--transition);
+}
+
+/* the scan line, riding the reveal's leading edge */
+.latest-post::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 2px;
+	background-color: var(--color-accent);
+	box-shadow: 0 0 10px 2px rgba(var(--accent-rgb), 0.9);
+	transform: translateX(-100%);
+	pointer-events: none;
+	animation:
+		latest-scan-line $scan-time $flash-at $scan-ease both,
+		latest-scan-fade 0.2s ($flash-at + $scan-time) linear both;
+}
+
+/* the sheen that crosses the pill on the flash */
+.latest-post::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(105deg, transparent 35%, rgba(var(--accent-rgb), 0.35) 50%, transparent 65%) no-repeat;
+	background-size: 250% 100%;
+	opacity: 0;
+	pointer-events: none;
+	animation: latest-sheen 0.8s ($flash-at + $scan-time) ease-out;
+}
+
+.latest-post-dot {
+	flex: none;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: var(--color-accent);
+	box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.8);
+	animation: latest-ping 1s ($flash-at + 0.6s) ease-out 3;
+}
+
+.latest-post-tag {
+	flex: none;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-accent);
+	animation: latest-flicker 0.45s ($flash-at + 0.45s) linear both;
+}
+
+.latest-post-sep {
+	flex: none;
+	width: 1px;
+	height: 14px;
+	background-color: var(--color-border-strong);
+}
+
+.latest-post-title {
+	min-width: 0;
+	animation: latest-glitch-in 0.45s ($flash-at + 0.5s) steps(5, end) both;
+}
+
+.latest-post-arrow {
+	flex: none;
+	font-family: var(--font-mono);
+	color: var(--color-muted);
+	transition: transform var(--transition), color var(--transition);
+}
+
+.latest-post:hover,
+.latest-post:focus-visible {
+	border-color: rgba(var(--accent-rgb), 0.6);
+	background-color: rgba(var(--accent-rgb), 0.1);
+	box-shadow: 0 0 24px -6px rgba(var(--accent-rgb), 0.35);
+	color: var(--color-fg);
+}
+
+.latest-post:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+.latest-post:hover .latest-post-arrow,
+.latest-post:focus-visible .latest-post-arrow {
+	color: var(--color-accent);
+	transform: translateX(2px);
+}
+
+/* the retro themes keep their own homepage */
+html[data-theme] .latest-post {
+	display: none;
+}
+
+/* the clip opens from the left edge out to past the border, so the hover glow and focus ring aren't cut off once it's in */
+@keyframes latest-scan-reveal {
+	from { clip-path: inset(-30px 100% -30px -30px); }
+	to   { clip-path: inset(-30px -30px -30px -30px); }
+}
+
+/* travels the same 30px past the edge as the reveal, so it stays on the leading edge (overflow hides the overshoot) */
+@keyframes latest-scan-line {
+	from { left: 0; }
+	to   { left: calc(100% + 30px); }
+}
+
+@keyframes latest-scan-fade {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+@keyframes latest-flash {
+	from {
+		border-color: var(--color-accent);
+		background-color: rgba(var(--accent-rgb), 0.3);
+		box-shadow: 0 0 36px -4px rgba(var(--accent-rgb), 0.7);
+	}
+}
+
+@keyframes latest-sheen {
+	from { opacity: 1; background-position: 150% 0; }
+	to   { opacity: 1; background-position: -50% 0; }
+}
+
+@keyframes latest-flicker {
+	0%   { opacity: 0; }
+	20%  { opacity: 1; }
+	30%  { opacity: 0.15; }
+	50%  { opacity: 1; }
+	60%  { opacity: 0.4; }
+	100% { opacity: 1; }
+}
+
+/* the title lands in a few hard steps, its teal/blue split closing up; the text itself holds still */
+@keyframes latest-glitch-in {
+	from {
+		opacity: 0;
+		text-shadow: -3px 0 rgba(var(--accent-rgb), 0.9), 3px 0 rgba(var(--accent-2-rgb), 0.9);
+	}
+	to {
+		opacity: 1;
+		text-shadow: none;
+	}
+}
+
+@keyframes latest-ping {
+	from { box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.8), 0 0 0 0 rgba(var(--accent-rgb), 0.7); }
+	to   { box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.8), 0 0 0 9px rgba(var(--accent-rgb), 0); }
+}
