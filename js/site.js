@@ -59,16 +59,33 @@
       pct.textContent = Math.round(p * 100) + '%';
     }
 
+    function out() {
+      boot.classList.add('boot-out');
+      root.classList.remove('booting');
+      try { sessionStorage.setItem('booted', '1'); } catch (e) {}
+      setTimeout(function () { boot.remove(); }, 300);
+    }
+
     function finish(elapsedMs) {
       status.innerHTML =
         '<span class="boot-tag">[</span><span class="boot-ok">  OK  </span><span class="boot-tag">]</span> ' +
         'compiled in ' + (elapsedMs / 1000).toFixed(2) + 's';
-      setTimeout(function () {
-        boot.classList.add('boot-out');
-        root.classList.remove('booting');
-        try { sessionStorage.setItem('booted', '1'); } catch (e) {}
-        setTimeout(function () { boot.remove(); }, 300);
-      }, 450);
+      setTimeout(out, 450);
+    }
+
+    // game boy: no log, just a moment of blank screen, the logo scrolling down to the center, a beat, then the game
+    function gameboy() {
+      var logo = boot.querySelector('.boot-logo');
+      var done = false;
+      function end() {
+        if (done) return;
+        done = true;
+        out();
+      }
+      logo.addEventListener('animationend', function () { setTimeout(end, 900); }, { once: true });
+      setTimeout(function () { logo.classList.add('is-on'); }, 300);
+      // if the scroll never finishes (the theme changed mid-boot), don't leave the screen stuck on the logo
+      setTimeout(end, 5000);
     }
 
     function race(start) {
@@ -84,6 +101,7 @@
     }
 
     function start() {
+      if (root.getAttribute('data-theme') === 'gameboy') return gameboy();
       playLog(boot, function () {
         requestAnimationFrame(function (now) { race(now)(now); });
       });
@@ -140,21 +158,30 @@
     var shutdown = document.querySelector('[data-action="shutdown"]');
     var halt = document.querySelector('.boot.shutdown');
 
+    function halted() {
+      halt.classList.add('is-halted');
+      window.addEventListener('keydown', reboot, { once: true });
+      halt.addEventListener('pointerdown', reboot, { once: true });
+      setTimeout(function () { halt.classList.add('is-waiting'); }, 2500);
+    }
+
     shutdown.addEventListener('click', function () {
       if (halt.classList.contains('is-open')) return;
       shutdown.blur();
       root.classList.add('powering-off');
 
+      // game boy: it's a power switch. the picture drops out and the screen goes unlit, no teardown log
+      if (root.getAttribute('data-theme') === 'gameboy') {
+        setTimeout(function () {
+          halt.classList.add('is-open');
+          halted();
+        }, 200);
+        return;
+      }
+
       setTimeout(function () {
         halt.classList.add('is-open');
-        playLog(halt, function () {
-          setTimeout(function () {
-            halt.classList.add('is-halted');
-            window.addEventListener('keydown', reboot, { once: true });
-            halt.addEventListener('pointerdown', reboot, { once: true });
-          }, 900);
-          setTimeout(function () { halt.classList.add('is-waiting'); }, 3400);
-        });
+        playLog(halt, function () { setTimeout(halted, 900); });
       }, 420);
     });
 

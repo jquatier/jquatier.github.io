@@ -21,11 +21,15 @@ html[data-theme="gameboy"] {
 	--gb-bezel: #5B586A;
 	--gb-ink: #4A44A6;   /* the blue-violet used for every printed label */
 	--gb-button: #A9367A;
+	--gb-led: #FF3B4E;
+	--gb-led-glow: rgba(255, 59, 78, 0.55);
+	--gb-lcd-off: #8E9A5F;   /* the unlit screen: greyed, a shade under the lit green */
 	--gb-dark: #2A2A2E;
 	--color-bg: var(--gb-3);
 	--color-surface: var(--gb-3);
 	--color-surface-2: var(--gb-2);
 	--color-fg: var(--gb-0);
+	--color-fg-soft: var(--gb-0);
 	--color-muted: var(--gb-1);
 	--color-faint: var(--gb-1);
 	--color-border: var(--gb-0);
@@ -70,6 +74,20 @@ html[data-theme="gameboy"] {
 		z-index: 1;
 	}
 
+	// the glass's dark edge, laid over the LCD instead of painted by it. the LCD scrolls on its own compositing
+	// layer, so anything it paints itself (the mixin's inset shadow, an outline) ends up under a card scrolled to
+	// the edge. offset from the overlay's own spot (1.1mm down, 11mm in) onto the LCD's 47×43mm box
+	.crt-overlay::after {
+		content: '';
+		position: absolute;
+		top: calc(14.4 * var(--u));
+		left: calc(10.5 * var(--u));
+		width: calc(47 * var(--u));
+		height: calc(43 * var(--u));
+		box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
+		pointer-events: none;
+	}
+
 	.crt-overlay::before {
 		content: '\25C1 OFF\00B7ON \25B7';
 		font: 700 calc(1.1 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -112,7 +130,7 @@ html[data-theme="gameboy"] {
 			display: block;
 			padding: calc(2.9 * var(--u)) 0 0 calc(26 * var(--u));
 			background:
-				radial-gradient(circle at calc(5.4 * var(--u)) calc(23.5 * var(--u)), #FF3B4E calc(0.9 * var(--u)), rgba(255, 59, 78, 0.55) calc(1.4 * var(--u)), transparent calc(2.3 * var(--u))),
+				radial-gradient(circle at calc(5.4 * var(--u)) calc(23.5 * var(--u)), var(--gb-led) calc(0.9 * var(--u)), var(--gb-led-glow) calc(1.4 * var(--u)), transparent calc(2.3 * var(--u))),
 				linear-gradient(#A5262E, #A5262E) calc(3 * var(--u)) calc(2.95 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
 				linear-gradient(#2F3F9B, #2F3F9B) calc(3 * var(--u)) calc(4.45 * var(--u)) / calc(21 * var(--u)) calc(0.5 * var(--u)) no-repeat,
 				linear-gradient(#A5262E, #A5262E) calc(62 * var(--u)) calc(2.95 * var(--u)) / calc(14 * var(--u)) calc(0.5 * var(--u)) no-repeat,
@@ -332,9 +350,31 @@ html[data-theme="gameboy"] {
 		.project-grid {
 			grid-template-columns: 1fr;
 			gap: calc(2 * var(--u));
+			margin-bottom: calc(3 * var(--u));
+		}
+
+		// section headings: the desktop margins in px swamp the screen, so they scale with it
+		.section-intro {
+			margin: calc(3 * var(--u)) 0 calc(2 * var(--u));
+		}
+
+		.page-content > .section-intro:first-child {
+			margin-top: calc(0.5 * var(--u));
+		}
+
+		.section-intro h1::after {
+			width: calc(4 * var(--u));
+			height: calc(0.4 * var(--u));
+			margin-top: calc(0.8 * var(--u));
+		}
+
+		.section-subtitle {
+			margin-top: calc(1 * var(--u));
 		}
 
 		.project-card,
+		.post-list .card,
+		.post.card,
 		.status-banner,
 		.status-list {
 			background: var(--gb-3);
@@ -344,6 +384,10 @@ html[data-theme="gameboy"] {
 
 		.project-card::before,
 		.project-card::after,
+		.post-list .card::before,
+		.post-list .card::after,
+		.post.card::before,
+		.post.card::after,
 		.status-banner::before,
 		.status-banner::after,
 		.status-list::before,
@@ -352,11 +396,91 @@ html[data-theme="gameboy"] {
 		}
 
 		.project-card-description,
+		.entry-summary,
 		.section-subtitle,
 		.status-list li,
 		.site-footer {
 			font-size: calc(1.15 * var(--u));
 			line-height: 1.9;
+		}
+
+		// the post list: the desktop padding and date size swamp a 47mm screen
+		.post-list .card-padded {
+			padding: calc(1.6 * var(--u)) calc(1.8 * var(--u));
+			margin-bottom: calc(2 * var(--u));
+		}
+
+		.index-post-info {
+			font-size: calc(1 * var(--u));
+			margin-bottom: calc(1 * var(--u));
+		}
+
+		// reading a post: the desktop padding, title and heading sizes don't fit a 47mm screen
+		.post.card-padded {
+			padding: calc(1.8 * var(--u)) calc(2 * var(--u));
+		}
+
+		// body text is 1.6mm; the title and headings step up from it, the date and code step down
+		.post .entry-title {
+			font-size: calc(2.2 * var(--u));
+			line-height: 1.6;
+			overflow-wrap: anywhere;
+		}
+
+		.post-info {
+			font-size: calc(1.15 * var(--u));
+		}
+
+		.entry-content p,
+		.entry-content li {
+			line-height: 1.9;
+		}
+
+		.entry-content h3 {
+			margin: calc(2.6 * var(--u)) 0 calc(1.2 * var(--u));
+			font-size: calc(1.8 * var(--u));
+			line-height: 1.6;
+		}
+
+		.entry-content li {
+			margin: calc(0.8 * var(--u)) 0 calc(0.8 * var(--u)) calc(1.4 * var(--u));
+		}
+
+		// images stack full width; there's no room to float one beside the text
+		.entry-content p img {
+			float: none;
+			display: block;
+			margin: calc(1 * var(--u)) auto;
+		}
+
+		// code keeps its case; the rest of the screen is uppercased
+		.entry-content code {
+			font-family: var(--font-mono);
+			font-size: 0.9em;
+			text-transform: none;
+		}
+
+		// code blocks: the screen's ink inverted, one shade, no syntax colors. lines wrap rather than scroll sideways
+		.highlight {
+			margin: calc(1.2 * var(--u)) 0 calc(2 * var(--u));
+			padding: calc(1.4 * var(--u)) calc(1.6 * var(--u));
+			background: var(--gb-0);
+			color: var(--gb-3);
+			border: 0;
+			border-radius: 0;
+		}
+
+		.highlight pre {
+			text-transform: none;
+			font-size: calc(1.3 * var(--u));
+			line-height: 1.9;
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+		}
+
+		.highlight * {
+			color: inherit;
+			background: none;
 		}
 
 		.status-headline {
@@ -470,9 +594,10 @@ html[data-theme="gameboy"] {
 			outline-offset: calc(-0.35 * var(--u));
 		}
 
-		// inside the LCD the margins are tight
+		// inside the LCD the margins are tight, but a selected card lifts 3px and grows a 4px focus ring,
+		// so leave room for those plus the glass edge
 		[data-nav-card] {
-			scroll-margin: calc(1.5 * var(--u)) 0;
+			scroll-margin: calc(1.5 * var(--u) + 7px) 0;
 		}
 
 		// speaker grille: six slanted slots, bottom right
@@ -569,64 +694,60 @@ html[data-theme="gameboy"] {
 			transform: translate(-50%, 0) rotate(0);
 		}
 
-		// the boot plays inside the LCD; the logo drops in like the Nintendo® scroll
+		// the boot plays inside the LCD like the real power-on: a blank screen, then the logo scrolls down
+		// from above the top edge to the center and stops, a beat, then the game. nothing else is printed
 		.boot:not(.shutdown) {
 			position: absolute;
-			padding: calc(2 * var(--u));
+			padding: 0;
 			background: var(--gb-3);
-			color: var(--gb-0);
-			font-size: calc(1.1 * var(--u));
-			line-height: 2;
 		}
 
-		.boot:not(.shutdown) .boot-ok,
-		.boot:not(.shutdown) .boot-warn,
-		.boot:not(.shutdown) .boot-tag,
-		.boot:not(.shutdown) .boot-ts,
-		.boot:not(.shutdown) .boot-banner,
-		.boot:not(.shutdown) .boot-bar,
-		.boot:not(.shutdown) .boot-pct {
-			color: var(--gb-0);
-		}
-
-		.boot:not(.shutdown) .boot-ts,
-		.boot:not(.shutdown) .boot-arch {
+		.boot:not(.shutdown) .boot-line:not(.boot-logo) {
 			display: none;
 		}
 
-		.boot:not(.shutdown) .boot-line {
-			white-space: pre-wrap;
-			overflow-wrap: anywhere;
-		}
-
 		.boot:not(.shutdown) .boot-logo {
-			margin-bottom: calc(1.5 * var(--u));
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: 0;
+			white-space: pre;
 			font-size: calc(1.3 * var(--u));
 			line-height: 1.05;
 			color: var(--gb-0);
+			opacity: 1;
+			transform: translate(-50%, -50%);
 			transition: none;
 		}
 
+		// stepped, so it ticks down a pixel row at a time like the LCD
 		.boot:not(.shutdown) .boot-logo.is-on {
-			animation: gb-logo-drop 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+			animation: gb-logo-scroll 2.4s steps(48, end) both;
 		}
 	}
 
-	@keyframes gb-logo-drop {
-		from { transform: translateY(calc(-12 * var(--u))); opacity: 1; }
-		to   { transform: translateY(0); opacity: 1; }
+	// from just above the screen's top edge (the LCD is 43mm tall, the logo starts centered on it) down to center
+	@keyframes gb-logo-scroll {
+		from { transform: translate(-50%, calc(-100% - 21.5 * var(--u))); }
+		to   { transform: translate(-50%, -50%); }
 	}
 
-	// ---- shutdown stays on the LCD: no tube collapse, no full-screen takeover ----
+	// ---- shutdown is the power switch: the picture drops out, the screen goes unlit and the LED goes dark.
+	// no tube collapse, no teardown log (js/site.js skips it), nothing printed but the reboot hint ----
 
-	// the shell and its buttons don't move; only what's on the screen fades, like the contrast dropping
+	// the shell and its buttons don't move; only what's on the screen vanishes
 	&.powering-off body .body-wrapper,
 	&.powering-off body .panel {
 		animation: none;
 	}
 
 	&.powering-off body .body-wrapper > * {
-		animation: gb-lcd-fade 0.4s ease-in both;
+		animation: gb-lcd-fade 0.2s ease-out both;
+	}
+
+	&.powering-off {
+		--gb-led: #4A2128;
+		--gb-led-glow: transparent;
 	}
 
 	@keyframes gb-lcd-fade {
@@ -668,31 +789,23 @@ html[data-theme="gameboy"] {
 			overflow-wrap: anywhere;
 		}
 
+		// the screen with the power off: grey-olive, no pixel grid lit up, just the glass's dark edge
 		.boot.shutdown .boot-halt {
-			gap: calc(2.4 * var(--u));
 			padding: 0 calc(3 * var(--u));
-			@include gb-lcd;
+			background: var(--gb-lcd-off);
+			box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #5F6630;
 		}
 
-		.boot.shutdown .boot-halt-msg {
-			padding: 0;
-			font-size: calc(1.5 * var(--u));
-			font-weight: 400;
-			line-height: 1.9;
-			letter-spacing: 0;
-			color: var(--gb-0);
+		.boot.shutdown .boot-halt-msg,
+		.boot.shutdown .boot-cursor {
+			display: none;
 		}
 
+		// barely there, like a faint ghost on the dead glass
 		.boot.shutdown .boot-halt-hint {
 			font-size: calc(1.05 * var(--u));
 			line-height: 1.6;
-			color: var(--gb-1);
-		}
-
-		.boot.shutdown .boot-cursor {
-			width: calc(0.9 * var(--u));
-			margin-left: calc(0.6 * var(--u));
-			background: var(--gb-1);
+			color: rgba(15, 56, 15, 0.35);
 		}
 	}
 }
