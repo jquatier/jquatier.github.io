@@ -24,6 +24,11 @@
 	margin: 34px 0 26px;
 }
 
+/* the page's own heading sits under the header; .page-content's padding already spaces it */
+.page-content > .section-intro:first-child {
+	margin-top: 8px;
+}
+
 .section-intro h1 {
 	font-size: 24px;
 	margin: 0;
