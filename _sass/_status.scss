@@ -50,12 +50,14 @@
 
 .status-leader {
 	flex: 1;
+	min-width: 16px;
 	border-bottom: 1px dotted var(--color-faint);
 	transform: translateY(-4px);
 }
 
+/* the state wraps, right-aligned, only once the row runs out of room (a long one overflows a phone otherwise) */
 .status-state {
-	white-space: nowrap;
+	text-align: right;
 }
 
 .status-ok { color: var(--color-accent); }

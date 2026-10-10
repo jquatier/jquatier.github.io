@@ -474,6 +474,20 @@ html[data-theme="gameboy"] {
 			line-height: 1.9;
 		}
 
+		// the status rows are tight on a 47mm screen: gaps scaled to it, and the name wraps too, so the state
+		// keeps whole words
+		.status-list li {
+			gap: calc(0.8 * var(--u));
+		}
+
+		.status-name {
+			white-space: normal;
+		}
+
+		.status-leader {
+			min-width: calc(1.5 * var(--u));
+		}
+
 		// the post list: the desktop padding and date size swamp a 47mm screen
 		.post-list .card-padded {
 			padding: calc(1.6 * var(--u)) calc(1.8 * var(--u));
