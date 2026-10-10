@@ -1,16 +1,47 @@
 <div class="crt-overlay" aria-hidden="true"></div>
-<div class="panel" role="toolbar" aria-label="Site controls">
-  <button class="panel-btn" type="button" data-theme="apple2" data-tip="mode: apple ][" aria-pressed="false" aria-label="Apple II theme">{% include icons/apple.svg %}</button>
-  <button class="panel-btn" type="button" data-theme="gameboy" data-tip="mode: game boy" aria-pressed="false" aria-label="Game Boy theme">{% include icons/gamepad.svg %}</button>
-  <button class="panel-btn" type="button" data-theme="dos" data-tip="mode: dos" aria-pressed="false" aria-label="DOS theme">{% include icons/computer.svg %}</button>
-  <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence">&#8635;</button>
-  <button class="panel-btn" type="button" data-action="shutdown" data-tip="shutdown" aria-label="Shut down">&#x23FB;</button>
+{%- comment -%}
+  the status bar along the bottom of every page: jq-os, the themes, reboot and shutdown, and the time in portland.
+  each theme restyles the same parts in place. .sb-key is the DOS F-key chip and the game boy's buttons;
+  .sb-word is the printed name each theme gives reboot and shutdown (the default theme shows the glyph instead)
+{%- endcomment %}
+<div class="statusbar" role="toolbar" aria-label="Site controls">
+  <span class="sb-brand"><span class="sb-screen"><span class="sb-hot">j</span>q-os</span></span>
+  <div class="sb-controls">
+    <span class="sb-label" aria-hidden="true">theme</span>
+    <button class="sb-menu" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose a theme"><span class="sb-key" aria-hidden="true"></span><span><span class="sb-menu-prefix">theme: </span><span class="sb-menu-name">midnight</span> &#9662;</span></button>
+    <div class="sb-themes" role="group" aria-label="Theme">
+      <button class="panel-btn" type="button" data-theme="midnight" aria-pressed="false" aria-label="Midnight theme"><span class="sb-key" aria-hidden="true"></span><span class="sb-name">midnight</span></button>
+      <button class="panel-btn" type="button" data-theme="apple2" aria-pressed="false" aria-label="Apple II theme"><span class="sb-key" aria-hidden="true"></span><span class="sb-name">apple ][</span></button>
+      <button class="panel-btn" type="button" data-theme="gameboy" aria-pressed="false" aria-label="Game Boy theme"><span class="sb-key" aria-hidden="true"></span><span class="sb-name">game boy</span></button>
+      <button class="panel-btn" type="button" data-theme="dos" aria-pressed="false" aria-label="DOS theme"><span class="sb-key" aria-hidden="true"></span><span class="sb-name">dos</span></button>
+    </div>
+    <span class="sb-sep" aria-hidden="true">&#9474;</span>
+    <button class="panel-btn" type="button" data-action="reboot" data-tip="reboot" aria-label="Replay boot sequence"><span class="sb-key" aria-hidden="true"></span><span class="sb-glyph" aria-hidden="true">&#8635;</span><span class="sb-word" aria-hidden="true"></span></button>
+    <button class="panel-btn" type="button" data-action="shutdown" data-tip="shutdown" aria-label="Shut down"><span class="sb-key" aria-hidden="true"></span><span class="sb-glyph" aria-hidden="true">&#x23FB;</span><span class="sb-word" aria-hidden="true"></span></button>
+  </div>
+  <span class="sb-clock" title="Time in Portland, Oregon"><span class="sb-led" aria-hidden="true"></span><span class="sb-screen"><time class="sb-time">--:--</time><span class="sb-tz"> PT</span></span></span>
+</div>
+{%- comment -%}
+  the game boy's front panel, drawn only by that theme: the d-pad moves between cards, A opens the selected one,
+  B goes back, SELECT reboots and START shuts down. the footer bar still carries the themes
+{%- endcomment %}
+<div class="console" role="group" aria-label="Game Boy controls">
   <div class="dpad" role="group" aria-label="Move between cards">
     <button class="dpad-btn" type="button" data-dir="up" aria-label="Card above"></button>
     <button class="dpad-btn" type="button" data-dir="left" aria-label="Previous card"></button>
     <button class="dpad-btn" type="button" data-dir="right" aria-label="Next card"></button>
     <button class="dpad-btn" type="button" data-dir="down" aria-label="Card below"></button>
   </div>
+  <span class="gb-well" aria-hidden="true"></span>
+  <button class="gb-btn" type="button" data-btn="b" aria-label="B: back"></button>
+  <button class="gb-btn" type="button" data-btn="a" aria-label="A: open the selected card"></button>
+  <span class="gb-print gb-print-b" aria-hidden="true">B</span>
+  <span class="gb-print gb-print-a" aria-hidden="true">A</span>
+  <button class="gb-pill" type="button" data-action="reboot" aria-label="Select: replay boot sequence"></button>
+  <button class="gb-pill" type="button" data-action="shutdown" aria-label="Start: shut down"></button>
+  <span class="gb-print gb-print-select" aria-hidden="true">SELECT</span>
+  <span class="gb-print gb-print-start" aria-hidden="true">START</span>
+  <span class="gb-grille" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span>
 </div>
 <div class="boot shutdown" aria-hidden="true">
   {% include boot-line.html delay="120" banner=true text="jq-os: received SIGTERM &middot; shutting down" %}

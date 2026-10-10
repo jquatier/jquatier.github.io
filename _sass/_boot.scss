@@ -25,7 +25,7 @@ html.booting .boot:not(.shutdown),
 
 /* shutdown: page collapses to a line, then the halt screen */
 html.powering-off .body-wrapper,
-html.powering-off .panel {
+html.powering-off .statusbar {
 	transform-origin: center;
 	animation: tube-off 0.4s ease-in both;
 }

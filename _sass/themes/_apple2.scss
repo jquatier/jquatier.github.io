@@ -1,5 +1,20 @@
 /* ---------- apple ][ : 40-column green phosphor, uppercase, inverse-video hover ---------- */
 
+// the status bar folded up for a narrow window (see sb-compact in _panel.scss)
+@mixin apple2-compact {
+	.sb-menu,
+	.panel-btn[data-action] {
+		width: auto;
+		height: 44px;
+	}
+
+	.sb-themes {
+		background: var(--color-bg);
+		border: 2px solid var(--color-fg);
+		border-bottom: 0;
+	}
+}
+
 html[data-theme="apple2"] {
 	--color-bg: #040904;
 	--color-surface: #040904;
@@ -18,6 +33,7 @@ html[data-theme="apple2"] {
 	--font-ui: 'VT323', 'JetBrains Mono', monospace;
 	--font-mono: 'VT323', 'JetBrains Mono', monospace;
 	--transition: 0s;
+	--bar-h: 46px;
 
 	body {
 		font-size: 20px;
@@ -114,8 +130,7 @@ html[data-theme="apple2"] {
 		}
 
 		.site-nav a,
-		.boot,
-		.panel [data-tip]::after {
+		.boot {
 			font-size: 18px;
 		}
 
@@ -123,25 +138,109 @@ html[data-theme="apple2"] {
 			font-size: 14px;
 		}
 
-		.panel {
+		// the status bar: a 2px rule, JQ-OS in inverse video, every control a word that inverts under the cursor.
+		// it sits under the CRT overlay so the scanlines run across it too
+		.statusbar {
+			z-index: 14;
 			background: var(--color-bg);
-			border: 2px solid var(--color-fg);
+			border-top: 2px solid var(--color-fg);
+			font-size: 22px;
+			color: var(--color-fg);
 		}
 
-		.panel-btn {
+		.sb-brand {
+			padding: 0 16px;
+			background: var(--color-fg);
+			color: var(--color-bg);
+			font-weight: 400;
+			text-shadow: none;
+		}
+
+		.sb-controls {
+			align-self: stretch;
+			gap: 0;
+			padding: 0;
+		}
+
+		.sb-label,
+		.sb-sep {
+			padding: 0 10px;
+			color: var(--color-faint);
+		}
+
+		.sb-label::after {
+			content: ':';
+		}
+
+		.sb-sep {
+			font-size: 0;
+		}
+
+		.sb-sep::before {
+			content: '|';
 			font-size: 22px;
 		}
 
-		.panel-btn .icon {
-			width: 20px;
-			height: 20px;
+		.panel-btn,
+		.sb-menu {
+			height: 44px;
+			padding: 0 12px;
+			font-size: 22px;
+			color: var(--color-fg);
 		}
 
 		.panel-btn:hover,
 		.panel-btn:focus-visible,
-		.panel-btn[aria-pressed="true"] {
+		.panel-btn[aria-pressed="true"],
+		.sb-menu:hover,
+		.sb-menu:focus-visible {
 			background: var(--color-fg);
 			color: var(--color-bg);
+			text-shadow: none;
+		}
+
+		.sb-glyph,
+		.statusbar [data-tip]::after {
+			display: none;
+		}
+
+		.sb-word {
+			display: inline;
+		}
+
+		[data-action="reboot"] .sb-word::before   { content: 'reboot'; }
+		[data-action="shutdown"] .sb-word::before { content: 'halt'; }
+
+		// the clock behind its own rule, with the block cursor parked after it
+		.sb-clock {
+			align-self: stretch;
+			padding: 0 16px;
+			border-left: 2px solid var(--color-fg);
+			color: var(--color-fg);
+		}
+
+		.sb-tz {
+			display: none;
+		}
+
+		.sb-clock .sb-screen::after {
+			content: '';
+			display: inline-block;
+			width: 0.6em;
+			height: 0.9em;
+			margin-left: 4px;
+			vertical-align: -0.1em;
+			background: var(--color-fg);
+		}
+
+		@media (max-width: $bp-mobile) {
+			.statusbar {
+				@include apple2-compact;
+			}
+		}
+
+		.statusbar.is-compact {
+			@include apple2-compact;
 		}
 
 		.project-card,

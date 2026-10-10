@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .hero {
-	min-height: 100vh;
-	min-height: 100svh; /* real visible height on mobile; 100vh overshoots behind the URL bar */
+	min-height: calc(100vh - var(--bar-h));
+	min-height: calc(100svh - var(--bar-h)); /* real visible height on mobile; 100vh overshoots behind the URL bar */
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .body-wrapper {
-	min-height: 100vh;
+	min-height: calc(100vh - var(--bar-h)); /* body pads its bottom by the status bar's height */
 	display: flex;
 	flex-direction: column;
 }

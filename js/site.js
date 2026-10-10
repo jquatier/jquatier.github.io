@@ -1,6 +1,6 @@
 ---
 ---
-/* jacobquatier.com: the boot and shutdown logs, the control panel, and card navigation.
+/* jacobquatier.com: the boot and shutdown logs, the status bar, and card navigation.
    two small inline scripts stay in the page because they have to run before first paint:
    the saved theme in _includes/head.html and the `booting` flag at the top of index.html */
 (function () {
@@ -123,22 +123,50 @@
     }
   })();
 
-  /* ---- control panel: themes, reboot, shutdown ---- */
+  /* ---- status bar: themes, reboot, shutdown, the clock ---- */
   (function () {
-    var themes = document.querySelectorAll('.panel-btn[data-theme]');
+    var DEFAULT = 'midnight';
+    var bar = document.querySelector('.statusbar');
+    var themes = bar.querySelectorAll('.panel-btn[data-theme]');
+    var menu = bar.querySelector('.sb-menu');
+    var menuName = bar.querySelector('.sb-menu-name');
 
     function render() {
-      var current = root.getAttribute('data-theme');
+      var current = root.getAttribute('data-theme') || DEFAULT;
       themes.forEach(function (btn) {
-        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-theme') === current));
+        var on = btn.getAttribute('data-theme') === current;
+        btn.setAttribute('aria-pressed', String(on));
+        if (on) menuName.textContent = btn.querySelector('.sb-name').textContent;
       });
     }
+
+    /* phone: the themes fold into one menu that opens above the bar */
+    function setOpen(open) {
+      bar.classList.toggle('is-open', open);
+      menu.setAttribute('aria-expanded', String(open));
+    }
+
+    menu.addEventListener('click', function () {
+      setOpen(!bar.classList.contains('is-open'));
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!bar.contains(e.target)) setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && bar.classList.contains('is-open')) {
+        setOpen(false);
+        menu.focus();
+      }
+    });
 
     /* one theme at a time; clicking the active one goes back to default */
     themes.forEach(function (btn) {
       btn.addEventListener('click', function () {
         var name = btn.getAttribute('data-theme');
-        var next = root.getAttribute('data-theme') === name ? null : name;
+        var next = name === DEFAULT || root.getAttribute('data-theme') === name ? null : name;
+        setOpen(false);
         if (next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
         if (next && window.themeFont) window.themeFont(next);
         try {
@@ -149,13 +177,31 @@
           setTimeout(function () { root.classList.remove('crt-power'); }, 600);
         }
         render();
+        fit();
       });
     });
 
-    document.querySelector('[data-action="reboot"]').addEventListener('click', reboot);
+    /* the era themes set wider type than the default, so the full bar can outgrow a tablet-width window
+       as well as a phone; whenever it doesn't fit, fold it into the compact layout */
+    function fit() {
+      bar.classList.remove('is-compact');
+      if (bar.scrollWidth > bar.clientWidth + 1) bar.classList.add('is-compact');
+    }
+
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(bar);
+    else window.addEventListener('resize', fit);
+    if (document.fonts) document.fonts.addEventListener('loadingdone', fit);
+
+    /* the bar and the game boy's SELECT/START both carry these */
+    function each(action, fn) {
+      Array.prototype.forEach.call(document.querySelectorAll('[data-action="' + action + '"]'), function (btn) {
+        btn.addEventListener('click', fn);
+      });
+    }
+
+    each('reboot', reboot);
 
     /* shutdown: collapse the page like a tube, log the teardown, halt */
-    var shutdown = document.querySelector('[data-action="shutdown"]');
     var halt = document.querySelector('.boot.shutdown');
 
     function halted() {
@@ -165,9 +211,9 @@
       setTimeout(function () { halt.classList.add('is-waiting'); }, 2500);
     }
 
-    shutdown.addEventListener('click', function () {
+    each('shutdown', function () {
       if (halt.classList.contains('is-open')) return;
-      shutdown.blur();
+      this.blur();
       root.classList.add('powering-off');
 
       // game boy: it's a power switch. the picture drops out and the screen goes unlit, no teardown log
@@ -186,9 +232,25 @@
     });
 
     render();
+
+    /* the time in portland, 24h, ticked over on the minute */
+    var clock = bar.querySelector('.sb-time');
+    var fmt;
+    try {
+      fmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Los_Angeles', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+      });
+    } catch (e) { return; }
+
+    function tick() {
+      var now = new Date();
+      clock.textContent = fmt.format(now);
+      setTimeout(tick, 60000 - (now.getTime() % 60000) + 50);
+    }
+    tick();
   })();
 
-  /* ---- card navigation: arrow keys on every theme, plus the d-pad in game boy mode.
+  /* ---- card navigation: arrow keys on every theme, plus the d-pad and A/B in game boy mode.
      the selection is the focused card; .is-selected mirrors :focus-visible so a d-pad tap (which
      browsers don't count as keyboard focus) still draws the highlight ---- */
   (function () {
@@ -260,29 +322,66 @@
       }
     });
 
+    /* A: open the selected card (or pick the first one if nothing is selected yet) */
+    function a() {
+      var list = cards();
+      var el = list.indexOf(document.activeElement) >= 0 ? document.activeElement : list.indexOf(last) >= 0 ? last : null;
+      if (el) el.click(); else move('right');
+    }
+
+    /* B: back a page while it stays on this site, otherwise home */
+    function b() {
+      var home = '{{ site.baseurl }}/';
+      var ref = null;
+      try { ref = document.referrer && new URL(document.referrer); } catch (e) {}
+      if (ref && ref.origin === location.origin && history.length > 1) history.back();
+      else if (location.pathname !== home) location.href = home;
+    }
+
+    /* in game boy mode the keyboard reaches A and B too: x/Enter is A, z/Backspace is B */
+    var KEYS = { x: 'a', X: 'a', Enter: 'a', z: 'b', Z: 'b', Backspace: 'b' };
+    var ACTIONS = { a: a, b: b };
+
     function pad(dir) { return document.querySelector('.dpad-btn[data-dir="' + dir + '"]'); }
+    function face(name) { return document.querySelector('.gb-btn[data-btn="' + name + '"]'); }
+
+    function typing(t) {
+      return t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName));
+    }
 
     document.addEventListener('keydown', function (e) {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.defaultPrevented) return;
+      if (root.classList.contains('powering-off') || typing(e.target)) return;
       var dir = DIRS[e.key];
-      if (!dir || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.defaultPrevented) return;
-      if (root.classList.contains('powering-off')) return;
-      var t = e.target;
-      if (t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName))) return;
-      if (move(dir)) {
-        e.preventDefault();
-        var btn = pad(dir);
-        if (btn) btn.classList.add('is-pressed');
+      if (dir) {
+        if (move(dir)) {
+          e.preventDefault();
+          var btn = pad(dir);
+          if (btn) btn.classList.add('is-pressed');
+        }
+        return;
       }
+
+      var name = root.getAttribute('data-theme') === 'gameboy' && KEYS[e.key];
+      // Enter on a link or button already does the right thing
+      if (!name || (e.key === 'Enter' && e.target.closest && e.target.closest('a, button'))) return;
+      e.preventDefault();
+      face(name).classList.add('is-pressed');
+      if (!e.repeat) ACTIONS[name]();
     });
 
     document.addEventListener('keyup', function (e) {
       var dir = DIRS[e.key];
-      var btn = dir && pad(dir);
+      var btn = dir ? pad(dir) : KEYS[e.key] && face(KEYS[e.key]);
       if (btn) btn.classList.remove('is-pressed');
     });
 
     Array.prototype.forEach.call(document.querySelectorAll('.dpad-btn'), function (btn) {
       btn.addEventListener('click', function () { move(btn.getAttribute('data-dir')); });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.gb-btn'), function (btn) {
+      btn.addEventListener('click', function () { ACTIONS[btn.getAttribute('data-btn')](); });
     });
   })();
 })();

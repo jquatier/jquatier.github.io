@@ -1,49 +1,98 @@
+@charset "UTF-8";
+
 /* ==========================================================================
-   Control panel (bottom toolbar) + CRT mode
+   Status bar (the footer pinned along the bottom of every page) + CRT mode
    ========================================================================== */
 
-.panel {
+:root {
+	--bar-h: 45px;   /* the bar's height; pages pad their bottom by it so nothing ends up behind the bar */
+}
+
+body {
+	padding-bottom: var(--bar-h);
+}
+
+.statusbar {
 	position: fixed;
-	left: 50%;
-	bottom: 14px;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	z-index: 20;
 	display: flex;
-	gap: 2px;
-	padding: 4px;
-	transform: translateX(-50%);
+	align-items: stretch;
+	height: var(--bar-h);
 	background: var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 6px;
-	box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+	border-top: 1px solid var(--color-border);
+	font-family: var(--font-mono);
+	font-size: 12px;
+	line-height: 1;
+	color: var(--color-muted);
 	animation: fade-in 0.4s 1.2s ease-out both;
 }
 
-.panel-btn {
+.sb-brand {
+	display: flex;
+	align-items: center;
+	flex: none;
+	padding: 0 14px;
+	background: var(--color-accent);
+	color: var(--color-bg);
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.sb-controls {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	margin-left: auto;
+	padding: 0 8px;
+}
+
+.sb-themes {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.sb-label,
+.sb-sep {
+	padding: 0 8px;
+	color: var(--color-faint);
+	white-space: nowrap;
+}
+
+.panel-btn,
+.sb-menu {
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 36px;
-	height: 32px;
-	padding: 0;
+	min-width: 44px;
+	height: 44px;
+	padding: 0 10px;
 	border: 0;
-	border-radius: 4px;
+	border-radius: 3px;
 	background: none;
-	font-family: var(--font-mono);
-	font-size: 18px;
-	line-height: 1;
+	font: inherit;
+	letter-spacing: inherit;
+	text-transform: inherit;
 	color: var(--color-muted);
+	white-space: nowrap;
 	cursor: pointer;
 	transition: color var(--transition), background var(--transition);
 }
 
-.panel-btn .icon {
-	width: 18px;
-	height: 18px;
+.panel-btn[data-action] {
+	padding: 0;
+	font-size: 16px;
 }
 
 .panel-btn:hover,
-.panel-btn:focus-visible {
+.panel-btn:focus-visible,
+.sb-menu:hover,
+.sb-menu:focus-visible {
 	color: var(--color-accent);
 	background: rgba(var(--accent-rgb), 0.08);
 	outline: none;
@@ -51,20 +100,42 @@
 
 .panel-btn[aria-pressed="true"] {
 	color: var(--color-accent);
+	background: rgba(var(--accent-rgb), 0.12);
+}
+
+/* the F-key chips and console buttons, the printed reboot/shutdown names, and the phone menu belong to the themes
+   and the narrow layout */
+.sb-key,
+.sb-word,
+.sb-menu,
+.sb-led {
+	display: none;
+}
+
+.sb-clock {
+	display: flex;
+	align-items: center;
+	flex: none;
+	padding: 0 18px 0 10px;
+	color: var(--color-fg-soft);
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
 }
 
 /* hover label, rendered above the control */
-.panel [data-tip]::after {
+.statusbar [data-tip]::after {
 	content: '// ' attr(data-tip);
 	position: absolute;
 	left: 50%;
-	bottom: calc(100% + 12px);
+	bottom: calc(100% + 8px);
 	transform: translate(-50%, 4px);
 	padding: 4px 8px;
 	border: 1px solid var(--color-border);
 	border-radius: 4px;
 	background: var(--color-surface-2);
+	font-family: var(--font-mono);
 	font-size: 11px;
+	line-height: 1.4;
 	letter-spacing: 0.02em;
 	white-space: nowrap;
 	color: var(--color-muted);
@@ -73,14 +144,93 @@
 	transition: opacity var(--transition), transform var(--transition);
 }
 
-.panel [data-tip]:hover::after,
-.panel [data-tip]:focus-visible::after {
+.statusbar [data-tip]:hover::after,
+.statusbar [data-tip]:focus-visible::after {
 	opacity: 1;
 	transform: translate(-50%, 0);
 }
 
-/* the d-pad is drawn by the game boy theme; everywhere else the arrow keys do the job */
-.dpad {
+/* compact: no clock, and the four themes fold into one `theme: <name> ▾` menu that opens above the bar.
+   always on a phone; js/site.js also sets .is-compact whenever the full bar doesn't fit (the era themes are wider) */
+@mixin sb-compact {
+	.sb-brand {
+		padding: 0 12px;
+	}
+
+	.sb-controls {
+		flex: 1;
+		min-width: 0;
+		gap: 0;
+		padding: 0 4px 0 0;
+	}
+
+	.sb-label,
+	.sb-sep,
+	.sb-clock {
+		display: none;
+	}
+
+	.sb-menu {
+		display: flex;
+		flex: 1;
+		justify-content: flex-start;
+		height: 48px;
+		padding: 0 14px;
+		border-radius: 0;
+		color: var(--color-fg-soft);
+	}
+
+	.panel-btn[data-action] {
+		width: 48px;
+		height: 48px;
+	}
+
+	.sb-themes {
+		position: absolute;
+		left: 0;
+		bottom: calc(100% + 1px);
+		display: none;
+		flex-direction: column;
+		align-items: stretch;
+		min-width: 180px;
+		padding: 4px;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border-strong);
+		border-bottom: 0;
+	}
+
+	&.is-open .sb-themes {
+		display: flex;
+	}
+
+	.sb-themes .panel-btn {
+		justify-content: flex-start;
+		height: 44px;
+		padding: 0 12px;
+	}
+
+	/* the tooltips sit off the edge of a phone screen and touch never hovers anyway */
+	[data-tip]::after {
+		display: none;
+	}
+}
+
+@media (max-width: $bp-mobile) {
+	:root {
+		--bar-h: 49px;
+	}
+
+	.statusbar {
+		@include sb-compact;
+	}
+}
+
+.statusbar.is-compact {
+	@include sb-compact;
+}
+
+/* the console is drawn by the game boy theme; everywhere else the arrow keys do the job */
+.console {
 	display: none;
 }
 
@@ -112,7 +262,8 @@ html[data-theme="apple2"] .crt-overlay::after {
 	animation: crt-roll 7s linear infinite;
 }
 
-html[data-theme="apple2"] .body-wrapper {
+html[data-theme="apple2"] .body-wrapper,
+html[data-theme="apple2"] .statusbar {
 	text-shadow:
 		0 0 2px rgba(var(--accent-rgb), 0.35),
 		1px 0 0 rgba(255, 0, 0, 0.12),

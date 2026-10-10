@@ -8,6 +8,43 @@
 	box-shadow: 10px 10px 0 #000000;
 }
 
+// the status bar folded up for a narrow window (see sb-compact in _panel.scss)
+@mixin dos-compact {
+	.sb-menu {
+		height: 44px;
+		padding: 0 12px;
+	}
+
+	.sb-menu .sb-key {
+		display: none;
+	}
+
+	.sb-menu-prefix {
+		text-transform: capitalize;
+	}
+
+	.sb-menu-name {
+		text-transform: uppercase;
+	}
+
+	.panel-btn[data-action] {
+		width: auto;
+		height: 44px;
+	}
+
+	// the theme menu opens as a dialog over the page
+	.sb-themes {
+		padding: 4px;
+		background: var(--dos-grey);
+		border: 0;
+		box-shadow: 6px 6px 0 #000000;
+	}
+
+	.sb-themes .panel-btn {
+		height: 40px;
+	}
+}
+
 html[data-theme="dos"] {
 	--dos-blue: #0000AA;
 	--dos-cyan: #55FFFF;
@@ -31,9 +68,10 @@ html[data-theme="dos"] {
 	--font-ui: 'VT323', 'JetBrains Mono', monospace;
 	--font-mono: 'VT323', 'JetBrains Mono', monospace;
 	--transition: 0s;
+	--bar-h: 44px;
 
 	body {
-		padding: 26px 0 40px;
+		padding: 26px 0 var(--bar-h);
 		font-size: 20px;
 		-webkit-font-smoothing: none;
 
@@ -263,62 +301,105 @@ html[data-theme="dos"] {
 		.status-warn { color: var(--dos-yellow); }
 		.status-err  { color: #FF5555; }
 
-		// the panel is the F-key bar along the bottom
-		.panel {
-			left: 0;
-			right: 0;
-			bottom: 0;
-			width: 100%;
-			gap: 0;
-			padding: 0 8px;
-			transform: none;
-			justify-content: flex-start;
+		// the status bar is the F-key bar along the bottom: JQ-OS in the menubar's grey with its hot letter,
+		// a key per control, and the clock in a black box at the far end
+		.statusbar {
 			background: var(--dos-teal);
 			border: 0;
-			box-shadow: none;
-		}
-
-		.panel-btn {
-			width: auto;
-			height: 26px;
-			padding: 0 12px 0 4px;
 			font-size: 20px;
-			line-height: 26px;
 			color: #000000;
 		}
 
-		.panel-btn::before {
-			display: inline-block;
-			margin-right: 6px;
+		.sb-brand {
+			padding: 0 12px;
+			background: var(--dos-grey);
+			color: #000000;
+			font-weight: 400;
+			text-transform: uppercase;
+		}
+
+		.sb-hot {
+			color: #AA0000;
+		}
+
+		.sb-controls {
+			gap: 0;
+			margin-left: 0;
+			padding: 0;
+		}
+
+		.sb-themes {
+			gap: 0;
+		}
+
+		.sb-label,
+		.sb-sep,
+		.sb-glyph,
+		.statusbar [data-tip]::after {
+			display: none;
+		}
+
+		.panel-btn,
+		.sb-menu {
+			gap: 6px;
+			height: 44px;
+			padding: 0 12px 0 8px;
+			font-size: 20px;
+			color: #000000;
+		}
+
+		.sb-name {
+			text-transform: capitalize;
+		}
+
+		[data-theme="dos"] .sb-name {
+			text-transform: uppercase;
+		}
+
+		.sb-key,
+		.sb-word {
+			display: inline;
+		}
+
+		.sb-key {
 			padding: 0 3px;
 			background: #000000;
 			color: #FFFFFF;
-			font-size: 20px;
 		}
 
-		.panel-btn:nth-child(1)::before { content: 'F1'; }
-		.panel-btn:nth-child(2)::before { content: 'F2'; }
-		.panel-btn:nth-child(3)::before { content: 'F3'; }
-		.panel-btn:nth-child(4)::before { content: 'F5'; }
-		.panel-btn:nth-child(5)::before { content: 'F10'; }
+		[data-theme="midnight"] .sb-key::before   { content: 'F1'; }
+		[data-theme="apple2"] .sb-key::before     { content: 'F2'; }
+		[data-theme="gameboy"] .sb-key::before    { content: 'F3'; }
+		[data-theme="dos"] .sb-key::before        { content: 'F4'; }
+		[data-action="reboot"] .sb-key::before    { content: 'F5'; }
+		[data-action="shutdown"] .sb-key::before  { content: 'F10'; }
+
+		[data-action="reboot"] .sb-word::before   { content: 'Reboot'; }
+		[data-action="shutdown"] .sb-word::before { content: 'Quit'; }
 
 		.panel-btn:hover,
 		.panel-btn:focus-visible,
-		.panel-btn[aria-pressed="true"] {
+		.panel-btn[aria-pressed="true"],
+		.sb-menu:hover,
+		.sb-menu:focus-visible {
 			background: #000000;
 			color: var(--dos-yellow);
 		}
 
-		.panel [data-tip]::after {
-			bottom: calc(100% + 8px);
-			background: var(--dos-grey);
-			border: 0;
+		.panel-btn[aria-pressed="true"] .sb-key {
+			background: var(--dos-yellow);
 			color: #000000;
-			box-shadow: 6px 6px 0 #000000;
 		}
 
-		.site-footer {
-			padding-bottom: 60px;
+		.sb-clock {
+			margin-left: auto;
+			padding: 0 14px;
+			background: #000000;
+			color: var(--dos-cyan);
+		}
+
+		.sb-tz {
+			display: none;
 		}
 
 		// the boot keeps the black screen — that part happened before the TUI loaded
@@ -343,10 +424,16 @@ html[data-theme="dos"] {
 			.link-grid::after {
 				content: '\A        ' attr(data-files) ' file(s)';
 			}
+		}
 
-			.panel-btn {
-				padding-right: 6px;
+		@media (max-width: $bp-mobile) {
+			.statusbar {
+				@include dos-compact;
 			}
+		}
+
+		.statusbar.is-compact {
+			@include dos-compact;
 		}
 	}
 }

@@ -84,7 +84,7 @@ a.card-link {
 }
 
 /* the cards the arrow keys and d-pad move between (js/site.js); keep a selected one clear of the
-   viewport edge (and the fixed panel) when it scrolls into view */
+   viewport edge (and the status bar) when it scrolls into view */
 [data-nav-card] {
 	scroll-margin: 24px 0 72px;
 }

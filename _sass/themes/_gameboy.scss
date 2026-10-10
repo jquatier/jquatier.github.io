@@ -3,6 +3,74 @@
 /* ---------- game boy : a DMG-01 at true proportions. body 90×148mm, LCD 47×43mm.
    everything is positioned in millimetres via --u (1mm in px), so the shell scales as one object ---------- */
 
+// place an element by its center, in mm from the shell's top-left corner, optionally turned
+@mixin gb-at($x, $y, $w, $h, $turn: 0deg) {
+	position: absolute;
+	left: calc(#{$x} * var(--u));
+	top: calc(#{$y} * var(--u));
+	width: calc(#{$w} * var(--u));
+	height: calc(#{$h} * var(--u));
+	transform: translate(-50%, -50%) rotate($turn);
+}
+
+// the status bar folded up for a narrow window (see sb-compact in _panel.scss): the theme menu is one magenta
+// button, and reboot/power print their names under the pills
+@mixin gameboy-compact {
+	gap: 6px;
+	padding: 0 10px;
+
+	.sb-brand {
+		padding: 3px;
+	}
+
+	.sb-screen {
+		padding: 6px 7px;
+	}
+
+	.sb-controls {
+		gap: 0;
+		margin: 0;
+	}
+
+	.sb-menu {
+		height: 44px;
+		padding: 0 6px;
+		color: #3B3785;
+	}
+
+	.sb-menu-prefix {
+		display: none;
+	}
+
+	.panel-btn[data-action] {
+		flex-direction: column;
+		gap: 5px;
+		width: auto;
+		height: 48px;
+		padding: 0 6px;
+		font-size: 8px;
+		letter-spacing: 0.1em;
+	}
+
+	.panel-btn[data-action] .sb-key {
+		width: 26px;
+		height: 9px;
+	}
+
+	.sb-themes {
+		min-width: 190px;
+		padding: 8px;
+		background: var(--gb-shell);
+		border: 0;
+		border-radius: 8px 8px 0 0;
+		box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5), 0 -10px 30px rgba(0, 0, 0, 0.35);
+	}
+
+	.sb-themes .panel-btn {
+		padding: 0 8px;
+	}
+}
+
 // the lit LCD: a faint pixel grid over the lightest green, inside the glass's dark edge
 @mixin gb-lcd {
 	background:
@@ -43,7 +111,9 @@ html[data-theme="gameboy"] {
 	--font-ui: 'Press Start 2P', 'JetBrains Mono', monospace;
 	--font-mono: 'Press Start 2P', 'JetBrains Mono', monospace;
 	--transition: 0s;
-	--shell-w: min(92vw, calc((100vh - 32px) * 0.608), 640px);
+	--bar-h: 52px;
+	// the shell fits the viewport height above the status bar
+	--shell-w: min(92vw, calc((100vh - 32px - var(--bar-h)) * 0.608), 640px);
 	--u: calc(var(--shell-w) / 90);
 	min-height: 100vh;
 	background: #26262B;
@@ -102,10 +172,10 @@ html[data-theme="gameboy"] {
 		width: var(--shell-w);
 		min-height: 0;
 		aspect-ratio: 90 / 148;
-		margin: 16px auto;
+		margin: 16px auto calc(16px + var(--bar-h));
 		padding: 0;
 		background: var(--gb-shell);
-		border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(20 * var(--u)) calc(3 * var(--u));
+		border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(16.5 * var(--u)) calc(3 * var(--u));
 		box-shadow:
 			inset 0 calc(-0.6 * var(--u)) 0 rgba(0, 0, 0, 0.14),
 			inset 0 calc(0.4 * var(--u)) 0 rgba(255, 255, 255, 0.5),
@@ -497,201 +567,442 @@ html[data-theme="gameboy"] {
 			padding: calc(2 * var(--u)) 0;
 		}
 
-		// ---- the controls: the panel covers the lower half of the shell and lays the buttons out like the real thing ----
-
-		.panel {
-			position: absolute;
-			top: calc(78 * var(--u));
-			left: 0;
-			right: 0;
-			bottom: 0;
-			width: auto;
-			display: block;
-			padding: 0;
-			transform: none;
-			background: none;
-			border: 0;
-			box-shadow: none;
-			animation: none;
-			z-index: 2;
-		}
-
-		// d-pad: the cross is one element, each arm is a button that moves the selection on the LCD
-		.dpad {
-			display: block;
-			position: absolute;
-			top: calc(11 * var(--u));
-			left: calc(7 * var(--u));
-			width: calc(22 * var(--u));
-			height: calc(22 * var(--u));
-			background:
-				radial-gradient(circle, #3A3A40 19%, transparent 20%) center / 100% 100% no-repeat,
-				linear-gradient(var(--gb-dark), var(--gb-dark)) center / 34% 100% no-repeat,
-				linear-gradient(var(--gb-dark), var(--gb-dark)) center / 100% 34% no-repeat;
-			filter: drop-shadow(0 calc(0.4 * var(--u)) 0 rgba(0, 0, 0, 0.35));
-			transition: transform 0.08s ease-out;
-		}
-
-		// the whole pad rocks toward the arm being pressed
-		.dpad:has([data-dir="up"]:is(:active, .is-pressed))    { transform: perspective(calc(40 * var(--u))) rotateX(10deg); }
-		.dpad:has([data-dir="down"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateX(-10deg); }
-		.dpad:has([data-dir="left"]:is(:active, .is-pressed))  { transform: perspective(calc(40 * var(--u))) rotateY(-10deg); }
-		.dpad:has([data-dir="right"]:is(:active, .is-pressed)) { transform: perspective(calc(40 * var(--u))) rotateY(10deg); }
-
-		.dpad-btn {
-			position: absolute;
-			display: block;
-			width: 34%;
-			height: 33%;
-			padding: 0;
-			border: 0;
-			border-radius: calc(0.6 * var(--u));
-			background: none;
-			color: transparent;
-			cursor: pointer;
-			-webkit-tap-highlight-color: transparent;
-			touch-action: manipulation;
-		}
-
-		.dpad-btn[data-dir="up"]    { top: 0;    left: 33%; }
-		.dpad-btn[data-dir="down"]  { bottom: 0; left: 33%; }
-		.dpad-btn[data-dir="left"]  { top: 33%;  left: 0;  width: 33%; height: 34%; }
-		.dpad-btn[data-dir="right"] { top: 33%;  right: 0; width: 33%; height: 34%; }
-
-		// a faint arrow on each arm so the pad reads as a control
-		.dpad-btn::before {
-			content: '';
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			width: 0;
-			height: 0;
-			border: calc(1.1 * var(--u)) solid transparent;
-			transform: translate(-50%, -50%);
-		}
-
-		.dpad-btn[data-dir="up"]::before    { border-bottom-color: rgba(255, 255, 255, 0.14); margin-top: calc(-0.55 * var(--u)); }
-		.dpad-btn[data-dir="down"]::before  { border-top-color: rgba(255, 255, 255, 0.14);    margin-top: calc(0.55 * var(--u)); }
-		.dpad-btn[data-dir="left"]::before  { border-right-color: rgba(255, 255, 255, 0.14);  margin-left: calc(-0.55 * var(--u)); }
-		.dpad-btn[data-dir="right"]::before { border-left-color: rgba(255, 255, 255, 0.14);   margin-left: calc(0.55 * var(--u)); }
-
-		.dpad-btn:hover::before {
-			border-color: transparent;
-		}
-
-		.dpad-btn[data-dir="up"]:hover::before    { border-bottom-color: rgba(255, 255, 255, 0.32); }
-		.dpad-btn[data-dir="down"]:hover::before  { border-top-color: rgba(255, 255, 255, 0.32); }
-		.dpad-btn[data-dir="left"]:hover::before  { border-right-color: rgba(255, 255, 255, 0.32); }
-		.dpad-btn[data-dir="right"]:hover::before { border-left-color: rgba(255, 255, 255, 0.32); }
-
-		.dpad-btn:active,
-		.dpad-btn.is-pressed {
-			background: rgba(0, 0, 0, 0.28);
-		}
-
-		.dpad-btn:focus-visible {
-			outline: calc(0.35 * var(--u)) solid #F4D6E8;
-			outline-offset: calc(-0.35 * var(--u));
-		}
-
 		// inside the LCD the margins are tight, but a selected card lifts 3px and grows a 4px focus ring,
 		// so leave room for those plus the glass edge
 		[data-nav-card] {
 			scroll-margin: calc(1.5 * var(--u) + 7px) 0;
 		}
 
-		// speaker grille: six slanted slots, bottom right
-		.panel::after {
-			content: '';
+		// ---- the front panel, as on a DMG-01: d-pad, B and A in their well, SELECT and START, the speaker grille.
+		// positions are element centers in mm from the shell's top-left corner, measured off the real console ----
+
+		.console {
+			display: block;
 			position: absolute;
-			right: calc(9 * var(--u));
-			bottom: calc(6 * var(--u));
-			width: calc(21 * var(--u));
-			height: calc(16 * var(--u));
-			background: repeating-linear-gradient(90deg, #8A867F 0 calc(1.6 * var(--u)), transparent calc(1.6 * var(--u)) calc(3.6 * var(--u)));
-			transform: rotate(-28deg);
-			border-radius: calc(1 * var(--u));
-		}
-
-		.panel-btn {
-			position: absolute;
-			width: calc(11 * var(--u));
-			height: calc(11 * var(--u));
-			border-radius: 50%;
-			background: var(--gb-button);
-			color: #3D1230;
-			font-size: calc(3 * var(--u));
-			box-shadow:
-				inset 0 calc(-0.9 * var(--u)) 0 rgba(0, 0, 0, 0.28),
-				0 calc(0.5 * var(--u)) 0 #8E8A84;
-		}
-
-		// the mode buttons take the A/B diagonal (plus one more up the same line)
-		.panel-btn[data-theme="apple2"]  { right: calc(8 * var(--u));  top: calc(5 * var(--u)); }
-		.panel-btn[data-theme="gameboy"] { right: calc(22 * var(--u)); top: calc(11.5 * var(--u)); }
-		.panel-btn[data-theme="dos"]     { right: calc(36 * var(--u)); top: calc(18 * var(--u)); }
-
-		.panel-btn .icon {
-			width: calc(5.8 * var(--u));
-			height: calc(5.8 * var(--u));
-		}
-
-		.panel-btn:hover,
-		.panel-btn:focus-visible {
-			background: #B94489;
-			color: #3D1230;
-		}
-
-		.panel-btn[aria-pressed="true"] {
-			background: #7E2459;
-			color: #F4D6E8;
-			box-shadow: inset 0 calc(0.8 * var(--u)) 0 rgba(0, 0, 0, 0.3);
-		}
-
-		// select / start
-		.panel-btn:not([data-theme]) {
-			width: calc(12 * var(--u));
-			height: calc(4.4 * var(--u));
-			border-radius: calc(3 * var(--u));
-			background: #7B7776;
-			color: #D8D5D0;
-			font-size: calc(2.2 * var(--u));
-			transform: rotate(-25deg);
-			box-shadow:
-				inset 0 calc(-0.5 * var(--u)) 0 rgba(0, 0, 0, 0.3),
-				0 calc(0.3 * var(--u)) 0 #8E8A84;
-		}
-
-		.panel-btn[data-action="reboot"]   { left: calc(24.5 * var(--u)); top: calc(44.8 * var(--u)); }
-		.panel-btn[data-action="shutdown"] { left: calc(40.5 * var(--u)); top: calc(44.8 * var(--u)); }
-
-		.panel-btn:not([data-theme]):hover {
-			background: #8A8685;
-		}
-
-		.panel-btn:not([data-theme])::before {
-			position: absolute;
-			top: calc(100% + 0.9 * var(--u));
-			left: 50%;
-			transform: translateX(-50%);
-			font: 700 calc(1.9 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
-			letter-spacing: 0.16em;
-			color: #3B3785;
+			inset: 0;
+			z-index: 2;
 			pointer-events: none;
 		}
 
-		.panel-btn[data-action="reboot"]::before   { content: 'SELECT'; }
-		.panel-btn[data-action="shutdown"]::before { content: 'START'; }
+		.console button {
+			padding: 0;
+			border: 0;
+			cursor: pointer;
+			pointer-events: auto;
+			-webkit-tap-highlight-color: transparent;
+			touch-action: manipulation;
+		}
 
-		.panel [data-tip]::after {
-			bottom: calc(100% + calc(1.5 * var(--u)));
-			padding: calc(0.6 * var(--u)) calc(1 * var(--u));
-			background: var(--gb-3);
-			border: calc(0.35 * var(--u)) solid var(--gb-0);
-			color: var(--gb-0);
-			font-size: calc(1.3 * var(--u));
+		.console button:focus-visible {
+			outline: calc(0.35 * var(--u)) solid var(--gb-ink);
+			outline-offset: calc(0.5 * var(--u));
+		}
+
+		// d-pad: 22.1mm across, 7.8mm arms ribbed across their length, a dimple in the middle. each arm is a button
+		.dpad {
+			--arm: 35.3%;
+			display: block;
+			@include gb-at(18.2, 100.2, 22.1, 22.1);
+			pointer-events: auto;
+			filter: drop-shadow(0 calc(0.4 * var(--u)) 0 rgba(0, 0, 0, 0.35));
+			transition: transform 0.08s ease-out;
+		}
+
+		.dpad::before,
+		.dpad::after {
+			content: '';
+			position: absolute;
+			border-radius: calc(1 * var(--u));
+			box-shadow: inset 0 0 0 calc(0.15 * var(--u)) #1A1A1D, inset calc(0.3 * var(--u)) calc(0.3 * var(--u)) 0 rgba(255, 255, 255, 0.06);
+		}
+
+		.dpad::before {
+			top: 0;
+			bottom: 0;
+			left: calc(50% - var(--arm) / 2);
+			width: var(--arm);
+			background: repeating-linear-gradient(0deg, var(--gb-dark) 0 calc(0.55 * var(--u)), #36363C calc(0.55 * var(--u)) calc(0.8 * var(--u)));
+		}
+
+		// the cross bar carries the flat center square and the dimple
+		.dpad::after {
+			left: 0;
+			right: 0;
+			top: calc(50% - var(--arm) / 2);
+			height: var(--arm);
+			background:
+				radial-gradient(circle, #1E1E22 calc(1 * var(--u)), #3A3A40 calc(1.4 * var(--u)), transparent calc(1.45 * var(--u))) center / 100% 100% no-repeat,
+				linear-gradient(var(--gb-dark), var(--gb-dark)) center / var(--arm) 100% no-repeat,
+				repeating-linear-gradient(90deg, var(--gb-dark) 0 calc(0.55 * var(--u)), #36363C calc(0.55 * var(--u)) calc(0.8 * var(--u)));
+		}
+
+		// the whole pad rocks toward the arm being pressed
+		.dpad:has([data-dir="up"]:is(:active, .is-pressed))    { transform: translate(-50%, -50%) perspective(calc(40 * var(--u))) rotateX(10deg); }
+		.dpad:has([data-dir="down"]:is(:active, .is-pressed))  { transform: translate(-50%, -50%) perspective(calc(40 * var(--u))) rotateX(-10deg); }
+		.dpad:has([data-dir="left"]:is(:active, .is-pressed))  { transform: translate(-50%, -50%) perspective(calc(40 * var(--u))) rotateY(-10deg); }
+		.dpad:has([data-dir="right"]:is(:active, .is-pressed)) { transform: translate(-50%, -50%) perspective(calc(40 * var(--u))) rotateY(10deg); }
+
+		.dpad-btn {
+			position: absolute;
+			z-index: 1;
+			display: block;
+			border-radius: calc(1 * var(--u));
+			background: none;
+			color: transparent;
+		}
+
+		.dpad-btn[data-dir="up"],
+		.dpad-btn[data-dir="down"] {
+			left: calc(50% - var(--arm) / 2);
+			width: var(--arm);
+			height: calc(50% - var(--arm) / 2);
+		}
+
+		.dpad-btn[data-dir="left"],
+		.dpad-btn[data-dir="right"] {
+			top: calc(50% - var(--arm) / 2);
+			width: calc(50% - var(--arm) / 2);
+			height: var(--arm);
+		}
+
+		.dpad-btn[data-dir="up"]    { top: 0; }
+		.dpad-btn[data-dir="down"]  { bottom: 0; }
+		.dpad-btn[data-dir="left"]  { left: 0; }
+		.dpad-btn[data-dir="right"] { right: 0; }
+
+		.dpad-btn:hover {
+			background: rgba(255, 255, 255, 0.05);
+		}
+
+		.dpad-btn:active,
+		.dpad-btn.is-pressed {
+			background: rgba(0, 0, 0, 0.28);
+		}
+
+		// B and A sit on a 26° diagonal in one recessed pill, a shade lighter than the shell
+		.gb-well {
+			@include gb-at(71, 98.75, 30, 14, -26deg);
+			border-radius: calc(7 * var(--u));
+			background: #CDCAC3;
+			box-shadow:
+				inset 0 calc(0.35 * var(--u)) calc(0.7 * var(--u)) rgba(0, 0, 0, 0.14),
+				0 calc(0.17 * var(--u)) 0 rgba(255, 255, 255, 0.5);
+		}
+
+		.gb-btn {
+			border-radius: 50%;
+			background: radial-gradient(circle at 36% 30%, #C25C93, var(--gb-button) 45%, #8A2860);
+			box-shadow:
+				inset 0 calc(-0.7 * var(--u)) 0 rgba(0, 0, 0, 0.22),
+				0 0 0 calc(0.35 * var(--u)) #7A2558,
+				0 calc(0.5 * var(--u)) 0 #8E8A84;
+		}
+
+		.gb-btn[data-btn="b"] { @include gb-at(63.6, 102.4, 11.4, 11.4); }
+		.gb-btn[data-btn="a"] { @include gb-at(78.4, 95.1, 11.4, 11.4); }
+
+		.gb-btn:hover {
+			background: radial-gradient(circle at 36% 30%, #CC6A9E, #B94489 45%, #922B67);
+		}
+
+		.gb-btn:active,
+		.gb-btn.is-pressed {
+			background: #7E2459;
+			box-shadow:
+				inset 0 calc(0.8 * var(--u)) 0 rgba(0, 0, 0, 0.3),
+				0 0 0 calc(0.35 * var(--u)) #7A2558;
+			transform: translate(-50%, calc(-50% + 0.4 * var(--u)));
+		}
+
+		// SELECT / START: small rubber pills in a light recess. the hit area reaches past the pill so a finger finds it
+		.gb-pill {
+			--hit: max(calc(2.5 * var(--u)), calc(22px - 1.55 * var(--u)));
+			border-radius: calc(1.55 * var(--u));
+			background: linear-gradient(#8C8886, #6E6A69);
+			box-shadow:
+				inset 0 calc(-0.35 * var(--u)) 0 rgba(0, 0, 0, 0.3),
+				0 0 0 calc(0.95 * var(--u)) #D4D1CA,
+				0 0 0 calc(1.12 * var(--u)) rgba(0, 0, 0, 0.12);
+		}
+
+		.gb-pill[data-action="reboot"]   { @include gb-at(32.3, 122.5, 10.8, 3.1, -26deg); }
+		.gb-pill[data-action="shutdown"] { @include gb-at(47.8, 122.4, 10.8, 3.1, -26deg); }
+
+		.gb-pill::after {
+			content: '';
+			position: absolute;
+			inset: calc(-1 * var(--hit)) calc(-1.5 * var(--u));
+		}
+
+		.gb-pill:hover {
+			background: linear-gradient(#999593, #7B7776);
+		}
+
+		.gb-pill:active {
+			background: #6E6A69;
+			box-shadow:
+				inset 0 calc(0.35 * var(--u)) 0 rgba(0, 0, 0, 0.3),
+				0 0 0 calc(0.95 * var(--u)) #D4D1CA,
+				0 0 0 calc(1.12 * var(--u)) rgba(0, 0, 0, 0.12);
+		}
+
+		// the printed labels: violet ink, wide letterforms on the same 26° slant. A and B sit off their button's
+		// lower-right edge, SELECT and START below and a little left along the pill's axis
+		.gb-print {
+			position: absolute;
+			font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+			line-height: 1;
+			white-space: nowrap;
+			color: #3B3785;
+			text-transform: none;
+			-webkit-font-smoothing: antialiased;
+			pointer-events: none;
+		}
+
+		.gb-print-a,
+		.gb-print-b {
+			font-size: calc(2.9 * var(--u));
+			font-weight: 600;
+			transform: translate(-50%, -50%) rotate(-26deg) scaleX(1.35);
+		}
+
+		.gb-print-a { left: calc(82.6 * var(--u)); top: calc(105 * var(--u)); }
+		.gb-print-b { left: calc(67.7 * var(--u)); top: calc(112.4 * var(--u)); }
+
+		// the trailing letter-spacing is balanced with the same padding up front so the word centers on its point
+		.gb-print-select,
+		.gb-print-start {
+			padding-left: 0.12em;
+			font-size: calc(2.35 * var(--u));
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			transform: translate(-50%, -50%) rotate(-26deg) scaleX(1.3);
+		}
+
+		.gb-print-select { left: calc(33.6 * var(--u)); top: calc(127.7 * var(--u)); }
+		.gb-print-start  { left: calc(49.2 * var(--u)); top: calc(127.2 * var(--u)); }
+
+		// speaker grille: six separate grooves at 60°. the first is only a faint ridge
+		.gb-grille span {
+			@include gb-at(0, 0, 14.2, 1.4, 60deg);
+			border-radius: calc(0.7 * var(--u));
+			background: #2E2C2A;
+			box-shadow:
+				inset 0 calc(0.17 * var(--u)) calc(0.17 * var(--u)) rgba(0, 0, 0, 0.6),
+				calc(0.17 * var(--u)) calc(0.17 * var(--u)) 0 rgba(255, 255, 255, 0.55);
+		}
+
+		@for $i from 0 through 5 {
+			.gb-grille span:nth-child(#{$i + 1}) {
+				left: calc(#{59.9 + 4.54 * $i} * var(--u));
+				top: calc(#{139.6 - 2.5 * $i} * var(--u));
+			}
+		}
+
+		.gb-grille span:first-child {
+			background: #B3AFA8;
+			box-shadow: inset 0 calc(0.17 * var(--u)) 0 rgba(0, 0, 0, 0.15);
+		}
+
+		// ---- the status bar: outside the console, a strip of the same shell plastic along the bottom of the page ----
+
+		.statusbar {
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			padding: 0 14px;
+			background: var(--gb-shell);
+			border: 0;
+			border-radius: 8px 8px 0 0;
+			box-shadow:
+				inset 0 2px 0 rgba(255, 255, 255, 0.5),
+				inset 0 -3px 0 rgba(0, 0, 0, 0.14),
+				0 -10px 30px rgba(0, 0, 0, 0.35);
+			font: 700 10px / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
+			letter-spacing: 0.14em;
 			text-transform: uppercase;
-			transform: translate(-50%, 0) rotate(0);
+			color: #3B3785;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		// JQ-OS and the clock each get a little LCD in the bezel's grey frame
+		.sb-brand {
+			align-self: center;
+			padding: 4px;
+			background: var(--gb-bezel);
+			border-radius: 4px 4px 10px 4px;
+			color: var(--gb-0);
+		}
+
+		.statusbar .sb-screen {
+			display: block;
+			padding: 6px 9px;
+			background:
+				linear-gradient(rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+				linear-gradient(90deg, rgba(15, 56, 15, 0.08) 1px, transparent 1px) 0 0 / 3px 3px,
+				var(--gb-3);
+			box-shadow: inset 0 0 0 2px #66701A;
+			font: 400 10px / 1 'Press Start 2P', monospace;
+			letter-spacing: 0;
+			color: var(--gb-0);
+			-webkit-font-smoothing: none;
+		}
+
+		.sb-controls {
+			gap: 4px 6px;
+			margin: 0 auto;
+			padding: 0;
+		}
+
+		.sb-themes {
+			gap: 4px 6px;
+		}
+
+		.sb-label,
+		.sb-glyph,
+		.statusbar [data-tip]::after {
+			display: none;
+		}
+
+		.sb-sep {
+			width: 2px;
+			height: 22px;
+			margin: 0 6px;
+			padding: 0;
+			background: #8E8A84;
+			font-size: 0;
+		}
+
+		.panel-btn,
+		.sb-menu {
+			gap: 7px;
+			height: 44px;
+			padding: 0 7px;
+			border-radius: 0;
+			background: none;
+			color: #3B3785;
+		}
+
+		.panel-btn[data-action] {
+			gap: 8px;
+			padding: 0 7px;
+			font-size: inherit;
+		}
+
+		.panel-btn:hover,
+		.panel-btn:focus-visible,
+		.panel-btn[aria-pressed="true"],
+		.sb-menu:hover,
+		.sb-menu:focus-visible {
+			background: none;
+			color: #3B3785;
+		}
+
+		.panel-btn:focus-visible,
+		.sb-menu:focus-visible {
+			outline: 2px solid #3B3785;
+			outline-offset: -2px;
+		}
+
+		// the theme buttons are the console's round magenta buttons with their name printed beside them
+		.sb-key {
+			display: block;
+			flex: none;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--gb-button);
+			box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.28), 0 2px 0 #8E8A84;
+		}
+
+		.panel-btn:hover .sb-key,
+		.sb-menu:hover .sb-key {
+			background: #B94489;
+		}
+
+		.panel-btn[aria-pressed="true"] .sb-key {
+			background: #7E2459;
+			box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+			transform: translateY(2px);
+		}
+
+		.panel-btn[aria-pressed="true"] .sb-name {
+			text-decoration: underline 2px;
+			text-underline-offset: 4px;
+		}
+
+		// reboot and power are the slanted grey pills
+		.panel-btn[data-action] .sb-key {
+			width: 32px;
+			height: 11px;
+			border-radius: 6px;
+			background: #7B7776;
+			box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+			transform: rotate(-25deg);
+		}
+
+		.panel-btn[data-action]:hover .sb-key {
+			background: #8A8685;
+		}
+
+		.panel-btn[data-action]:active .sb-key {
+			box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3);
+		}
+
+		.sb-word {
+			display: inline;
+		}
+
+		[data-action="reboot"] .sb-word::before   { content: 'reboot'; }
+		[data-action="shutdown"] .sb-word::before { content: 'power'; }
+
+		.sb-clock {
+			gap: 10px;
+			padding: 0;
+			color: inherit;
+		}
+
+		.sb-tz {
+			display: none;
+		}
+
+		// the battery LED goes dark with the console's at power-off
+		.sb-led {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 8px;
+			letter-spacing: 0.08em;
+		}
+
+		.sb-led::before {
+			content: '';
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: var(--gb-led);
+			box-shadow: 0 0 6px var(--gb-led-glow);
+		}
+
+		.sb-led::after {
+			content: 'battery';
+		}
+
+		// the clock's LCD is framed by a spread shadow; JQ-OS gets the same frame from its wrapper
+		.sb-clock .sb-screen {
+			margin: 4px;
+			border-radius: 0 0 6px 0;
+			box-shadow: inset 0 0 0 2px #66701A, 0 0 0 4px var(--gb-bezel);
+		}
+
+		@media (max-width: $bp-mobile) {
+			.statusbar {
+				@include gameboy-compact;
+			}
+		}
+
+		.statusbar.is-compact {
+			@include gameboy-compact;
 		}
 
 		// the boot plays inside the LCD like the real power-on: a blank screen, then the logo scrolls down
@@ -737,7 +1048,7 @@ html[data-theme="gameboy"] {
 
 	// the shell and its buttons don't move; only what's on the screen vanishes
 	&.powering-off body .body-wrapper,
-	&.powering-off body .panel {
+	&.powering-off body .statusbar {
 		animation: none;
 	}
 
