@@ -154,6 +154,11 @@
       if (!bar.contains(e.target)) setOpen(false);
     });
 
+    // close it once focus moves on to anything that isn't the menu or its themes
+    document.addEventListener('focusin', function (e) {
+      if (e.target !== menu && !e.target.closest('.sb-themes')) setOpen(false);
+    });
+
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && bar.classList.contains('is-open')) {
         setOpen(false);
@@ -166,7 +171,11 @@
       btn.addEventListener('click', function () {
         var name = btn.getAttribute('data-theme');
         var next = name === DEFAULT || root.getAttribute('data-theme') === name ? null : name;
-        setOpen(false);
+        // picked from the open menu: the list is about to hide, so hand focus back to the menu button
+        if (bar.classList.contains('is-open')) {
+          setOpen(false);
+          menu.focus();
+        }
         if (next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
         if (next && window.themeFont) window.themeFont(next);
         try {
@@ -186,6 +195,8 @@
     function fit() {
       bar.classList.remove('is-compact');
       if (bar.scrollWidth > bar.clientWidth + 1) bar.classList.add('is-compact');
+      // back to the full bar: drop the menu's open state so it doesn't reappear on the next fold
+      if (getComputedStyle(menu).display === 'none') setOpen(false);
     }
 
     if (window.ResizeObserver) new ResizeObserver(fit).observe(bar);

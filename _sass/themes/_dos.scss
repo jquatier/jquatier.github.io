@@ -118,7 +118,14 @@ html[data-theme="dos"] {
 			color: #000000;
 		}
 
+		// fill the screen between the menubar and the F-key bar, not past it
+		.body-wrapper {
+			min-height: calc(100vh - 26px - var(--bar-h));
+		}
+
 		.hero {
+			min-height: calc(100vh - 26px - var(--bar-h));
+			min-height: calc(100svh - 26px - var(--bar-h));
 			padding-top: 40px;
 			padding-bottom: 80px;
 		}

@@ -199,6 +199,13 @@ html[data-theme="apple2"] {
 			text-shadow: none;
 		}
 
+		// a black ring inside the inverse-video block
+		.panel-btn:focus-visible,
+		.sb-menu:focus-visible {
+			outline: 2px solid var(--color-bg);
+			outline-offset: -5px;
+		}
+
 		.sb-glyph,
 		.statusbar [data-tip]::after {
 			display: none;
