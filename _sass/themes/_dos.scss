@@ -68,7 +68,6 @@ html[data-theme="dos"] {
 	--font-ui: 'VT323', 'JetBrains Mono', monospace;
 	--font-mono: 'VT323', 'JetBrains Mono', monospace;
 	--transition: 0s;
-	--bar-h: 44px;
 
 	body {
 		padding: 26px 0 var(--bar-h);
@@ -315,6 +314,10 @@ html[data-theme="dos"] {
 			border: 0;
 			font-size: 20px;
 			color: #000000;
+		}
+
+		.statusbar::before {
+			display: none;
 		}
 
 		.sb-brand {

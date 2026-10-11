@@ -44,9 +44,9 @@
 
 	.panel-btn[data-action] {
 		flex-direction: column;
-		gap: 5px;
+		gap: 4px;
 		width: auto;
-		height: 48px;
+		height: var(--bar-h);
 		padding: 0 6px;
 		font-size: 8px;
 		letter-spacing: 0.1em;
@@ -111,9 +111,15 @@ html[data-theme="gameboy"] {
 	--font-ui: 'Press Start 2P', 'JetBrains Mono', monospace;
 	--font-mono: 'Press Start 2P', 'JetBrains Mono', monospace;
 	--transition: 0s;
-	--bar-h: 52px;
-	// the shell fits the viewport height above the status bar
-	--shell-w: min(92vw, calc((100vh - 32px - var(--bar-h)) * 0.608), 640px);
+	// the shell fits the viewport height above the status bar, with --shell-m above and below it.
+	// svh is the height with the browser's toolbars showing; iOS Safari's 100vh counts the part behind them
+	--shell-m: 8px;
+	--shell-w: min(92vw, calc((100vh - 2 * var(--shell-m) - var(--bar-h)) * 0.608), 640px);
+
+	@supports (height: 100svh) {
+		--shell-w: min(92vw, calc((100svh - 2 * var(--shell-m) - var(--bar-h)) * 0.608), 640px);
+	}
+
 	--u: calc(var(--shell-w) / 90);
 	min-height: 100vh;
 	background: #26262B;
@@ -123,7 +129,7 @@ html[data-theme="gameboy"] {
 	&::before {
 		content: 'BATTERY';
 		position: absolute;
-		top: calc(16px + 34.6 * var(--u));
+		top: calc(var(--shell-m) + 34.6 * var(--u));
 		left: calc(50% - var(--shell-w) / 2 + 11.4 * var(--u));
 		transform: translateX(-50%);
 		z-index: 1;
@@ -172,7 +178,7 @@ html[data-theme="gameboy"] {
 		width: var(--shell-w);
 		min-height: 0;
 		aspect-ratio: 90 / 148;
-		margin: 16px auto calc(16px + var(--bar-h));
+		margin: var(--shell-m) auto calc(var(--shell-m) + var(--bar-h));
 		padding: 0;
 		background: var(--gb-shell);
 		border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(16.5 * var(--u)) calc(3 * var(--u));
@@ -837,6 +843,11 @@ html[data-theme="gameboy"] {
 			text-transform: uppercase;
 			color: #3B3785;
 			-webkit-font-smoothing: antialiased;
+		}
+
+		// the plastic's own highlight is the top edge
+		.statusbar::before {
+			display: none;
 		}
 
 		// JQ-OS and the clock each get a little LCD in the bezel's grey frame

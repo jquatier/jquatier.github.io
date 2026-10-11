@@ -33,7 +33,6 @@ html[data-theme="apple2"] {
 	--font-ui: 'VT323', 'JetBrains Mono', monospace;
 	--font-mono: 'VT323', 'JetBrains Mono', monospace;
 	--transition: 0s;
-	--bar-h: 46px;
 
 	body {
 		font-size: 20px;
@@ -143,9 +142,13 @@ html[data-theme="apple2"] {
 		.statusbar {
 			z-index: 14;
 			background: var(--color-bg);
-			border-top: 2px solid var(--color-fg);
 			font-size: 22px;
 			color: var(--color-fg);
+		}
+
+		.statusbar::before {
+			height: 2px;
+			background: var(--color-fg);
 		}
 
 		.sb-brand {
