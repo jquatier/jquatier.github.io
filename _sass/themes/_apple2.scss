@@ -165,23 +165,13 @@ html[data-theme="apple2"] {
 			padding: 0;
 		}
 
-		.sb-label,
-		.sb-sep {
+		.sb-label {
 			padding: 0 10px;
 			color: var(--color-faint);
 		}
 
 		.sb-label::after {
 			content: ':';
-		}
-
-		.sb-sep {
-			font-size: 0;
-		}
-
-		.sb-sep::before {
-			content: '|';
-			font-size: 22px;
 		}
 
 		.panel-btn,

@@ -42,12 +42,14 @@
 		display: none;
 	}
 
+	// the turned pill stands about 19px tall but lays out at 9px, so the gap clears its low end and the top padding
+	// pulls pill and name back to the middle of the bar
 	.panel-btn[data-action] {
 		flex-direction: column;
-		gap: 4px;
+		gap: 10px;
 		width: auto;
 		height: var(--bar-h);
-		padding: 0 6px;
+		padding: 5px 9px 0;
 		font-size: 8px;
 		letter-spacing: 0.1em;
 	}
@@ -55,6 +57,11 @@
 	.panel-btn[data-action] .sb-key {
 		width: 26px;
 		height: 9px;
+	}
+
+	// letter-spacing trails the last letter; balance it so the name centers under the pill
+	.panel-btn[data-action] .sb-word {
+		padding-left: 0.1em;
 	}
 
 	.sb-themes {
@@ -828,7 +835,6 @@ html[data-theme="gameboy"] {
 
 		.statusbar {
 			align-items: center;
-			justify-content: space-between;
 			gap: 12px;
 			padding: 0 14px;
 			background: var(--gb-shell);
@@ -875,7 +881,6 @@ html[data-theme="gameboy"] {
 
 		.sb-controls {
 			gap: 4px 6px;
-			margin: 0 auto;
 			padding: 0;
 		}
 
@@ -887,15 +892,6 @@ html[data-theme="gameboy"] {
 		.sb-glyph,
 		.statusbar [data-tip]::after {
 			display: none;
-		}
-
-		.sb-sep {
-			width: 2px;
-			height: 22px;
-			margin: 0 6px;
-			padding: 0;
-			background: #8E8A84;
-			font-size: 0;
 		}
 
 		.panel-btn,
@@ -982,35 +978,12 @@ html[data-theme="gameboy"] {
 		[data-action="shutdown"] .sb-word::before { content: 'power'; }
 
 		.sb-clock {
-			gap: 10px;
 			padding: 0;
 			color: inherit;
 		}
 
 		.sb-tz {
 			display: none;
-		}
-
-		// the battery LED goes dark with the console's at power-off
-		.sb-led {
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			font-size: 8px;
-			letter-spacing: 0.08em;
-		}
-
-		.sb-led::before {
-			content: '';
-			width: 8px;
-			height: 8px;
-			border-radius: 50%;
-			background: var(--gb-led);
-			box-shadow: 0 0 6px var(--gb-led-glow);
-		}
-
-		.sb-led::after {
-			content: 'battery';
 		}
 
 		// the clock's LCD is framed by a spread shadow; JQ-OS gets the same frame from its wrapper

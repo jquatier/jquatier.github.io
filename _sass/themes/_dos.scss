@@ -334,7 +334,6 @@ html[data-theme="dos"] {
 
 		.sb-controls {
 			gap: 0;
-			margin-left: 0;
 			padding: 0;
 		}
 
@@ -343,7 +342,6 @@ html[data-theme="dos"] {
 		}
 
 		.sb-label,
-		.sb-sep,
 		.sb-glyph,
 		.statusbar [data-tip]::after {
 			display: none;
@@ -362,7 +360,9 @@ html[data-theme="dos"] {
 			text-transform: capitalize;
 		}
 
-		[data-theme="dos"] .sb-name {
+		[data-theme="dos"] .sb-name,
+		[data-theme="apple2"] .sb-name,
+		[data-theme="gameboy"] .sb-name {
 			text-transform: uppercase;
 		}
 
@@ -402,7 +402,6 @@ html[data-theme="dos"] {
 		}
 
 		.sb-clock {
-			margin-left: auto;
 			padding: 0 14px;
 			background: #000000;
 			color: var(--dos-cyan);

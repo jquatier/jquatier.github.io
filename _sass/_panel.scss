@@ -60,13 +60,18 @@ body {
 	white-space: nowrap;
 }
 
+/* the themes sit on the left after JQ-OS on every theme; reboot and shutdown keep the right, beside the clock */
 .sb-controls {
 	position: relative;
 	display: flex;
+	flex: 1;
 	align-items: center;
 	gap: 2px;
-	margin-left: auto;
 	padding: 0 8px;
+}
+
+.panel-btn[data-action="reboot"] {
+	margin-left: auto;
 }
 
 .sb-themes {
@@ -75,8 +80,7 @@ body {
 	gap: 2px;
 }
 
-.sb-label,
-.sb-sep {
+.sb-label {
 	padding: 0 8px;
 	color: var(--color-faint);
 	white-space: nowrap;
@@ -133,8 +137,7 @@ body {
    and the narrow layout */
 .sb-key,
 .sb-word,
-.sb-menu,
-.sb-led {
+.sb-menu {
 	display: none;
 }
 
@@ -191,7 +194,6 @@ body {
 	}
 
 	.sb-label,
-	.sb-sep,
 	.sb-clock {
 		display: none;
 	}
