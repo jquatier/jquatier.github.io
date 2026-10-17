@@ -501,6 +501,32 @@ html[data-theme="gameboy"] {
 			min-width: calc(1.5 * var(--u));
 		}
 
+		// the project cards: the desktop padding swamps a 47mm screen too, so it's scaled like the post list's
+		.project-card-body {
+			padding: calc(1.6 * var(--u)) calc(1.8 * var(--u));
+		}
+
+		.project-card-title {
+			margin-bottom: calc(1 * var(--u));
+		}
+
+		// and the banner crops a little shorter, so the whole card fits on the screen with the selection around it
+		.project-card-image img,
+		.project-card-image-secret {
+			aspect-ratio: 1159 / 400;
+		}
+
+		// the tint keeps pure black black; lighten it over the darkest shade, so a dark banner reads as the LCD's
+		// deepest green rather than a hole in the screen
+		.project-card-image {
+			isolation: isolate;
+			background: var(--gb-0);
+		}
+
+		.project-card-image img {
+			mix-blend-mode: lighten;
+		}
+
 		// the post list: the desktop padding and date size swamp a 47mm screen
 		.post-list .card-padded {
 			padding: calc(1.6 * var(--u)) calc(1.8 * var(--u));
@@ -594,10 +620,11 @@ html[data-theme="gameboy"] {
 			padding: calc(2 * var(--u)) 0;
 		}
 
-		// inside the LCD the margins are tight, but a selected card lifts 3px and grows a 4px focus ring,
-		// so leave room for those plus the glass edge
+		// inside the LCD the margins are tight, but a selected card lifts 3px and grows a 4px focus ring. the
+		// scroll lines up the card's unlifted box, so the top makes room for the lift and the ring, the bottom only
+		// for the ring less the lift: the same gap above and below, whichever way the d-pad moves
 		[data-nav-card] {
-			scroll-margin: calc(1.5 * var(--u) + 7px) 0;
+			scroll-margin: calc(1.5 * var(--u) + 10px) 0 calc(1.5 * var(--u) + 4px);
 		}
 
 		// ---- the front panel, as on a DMG-01: d-pad, B and A in their well, SELECT and START, the speaker grille.
@@ -833,7 +860,10 @@ html[data-theme="gameboy"] {
 
 		// ---- the status bar: outside the console, a strip of the same shell plastic along the bottom of the page ----
 
+		// it's part of the hardware, so it's there from the first frame like the shell, rather than fading in on
+		// every load (and blinking out between pages, or on power-up after a shutdown it stayed on screen for)
 		.statusbar {
+			animation: none;
 			align-items: center;
 			gap: 12px;
 			padding: 0 14px;

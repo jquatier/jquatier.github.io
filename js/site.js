@@ -223,6 +223,8 @@
     }
 
     each('shutdown', function () {
+      // once it's down, the same button powers it back up; mid-shutdown it waits
+      if (halt.classList.contains('is-halted')) return reboot();
       if (halt.classList.contains('is-open')) return;
       this.blur();
       root.classList.add('powering-off');
@@ -277,6 +279,15 @@
 
     function center(r) { return r.left + r.width / 2; }
 
+    /* whether the card fits in the view with its scroll margins: the window, or the game boy's screen,
+       which scrolls on its own */
+    function fits(el) {
+      var screen = el.closest('.body-wrapper');
+      var h = screen && getComputedStyle(screen).overflowY !== 'visible' ? screen.clientHeight : window.innerHeight;
+      var cs = getComputedStyle(el);
+      return el.getBoundingClientRect().height + parseFloat(cs.scrollMarginTop) + parseFloat(cs.scrollMarginBottom) <= h;
+    }
+
     function select(el) {
       Array.prototype.forEach.call(document.querySelectorAll('.is-selected'), function (n) {
         if (n !== el) n.classList.remove('is-selected');
@@ -284,7 +295,23 @@
       el.classList.add('is-selected');
       last = el;
       el.focus({ preventScroll: true });
-      el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      reveal(el);
+      // just after load the cards are still rising into place, so the scroll above aimed at where the card
+      // was mid-animation; aim again once it lands
+      var moving = [];
+      for (var n = el; n && n.getAnimations; n = n.parentElement) {
+        moving = moving.concat(n.getAnimations().filter(function (a) { return a.playState === 'running'; }));
+      }
+      if (moving.length) {
+        Promise.all(moving.map(function (a) { return a.finished; })).then(function () {
+          if (last === el) reveal(el);
+        }, function () {});
+      }
+    }
+
+    // a card taller than the view shows its top, title first, rather than whichever edge is nearer
+    function reveal(el) {
+      el.scrollIntoView({ block: fits(el) ? 'nearest' : 'start', inline: 'nearest' });
     }
 
     /* up/down pick the card in the neighbouring row whose centre is closest; left/right walk reading
