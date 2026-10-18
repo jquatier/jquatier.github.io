@@ -248,7 +248,8 @@ html[data-theme="gameboy"] {
 			color: var(--gb-ink);
 		}
 
-		// the LCD: 47×43mm, the site scrolls inside it
+		// the LCD: 47×43mm, the site scrolls inside it, up and down only. anything a hair too wide would otherwise
+		// let it pan sideways and cut off the left edge (iOS does, for a swipe that's not quite vertical)
 		.body-wrapper {
 			position: absolute;
 			top: calc(15.5 * var(--u));
@@ -258,7 +259,7 @@ html[data-theme="gameboy"] {
 			z-index: 1;
 			display: block;
 			min-height: 0;
-			overflow: auto;
+			overflow: hidden auto;
 			scrollbar-width: none;
 			@include gb-lcd;
 		}
@@ -430,8 +431,9 @@ html[data-theme="gameboy"] {
 			font-size: calc(1.5 * var(--u));
 		}
 
+		// minmax(0, ...): the column is the screen's width, and nothing inside a card can push it wider
 		.project-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 			gap: calc(2 * var(--u));
 			margin-bottom: calc(3 * var(--u));
 		}
@@ -514,6 +516,12 @@ html[data-theme="gameboy"] {
 		.project-card-image img,
 		.project-card-image-secret {
 			aspect-ratio: 1159 / 400;
+		}
+
+		// the redacted card's stamp at its desktop 17px is wider than the card; it scales with the screen instead
+		.secret-stamp {
+			padding: calc(0.8 * var(--u)) calc(1.2 * var(--u)) calc(0.8 * var(--u)) calc(1.6 * var(--u));
+			font-size: calc(1.6 * var(--u));
 		}
 
 		// the tint keeps pure black black; lighten it over the darkest shade, so a dark banner reads as the LCD's
