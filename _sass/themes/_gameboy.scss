@@ -146,37 +146,49 @@ html[data-theme="gameboy"] {
 		pointer-events: none;
 	}
 
-	// "PHONES" with the three slashes over the headphone jack, bottom-left of the front face
-	// the power switch label molded into the top edge; the idle crt-overlay element carries it
+	// the power switch's slot: a recessed track in the strip along the top edge, OFF·ON molded inside it. measured
+	// off a flat scan of a DMG-01 (9.1-26.8mm in, fully rounded ends); a touch shorter than the real 3.7mm so the
+	// strip fits above the bezel. the idle crt-overlay element carries it
 	.crt-overlay {
-		display: block;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		position: absolute;
 		inset: auto;
-		top: calc(1.1 * var(--u));
-		left: calc(11 * var(--u));
+		top: calc(1.4 * var(--u));
+		left: calc(9.1 * var(--u));
+		width: calc(17.7 * var(--u));
+		height: calc(3.1 * var(--u));
 		z-index: 1;
+		border-radius: calc(1.55 * var(--u));
+		// sunk into the plastic: the top wall in shadow, the bottom lip catching the light
+		box-shadow:
+			inset 0 calc(0.3 * var(--u)) calc(0.35 * var(--u)) rgba(0, 0, 0, 0.2),
+			inset 0 calc(-0.2 * var(--u)) 0 rgba(255, 255, 255, 0.55);
 	}
 
 	// the glass's dark edge, laid over the LCD instead of painted by it. the LCD scrolls on its own compositing
 	// layer, so anything it paints itself (the mixin's inset shadow, an outline) ends up under a card scrolled to
-	// the edge. offset from the overlay's own spot (1.1mm down, 11mm in) onto the LCD's 47×43mm box
+	// the edge. offset from the slot's spot (1.4mm down, 9.1mm in) onto the LCD's 47×43mm box
 	.crt-overlay::after {
 		content: '';
 		position: absolute;
-		top: calc(14.4 * var(--u));
-		left: calc(10.5 * var(--u));
+		top: calc(14.1 * var(--u));
+		left: calc(12.4 * var(--u));
 		width: calc(47 * var(--u));
 		height: calc(43 * var(--u));
 		box-shadow: inset 0 0 0 calc(0.5 * var(--u)) #66701A;
 		pointer-events: none;
 	}
 
+	// raised lettering in the same plastic, picked out by the light along its lower edge. the body labels are
+	// Futura on the real thing; Apple devices have it
 	.crt-overlay::before {
-		content: '\25C1 OFF\00B7ON \25B7';
-		font: 700 calc(1.1 * var(--u)) / 1 'Inter', 'Helvetica Neue', Arial, sans-serif;
-		letter-spacing: 0.12em;
-		color: #ADA9A6;
-		text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+		content: '\25C1 OFF\00B7ON\25B7';
+		font: 500 calc(1.75 * var(--u)) / 1 'Futura', 'Century Gothic', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+		letter-spacing: 0.06em;
+		color: #AFABA5;
+		text-shadow: 0 calc(-0.08 * var(--u)) 0 rgba(0, 0, 0, 0.14), 0 calc(0.12 * var(--u)) 0 rgba(255, 255, 255, 0.75);
 	}
 
 	// the shell: fit the viewport height, keep the 90:148 ratio
@@ -187,7 +199,15 @@ html[data-theme="gameboy"] {
 		aspect-ratio: 90 / 148;
 		margin: var(--shell-m) auto calc(var(--shell-m) + var(--bar-h));
 		padding: 0;
-		background: var(--gb-shell);
+		// the channels molded around the strip along the top edge, as on the real shell: one across the full width
+		// under the strip, and one at each end (5.2mm in on the left, 6.1mm on the right) from the top edge down to
+		// it, setting off the corners. each is a shadowed trough with a lit lip on its far side
+		background:
+			linear-gradient(rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.16)) 0 calc(5.3 * var(--u)) / 100% calc(0.35 * var(--u)) no-repeat,
+			linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)) 0 calc(5.65 * var(--u)) / 100% calc(0.25 * var(--u)) no-repeat,
+			linear-gradient(90deg, rgba(0, 0, 0, 0.16) 60%, rgba(255, 255, 255, 0.5) 60%) calc(4.9 * var(--u)) 0 / calc(0.6 * var(--u)) calc(5.3 * var(--u)) no-repeat,
+			linear-gradient(90deg, rgba(0, 0, 0, 0.16) 60%, rgba(255, 255, 255, 0.5) 60%) calc(83.6 * var(--u)) 0 / calc(0.6 * var(--u)) calc(5.3 * var(--u)) no-repeat,
+			var(--gb-shell);
 		border-radius: calc(3 * var(--u)) calc(3 * var(--u)) calc(16.5 * var(--u)) calc(3 * var(--u));
 		box-shadow:
 			inset 0 calc(-0.6 * var(--u)) 0 rgba(0, 0, 0, 0.14),
@@ -230,20 +250,24 @@ html[data-theme="gameboy"] {
 			box-sizing: border-box;
 		}
 
-		// the wordmark, printed on the shell under the bezel
+		// the wordmark, printed on the shell under the bezel. a retail DMG sets its name in plain Gill Sans Italic,
+		// regular weight, caps, tightly kerned (the heavier one was only on promo units). Apple devices have Gill Sans;
+		// everyone else gets Cabin, drawn after it. the small TM at cap height is drawn as an image, since the font's
+		// own ™ is nearly cap-sized
 		&::after {
-			content: 'JQ BOY';
+			content: 'JQ-01';
 			position: absolute;
-			top: calc(72.5 * var(--u));
+			top: calc(71 * var(--u));
 			left: calc(6 * var(--u));
 			right: auto;
 			bottom: auto;
 			z-index: 0;
 			display: block;
-			background: none;
+			padding-right: 0.4em;
+			background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 7'%3E%3Ctext x='0' y='7' font-family='Gill Sans, Gill Sans MT, Cabin, Arial, sans-serif' font-size='9.7' textLength='13' lengthAdjust='spacingAndGlyphs' fill='%234A44A6'%3ETM%3C/text%3E%3C/svg%3E") no-repeat right 0.2em / auto 0.22em;
 			animation: none;
-			font: calc(3.4 * var(--u)) / 1 'Press Start 2P', monospace;
-			letter-spacing: 0.02em;
+			font: italic 400 calc(6.5 * var(--u)) / 1 'Gill Sans', 'Gill Sans MT', 'Cabin', sans-serif;
+			letter-spacing: -0.02em;
 			text-transform: none;
 			color: var(--gb-ink);
 		}
@@ -864,6 +888,62 @@ html[data-theme="gameboy"] {
 		.gb-grille span:first-child {
 			background: #B3AFA8;
 			box-shadow: inset 0 calc(0.17 * var(--u)) 0 rgba(0, 0, 0, 0.15);
+		}
+
+		// PHONES over the headphone jack, measured off a flat scan of a DMG-01: a recessed track 32.5-47mm in and
+		// 2.7-6.5mm up from the bottom edge, with the headphone icon and the word molded in raised plastic like
+		// OFF·ON. a notch drops from it to the bottom edge over the jack, two grip ridges standing up inside
+		.gb-phones {
+			@include gb-at(39.75, 143.4, 14.5, 3.8);
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+			padding-left: calc(4 * var(--u));
+			border-radius: calc(1.9 * var(--u));
+			// sunk into the plastic: the top wall in shadow, the bottom lip catching the light
+			box-shadow:
+				inset 0 calc(0.3 * var(--u)) calc(0.35 * var(--u)) rgba(0, 0, 0, 0.2),
+				inset 0 calc(-0.2 * var(--u)) 0 rgba(255, 255, 255, 0.55);
+			font: 500 calc(2.2 * var(--u)) / 1 'Futura', 'Century Gothic', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+			letter-spacing: 0.04em;
+			color: #AFABA5;
+			text-shadow: 0 calc(-0.08 * var(--u)) 0 rgba(0, 0, 0, 0.14), 0 calc(0.12 * var(--u)) 0 rgba(255, 255, 255, 0.75);
+			pointer-events: none;
+		}
+
+		// the headphones: a headband arc with an ear cup at each end
+		.gb-phones::before {
+			content: '';
+			position: absolute;
+			top: calc(1 * var(--u));
+			left: calc(1.1 * var(--u));
+			width: calc(2.2 * var(--u));
+			height: calc(2 * var(--u));
+			box-sizing: border-box;
+			border: calc(0.28 * var(--u)) solid #AFABA5;
+			border-bottom: 0;
+			border-radius: calc(1.1 * var(--u)) calc(1.1 * var(--u)) 0 0;
+			background:
+				linear-gradient(#AFABA5, #AFABA5) left bottom / calc(0.6 * var(--u)) calc(0.8 * var(--u)) no-repeat border-box,
+				linear-gradient(#AFABA5, #AFABA5) right bottom / calc(0.6 * var(--u)) calc(0.8 * var(--u)) no-repeat border-box;
+			filter: drop-shadow(0 calc(-0.08 * var(--u)) 0 rgba(0, 0, 0, 0.14)) drop-shadow(0 calc(0.12 * var(--u)) 0 rgba(255, 255, 255, 0.75));
+		}
+
+		// the notch, 39.8-45.3mm in, from under the track down to the bottom edge: three matching grooves (1.2-1.3mm
+		// on the real one) with the plastic standing between them as two ridges. each groove is shaded alike, its left
+		// wall in shadow and its right wall catching the light
+		.gb-phones::after {
+			$groove: linear-gradient(90deg, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.1) 45%, rgba(0, 0, 0, 0.06) 75%, rgba(255, 255, 255, 0.45));
+			content: '';
+			position: absolute;
+			top: 100%;
+			left: calc(7.3 * var(--u));
+			width: calc(5.5 * var(--u));
+			height: calc(2.7 * var(--u));
+			background:
+				$groove 0 0 / calc(1.25 * var(--u)) 100% no-repeat,
+				$groove calc(2.125 * var(--u)) 0 / calc(1.25 * var(--u)) 100% no-repeat,
+				$groove calc(4.25 * var(--u)) 0 / calc(1.25 * var(--u)) 100% no-repeat;
 		}
 
 		// ---- the status bar: outside the console, a strip of the same shell plastic along the bottom of the page ----

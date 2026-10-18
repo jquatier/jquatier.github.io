@@ -28,7 +28,7 @@
     try {
       // era fonts load only when a theme that needs them is active
       window.themeFont = function (theme) {
-        var fam = { apple2: 'VT323', dos: 'VT323', gameboy: 'Press+Start+2P' }[theme];
+        var fam = { apple2: 'VT323', dos: 'VT323', gameboy: 'Press+Start+2P&family=Cabin:ital@1' }[theme];
         if (!fam) return;
         var id = 'theme-font-' + fam.replace(/\W/g, '');
         if (document.getElementById(id)) return;
