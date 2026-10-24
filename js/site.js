@@ -422,4 +422,23 @@
       btn.addEventListener('click', function () { ACTIONS[btn.getAttribute('data-btn')](); });
     });
   })();
+
+  /* ---- the game boy's minigame: the PLAY cartridge on the homepage loads js/bricks.js on its first press.
+     while it runs, the game takes the d-pad, the buttons and their keys for itself ---- */
+  (function () {
+    var cart = document.querySelector('[data-game]');
+    var script = null;
+    if (!cart) return;
+
+    cart.addEventListener('click', function () {
+      if (root.getAttribute('data-theme') !== 'gameboy') return;
+      if (window.jqBricks) return window.jqBricks.start(cart);
+      if (script) return;
+      script = document.createElement('script');
+      script.src = '{{ "/js/bricks.js" | prepend: site.baseurl }}';
+      script.onload = function () { window.jqBricks.start(cart); };
+      script.onerror = function () { script.remove(); script = null; };
+      document.head.appendChild(script);
+    });
+  })();
 })();

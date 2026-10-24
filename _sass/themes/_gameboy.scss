@@ -423,6 +423,32 @@ html[data-theme="gameboy"] {
 			transform: none;
 		}
 
+		// the PLAY cartridge: across both columns under the links, icon beside the label
+		.link-card-game {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			grid-column: 1 / -1;
+			font: inherit;
+			cursor: pointer;
+		}
+
+		// the minigame (js/bricks.js) draws on its own 160×144 screen laid over the LCD. it comes before the
+		// panel in the page, so the glass's dark edge still sits on top of it; the padding keeps the picture
+		// a millimetre inside that edge, as on the real screen
+		.gb-game-screen {
+			position: absolute;
+			top: calc(15.5 * var(--u));
+			left: calc(21.5 * var(--u));
+			width: calc(47 * var(--u));
+			height: calc(43 * var(--u));
+			z-index: 1;
+			box-sizing: border-box;
+			padding: calc(1 * var(--u));
+			image-rendering: pixelated;
+			@include gb-lcd;
+		}
+
 		// inner pages inside the screen
 		.page-wrapper {
 			width: 100%;
@@ -662,12 +688,16 @@ html[data-theme="gameboy"] {
 		// ---- the front panel, as on a DMG-01: d-pad, B and A in their well, SELECT and START, the speaker grille.
 		// positions are element centers in mm from the shell's top-left corner, measured off the real console ----
 
+		// no text selection or callout, so holding a button down for the minigame doesn't start one on a phone
 		.console {
 			display: block;
 			position: absolute;
 			inset: 0;
 			z-index: 2;
 			pointer-events: none;
+			-webkit-user-select: none;
+			user-select: none;
+			-webkit-touch-callout: none;
 		}
 
 		.console button {
@@ -824,7 +854,8 @@ html[data-theme="gameboy"] {
 			background: linear-gradient(#999593, #7B7776);
 		}
 
-		.gb-pill:active {
+		.gb-pill:active,
+		.gb-pill.is-pressed {
 			background: #6E6A69;
 			box-shadow:
 				inset 0 calc(0.35 * var(--u)) 0 rgba(0, 0, 0, 0.3),

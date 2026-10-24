@@ -71,3 +71,8 @@
 .link-card:active {
 	transform: translateY(-1px);
 }
+
+/* the game boy's PLAY cartridge (js/bricks.js): only that theme shows it */
+.link-card-game {
+	display: none;
+}

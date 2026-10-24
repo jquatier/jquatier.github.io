@@ -43,6 +43,11 @@ title: Jacob Quatier
       <span class="label" data-dos="{{ link.dos | escape }}">{{ link.label }}</span>
     </a>
     {%- endfor %}
+    {%- comment -%} the game boy's minigame cartridge; only that theme shows it, and js/site.js loads the game on the first press {%- endcomment %}
+    <button class="card card-interactive link-card link-card-game" type="button" style="--stagger: {{ site.data.links | size }}" aria-label="Play Bricks" data-nav-card data-game>
+      {% include icons/cartridge.svg %}
+      <span class="label">Play</span>
+    </button>
   </nav>
 
   {%- comment -%} the newest post, for 60 days after it's published. js/site.js removes it once that passes, since the site only rebuilds on a push {%- endcomment -%}
