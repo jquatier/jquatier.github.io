@@ -423,12 +423,13 @@ html[data-theme="gameboy"] {
 			transform: none;
 		}
 
-		// the PLAY cartridge: across both columns under the links, icon beside the label
+		// the PLAY cartridge takes the RSS card's place, so all six fit on the screen without scrolling
+		.link-card[href$="/feed.xml"] {
+			display: none;
+		}
+
 		.link-card-game {
 			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			grid-column: 1 / -1;
 			font: inherit;
 			cursor: pointer;
 		}
