@@ -288,19 +288,168 @@ html[data-theme="dos"] {
 		}
 
 		.project-card,
+		.post-list .card,
 		.status-banner,
 		.status-list {
 			background: var(--dos-blue);
 			@include dos-dialog;
 		}
 
-		.project-card::before,
 		.project-card::after,
+		.post-list .card::before,
+		.post-list .card::after,
 		.status-banner::before,
 		.status-banner::after,
 		.status-list::before,
 		.status-list::after {
 			display: none;
+		}
+
+		// section headings: yellow capitals over a double rule, and the subtitle a REM line
+		.section-intro h1 {
+			font-size: 24px;
+			font-weight: 400;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--dos-yellow);
+		}
+
+		.section-intro h1::after {
+			width: 100%;
+			height: 0;
+			margin-top: 2px;
+			border-top: 3px double #FFFFFF;
+			background: none;
+		}
+
+		.section-subtitle {
+			font-size: 20px;
+			color: var(--dos-cyan);
+		}
+
+		.section-subtitle::before {
+			content: 'REM ';
+			color: var(--dos-grey);
+			opacity: 1;
+		}
+
+		// the project cards are windows: a close box and the name set into the top rule, the banner in its own frame
+		.project-grid {
+			gap: 34px 30px;
+		}
+
+		.project-card {
+			overflow: visible;
+			padding: 18px 14px 0;
+		}
+
+		.project-card::before,
+		.project-card-title {
+			position: absolute;
+			top: -12px;
+			padding: 0 6px;
+			background: var(--dos-blue);
+			font: 20px/20px var(--font-mono);
+		}
+
+		.project-card::before {
+			content: '[\25A0]';
+			left: 10px;
+			width: auto;
+			height: auto;
+			border: 0;
+			color: #FFFFFF;
+		}
+
+		.project-card-title {
+			left: 50%;
+			max-width: calc(100% - 96px);
+			margin: 0;
+			overflow: hidden;
+			transform: translateX(-50%);
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			text-transform: uppercase;
+			color: #FFFFFF;
+		}
+
+		.project-card-title::before {
+			content: none;
+		}
+
+		.project-card-image {
+			border: 2px solid #FFFFFF;
+		}
+
+		.project-card-body {
+			padding: 12px 2px 16px;
+		}
+
+		.project-card-description,
+		.entry-summary {
+			font-size: 20px;
+			line-height: 1.2;
+			color: var(--dos-cyan);
+		}
+
+		.post-list .card-padded {
+			margin-bottom: 30px;
+		}
+
+		.entry-title {
+			font-size: 22px;
+			font-weight: 400;
+			color: #FFFFFF;
+		}
+
+		.index-post-info {
+			font-size: 18px;
+			color: var(--dos-grey);
+		}
+
+		// the window under the cursor: a yellow frame, and its name on the cursor bar
+		.project-card.card-interactive:hover,
+		.project-card.card-interactive:is(:focus-visible, .is-selected),
+		.post-list .card-link:hover .card,
+		.post-list .card-link:is(:focus-visible, .is-selected) .card {
+			transform: none;
+			outline: none;
+			border-color: var(--dos-yellow);
+		}
+
+		.project-card.card-interactive:hover .project-card-title,
+		.project-card.card-interactive:is(:focus-visible, .is-selected) .project-card-title,
+		.post-list .card-link:hover .entry-title,
+		.post-list .card-link:is(:focus-visible, .is-selected) .entry-title {
+			background: var(--dos-teal);
+			color: #000000;
+		}
+
+		.post-list .entry-title {
+			display: inline-block;
+			margin-left: -6px;
+			padding: 0 6px;
+		}
+
+		// the redacted window: the desktop's shaded fill, and the stamp a critical-error box
+		.project-card-image-secret {
+			background: repeating-conic-gradient(var(--dos-grey) 0 25%, var(--dos-blue) 0 50%) 0 0 / 4px 4px;
+		}
+
+		.secret-stamp {
+			padding: 4px 12px 4px 18px;
+			background: #AA0000;
+			border: 3px double #FFFFFF;
+			box-shadow: 6px 6px 0 #000000;
+			font-size: 22px;
+			font-weight: 400;
+			color: #FFFFFF;
+			transform: none;
+		}
+
+		.project-card-secret .project-card-title {
+			letter-spacing: 0;
+			color: var(--dos-grey);
 		}
 
 		.status-ok   { color: #55FF55; }

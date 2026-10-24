@@ -244,10 +244,135 @@ html[data-theme="apple2"] {
 		}
 
 		.project-card,
+		.post-list .card,
 		.status-banner,
 		.status-list {
 			background: var(--color-bg);
 			border: 2px solid var(--color-fg);
 		}
+
+		// section headings in inverse video, and the subtitle under each one a REM line
+		.section-intro h1 {
+			padding: 0 10px;
+			font-size: 28px;
+			font-weight: 400;
+			background: var(--color-fg);
+			color: var(--color-bg);
+		}
+
+		.section-intro h1::after {
+			display: none;
+		}
+
+		.section-subtitle {
+			font-size: 20px;
+			color: var(--color-muted);
+		}
+
+		.section-subtitle::before {
+			content: 'REM ';
+			color: var(--color-faint);
+			opacity: 1;
+		}
+
+		// the project and post cards: a plain 2px frame, 40-column-sized text, and inverse video under the cursor
+		.project-card::before,
+		.project-card::after,
+		.post-list .card::before,
+		.post-list .card::after {
+			display: none;
+		}
+
+		.project-card-image {
+			isolation: isolate;
+			border-bottom: 2px solid var(--color-fg);
+			background: var(--color-fg);
+		}
+
+		// a monochrome monitor: the banner comes out in phosphor green
+		.project-card-image img {
+			filter: grayscale(1) contrast(1.2);
+			mix-blend-mode: multiply;
+		}
+
+		.project-card-title,
+		.entry-title {
+			font-size: 24px;
+			font-weight: 400;
+			line-height: 1.1;
+		}
+
+		.project-card-title::before {
+			content: ']RUN ';
+		}
+
+		.project-card-description,
+		.entry-summary {
+			font-size: 20px;
+			line-height: 1.2;
+		}
+
+		.index-post-info {
+			font-size: 18px;
+		}
+
+		.project-card.card-interactive:hover,
+		.project-card.card-interactive:is(:focus-visible, .is-selected),
+		.post-list .card-link:hover .card,
+		.post-list .card-link:is(:focus-visible, .is-selected) .card {
+			transform: none;
+			outline: none;
+			background: var(--color-fg);
+		}
+
+		.project-card.card-interactive:hover *,
+		.project-card.card-interactive:hover .project-card-title::before,
+		.project-card.card-interactive:is(:focus-visible, .is-selected) *,
+		.project-card.card-interactive:is(:focus-visible, .is-selected) .project-card-title::before,
+		.post-list .card-link:hover .card *,
+		.post-list .card-link:is(:focus-visible, .is-selected) .card * {
+			color: var(--color-bg);
+		}
+
+		.project-card.card-interactive:hover .project-card-image,
+		.project-card.card-interactive:is(:focus-visible, .is-selected) .project-card-image {
+			border-bottom-color: var(--color-bg);
+		}
+
+		.project-card.card-interactive:hover img,
+		.project-card.card-interactive:is(:focus-visible, .is-selected) img {
+			filter: grayscale(1) contrast(1.2) invert(1);
+		}
+
+		// the redacted card: green hatching, and FLASH, the Apple's blinking inverse text, for the stamp
+		.project-card-image-secret {
+			background:
+				repeating-linear-gradient(
+					-45deg,
+					rgba(59, 242, 59, 0.1) 0,
+					rgba(59, 242, 59, 0.1) 14px,
+					transparent 14px,
+					transparent 28px
+				),
+				var(--color-bg);
+		}
+
+		.secret-stamp {
+			padding: 2px 10px 2px 16px;
+			border: 0;
+			font-size: 28px;
+			font-weight: 400;
+			transform: none;
+			animation: apple2-flash 1s step-end infinite;
+		}
+
+		.project-card-secret .project-card-title {
+			letter-spacing: 0;
+		}
+	}
+
+	@keyframes apple2-flash {
+		0%, 49%   { background: var(--color-fg); color: var(--color-bg); }
+		50%, 100% { background: transparent; color: var(--color-fg); }
 	}
 }
