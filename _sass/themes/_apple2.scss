@@ -57,10 +57,19 @@ html[data-theme="apple2"] {
 			text-shadow: 0 0 14px rgba(59, 242, 59, 0.55);
 		}
 
-		.hero-name::before,
-		.hero-name::after {
-			display: none;
+		// the hover glitch with one color to work with: the name tears sideways like a CRT losing horizontal
+		// hold, some bands in inverse video
+		.hero-name::before {
+			background: var(--color-fg);
+			color: var(--color-bg);
 		}
+
+		.hero-name::after {
+			color: var(--color-accent);
+		}
+
+		.hero-name:hover::before { animation: apple2-tear-a 0.45s steps(1, end); }
+		.hero-name:hover::after  { animation: apple2-tear-b 0.45s steps(1, end); }
 
 		.hero-rule {
 			height: 3px;
@@ -369,6 +378,24 @@ html[data-theme="apple2"] {
 		.project-card-secret .project-card-title {
 			letter-spacing: 0;
 		}
+	}
+
+	@keyframes apple2-tear-a {
+		0%  { opacity: 1; clip-path: inset(12% 0 64% 0); transform: translateX(-0.18em); }
+		20% { opacity: 0; }
+		40% { opacity: 1; clip-path: inset(58% 0 20% 0); transform: translateX(0.12em); }
+		60% { opacity: 0; }
+		80% { opacity: 1; clip-path: inset(34% 0 44% 0); transform: translateX(-0.08em); }
+		100% { opacity: 0; }
+	}
+
+	@keyframes apple2-tear-b {
+		0%  { opacity: 1; clip-path: inset(50% 0 26% 0); transform: translateX(0.22em); }
+		20% { opacity: 1; clip-path: inset(0 0 76% 0);   transform: translateX(-0.14em); }
+		40% { opacity: 0; }
+		60% { opacity: 1; clip-path: inset(70% 0 6% 0);  transform: translateX(0.16em); }
+		80% { opacity: 1; clip-path: inset(20% 0 56% 0); transform: translateX(-0.1em); }
+		100% { opacity: 0; }
 	}
 
 	@keyframes apple2-flash {

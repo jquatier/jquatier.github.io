@@ -141,10 +141,24 @@ html[data-theme="dos"] {
 			@include dos-dialog;
 		}
 
-		.hero-name::before,
+		// the hover glitch in text mode: nothing moves, but the name's cells fill with garbage from the
+		// character set, then come back a few letters at a time. the frames are the name's 13 cells, so they
+		// line up over it. every character is one VT323 has (its fallback font's are wider and wrap the line),
+		// and none is uppercased, since that can change a character's width too
+		.hero-name::before {
+			inset: 0;
+			width: auto;
+			padding: inherit;
+			background: var(--dos-blue);
+			color: var(--dos-yellow);
+			text-transform: none;
+		}
+
 		.hero-name::after {
 			display: none;
 		}
+
+		.hero-name:hover::before { animation: dos-garble 0.5s steps(1, end); }
 
 		.hero-rule {
 			display: none;
@@ -193,6 +207,15 @@ html[data-theme="dos"] {
 	@keyframes dos-blink {
 		0%, 49%  { opacity: 1; }
 		50%, 100% { opacity: 0; }
+	}
+
+	@keyframes dos-garble {
+		0%  { opacity: 1; content: '¶Ç#Ü¼ Æ%Ñ¿§É½'; }
+		20% { opacity: 1; content: '¥±@Æ° ¢Ö&¬¡$÷'; }
+		40% { opacity: 1; content: 'J¬C«B Ü§A#I¿R'; }
+		60% { opacity: 1; content: 'JA$OB Q°AT¼ER'; }
+		80% { opacity: 1; content: 'JACOB QUA¥IER'; }
+		100% { opacity: 0; }
 	}
 
 	body {
