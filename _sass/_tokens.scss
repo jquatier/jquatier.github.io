@@ -1,6 +1,8 @@
 // breakpoints, for @media queries
 $bp-mobile: 600px;   // one-column cards, stacked header and footer
 $bp-narrow: 520px;   // the boot log and the DOS listing drop their side columns
+$bp-low: 700px;      // a viewport height: a phone screen with the browser's bars on it, where the homepage trims its padding
+$bp-short: 620px;    // a viewport height: a short phone screen (a folded phone's cover), where the homepage packs down to fit
 
 :root {
 	/* r, g, b triplets for rgba(). --fg-rgb is the default text color, used for faint light tints that

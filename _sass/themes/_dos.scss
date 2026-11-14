@@ -264,6 +264,11 @@ html[data-theme="dos"] {
 			display: none;
 		}
 
+		// the game boy's cartridge stays off the listing; the rule above would bring it back as a seventh file
+		.link-card-game {
+			display: none;
+		}
+
 		.link-card .label {
 			font-size: 20px;
 			font-weight: 400;
@@ -610,6 +615,54 @@ html[data-theme="dos"] {
 		@media (max-width: $bp-mobile) {
 			.statusbar {
 				@include dos-compact;
+			}
+		}
+
+		// a phone with the browser's bars on it: the dialogs close up so the listing ends above the F-key bar
+		@media (max-width: $bp-mobile) and (max-height: $bp-low) {
+			.hero {
+				padding-top: 24px;
+				padding-bottom: 24px;
+			}
+
+			.hero-tagline {
+				margin: 26px 0 30px;
+			}
+		}
+
+		// a short phone screen: the listing is DIR /W, names only and two across
+		@media (max-width: $bp-mobile) and (max-height: $bp-short) {
+			.hero {
+				padding-top: 14px;
+			}
+
+			.hero-tagline {
+				margin: 22px 0 20px;
+			}
+
+			.link-grid {
+				display: grid;
+				grid-template-columns: repeat(2, auto);
+				gap: 0 2ch;
+				padding-top: 4px;
+				padding-bottom: 6px;
+			}
+
+			.link-grid::before,
+			.link-grid::after {
+				grid-column: 1 / -1;
+			}
+
+			.link-grid::before {
+				content: ' Directory of C:\\JQ\A ';
+			}
+
+			.link-grid::after {
+				content: '\A        ' attr(data-files) ' file(s)';
+			}
+
+			.link-card .label::after {
+				display: none;
 			}
 		}
 

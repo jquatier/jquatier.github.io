@@ -248,6 +248,23 @@ html[data-theme="apple2"] {
 			}
 		}
 
+		// a short phone screen (see _responsive.scss): the 40-column labels come down a size to sit three across
+		@media (max-width: $bp-mobile) and (max-height: $bp-short) {
+			.hero-rule {
+				margin-top: 16px;
+			}
+
+			.link-card {
+				padding-top: 10px;
+				padding-bottom: 6px;
+			}
+
+			.link-card .label {
+				font-size: 18px;
+				letter-spacing: 0.02em;
+			}
+		}
+
 		.statusbar.is-compact {
 			@include apple2-compact;
 		}

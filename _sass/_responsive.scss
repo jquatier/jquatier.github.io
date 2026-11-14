@@ -70,3 +70,51 @@
 		display: block;
 	}
 }
+
+/* the homepage is one screen with nothing to scroll to, so on a phone that's short on height it gives up
+   spacing to fit, not width */
+@media only screen and (max-width: $bp-mobile) and (max-height: $bp-low) {
+	.hero {
+		padding-top: 16px;
+		padding-bottom: 16px;
+	}
+
+	.hero-tagline {
+		margin-bottom: 28px;
+	}
+
+	.latest-post {
+		margin-top: 18px;
+	}
+}
+
+/* a short screen: the links go three across in two rows of smaller cards */
+@media only screen and (max-width: $bp-mobile) and (max-height: $bp-short) {
+	.hero-rule {
+		margin: 14px auto 12px;
+	}
+
+	.hero-tagline {
+		margin-bottom: 22px;
+	}
+
+	.link-grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 10px;
+		max-width: 440px;
+	}
+
+	.link-card {
+		gap: 7px;
+		padding: 13px 4px 11px;
+	}
+
+	.link-card .label {
+		font-size: 12px;
+	}
+
+	.latest-post {
+		margin-top: 16px;
+		max-width: 440px;
+	}
+}
