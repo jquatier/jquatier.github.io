@@ -72,6 +72,13 @@ h1.entry-title,
 	display: block;
 }
 
+.entry-content p.caption {
+	margin: -2px 0 18px;
+	font-size: 12px;
+	text-align: center;
+	color: var(--color-faint);
+}
+
 .entry-content h3 {
 	font-size: 15px;
 	margin: 24px 0 10px;
@@ -79,6 +86,11 @@ h1.entry-title,
 
 .entry-content ol {
 	list-style-type: decimal;
+	margin-left: 22px;
+}
+
+.entry-content ul {
+	list-style-type: disc;
 	margin-left: 22px;
 }
 
