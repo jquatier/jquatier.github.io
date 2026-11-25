@@ -60,8 +60,6 @@ There have been forty rounds since July. Here are some of the things they turned
 
 **The wrong logo.** A prompt asked for CloudFront and the agent used the Cloudflare logo. That's a real icon, so `check` passed, but it's a different company. A checker can't tell what you meant. The skill now says to search when a request names a specific product, and it lists the pairs that are easy to mix up.
 
-**A prompt that was the problem.** One prompt kept failing, round after round. I rewrote part of the skill for it and ran it three times. None passed. Then I added one sentence to the *prompt*, written the way a user would say it: "an overview page that fits on one screen, and then a page for each part of the system." Three out of three passed, with or without the skill change, so I dropped the skill change.
-
 **A fix the agents turned down.** I added an error message that printed a ready-to-paste fix for a layout conflict. In the next round, agents were offered it three times and declined it every time. When I read the transcripts, the agents had a point. The fix would have quietly dropped half of what the user asked for, so they went looking for an arrangement that kept both halves.
 
 ### Keep the prompts hard
