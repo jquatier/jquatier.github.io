@@ -670,4 +670,10 @@ html[data-theme="dos"] {
 			@include dos-compact;
 		}
 	}
+
+	// the whole screen is already the terminal font; a prompt keeps the body size
+	.entry-content blockquote.prompt p {
+		font-size: inherit;
+		line-height: inherit;
+	}
 }
