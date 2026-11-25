@@ -52,21 +52,17 @@ The gauntlet's README puts it this way: a run that scores full marks and finds a
 
 There have been forty rounds since July. Here are some of the things they turned up.
 
-**Missing icons.** Every `check` call from every round gets logged, and there are almost 5,000 of them now. The most common failure in there was agents asking for icons that didn't exist. `sys/api` missed 15 times by itself, and the closest match `check` could suggest was `sys/ads`. Agents were still writing `api`, `worker`, `mobile` and `scheduler` four months after I retired those names on purpose. Stripe got drawn as a plain box twenty times, even though there's a Stripe logo.
+**Missing icons.** Every `check` call from every round gets logged, and there are almost 5,000 of them now. The most common failure in there was agents asking for icons that didn't exist. `sys/api` missed 15 times by itself, and the closest match `check` could suggest was `sys/ads`. Agents were still writing `api`, `worker`, `mobile` and `scheduler` four months after I retired those names on purpose.
 
-[Squinch 0.24](https://github.com/jquatier/squinch/releases/tag/v0.24.0) is mostly a fix for that. Common words now draw the icon you'd expect (`api` is braces, `worker` is a cog, `device` is a phone), and the four retired names are back. The product logos went from 147 to 283, picked from a list of 578 technologies that tend to show up in architecture diagrams. The skill now has an example of a third party drawn with its logo (`logos/stripe "Stripe" external`). The next round made 213 CLI calls without a single unknown icon. Agents used `sys/api` 20 times, and Stripe never came out as a box.
+[Squinch 0.24](https://github.com/jquatier/squinch/releases/tag/v0.24.0) is mostly a fix for that. Common words now draw the icon you'd expect (`api` is braces, `worker` is a cog, `device` is a phone), and the four retired names are back. The product logos went from 147 to 283, picked from a list of 578 technologies that tend to show up in architecture diagrams. The next round made 213 CLI calls without a single unknown icon. Agents used `sys/api` 20 times.
 
 **Too many errors.** One agent declared nine boxes inside a system, referred to them from outside it without the system's prefix, and got back twenty-eight `unknown id` errors. They were all correct, but the actual problem (a missing prefix) was hard to see in a list that long. Now when three or more errors share a cause, they fold into one message that names it.
 
 **The wrong logo.** A prompt asked for CloudFront and the agent used the Cloudflare logo. That's a real icon, so `check` passed, but it's a different company. A checker can't tell what you meant. The skill now says to search when a request names a specific product, and it lists the pairs that are easy to mix up.
 
-**Reference files nobody opened.** To keep the skill short, I moved the long reference sections into separate files. In the next round, none of the fifty sessions opened any of them. The icon lists went back into the main file. The cookbook stayed out, since the error messages already explain their own fixes.
-
 **A prompt that was the problem.** One prompt kept failing, round after round. I rewrote part of the skill for it and ran it three times. None passed. Then I added one sentence to the *prompt*, written the way a user would say it: "an overview page that fits on one screen, and then a page for each part of the system." Three out of three passed, with or without the skill change, so I dropped the skill change.
 
 **A fix the agents turned down.** I added an error message that printed a ready-to-paste fix for a layout conflict. In the next round, agents were offered it three times and declined it every time. When I read the transcripts, the agents had a point. The fix would have quietly dropped half of what the user asked for, so they went looking for an arrangement that kept both halves.
-
-**Code I got to delete.** I'd written a pre-parser that caught other diagram languages' syntax (UML, Mermaid) and turned it into one clear error, in case agents reached for it. After the skill taught the real syntax, zero of forty agents wrote any of it, so I took it out.
 
 ### Keep the prompts hard
 
