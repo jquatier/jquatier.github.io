@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Cold Agents - Testing a Tool by Handing It to a Stranger"
+title:  "Cold Agents - Testing a Tool Built for Agents"
 date:   2026-11-25 11:00:00 -0800
 summary: "I test Squinch by handing it to AI agents that have never seen it before, 42 at a time. Here's how that's set up and some of what it's turned up..."
 ---
