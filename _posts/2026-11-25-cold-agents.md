@@ -70,14 +70,6 @@ After eleven rounds of tuning, the original twenty prompts scored full marks two
 
 I also try to score only what a prompt asks for. One prompt's scoring required a shared trunk line the prompt never mentioned, so I took it out. It was grading the agent on my taste instead of its work.
 
-### What runs in CI
-
-Running a round costs real money, and agents don't give the same answer twice, so it never runs in CI. The harness only makes the setup repeatable.
-
-The answers from the last round I reviewed get committed, and CI scores them on every push with no model and no network. It builds every answer, renders every view, checks the SVG, and makes sure each answer still has what its prompt asked for. If an engine change breaks an answer some past agent wrote, CI catches it.
-
-The latest round scored 41 out of 42, and 32 of the 42 passed on the first `check`. The one miss was an agent drawing a nightly sync job as an arrow instead of a box, which is a modeling choice the tool can't really make for you.
-
 ### Tips for testing with cold agents
 
 If you're building something for agents to use, here's what I'd pass on:
@@ -87,8 +79,7 @@ If you're building something for agents to use, here's what I'd pass on:
 3. **Watch the retries.** Every extra `check` call points at a doc or an error message to fix.
 4. **Read the transcripts.** They tell you whether a failure was the agent, the tool, or your test.
 5. **Look for repeats.** If lots of agents ask for the same thing, it's probably worth adding.
-6. **Keep the expensive part out of CI.** Commit the answers and score them for free on every push.
 
-So yeah, the whole setup is in the repo under [`gauntlet/`](https://github.com/jquatier/squinch/tree/main/gauntlet) if you want to borrow it, and you can try Squinch itself in the [playground](https://squinch.cc/playground/).
+The whole setup is in the repo under [`gauntlet/`](https://github.com/jquatier/squinch/tree/main/gauntlet) if you want to borrow it, and you can try Squinch itself in the [playground](https://squinch.cc/playground/).
 
 Enjoy! =)
