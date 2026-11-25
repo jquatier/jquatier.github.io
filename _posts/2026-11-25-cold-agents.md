@@ -50,15 +50,11 @@ The gauntlet's README says it better than I can: a run that scores full marks an
 
 ### What it's found
 
-Thirty-nine rounds since July. These are the ones that changed how I think about it.
+Forty rounds since July. These are the ones that changed how I think about it.
 
-**Agents agree on the same "wrong" syntax.** In one probe, five out of five fresh agents, Sonnet and Haiku alike, wrote a tag where the kind goes:
+**The misses add up.** Every `check` call from every round gets logged, and by now there are almost 5,000 of them. When I went through them, the most common way to fail had nothing to do with syntax. Agents kept asking for icons that didn't exist. `sys/api` missed 15 times on its own, and the closest match `check` could suggest was `sys/ads`. Agents were still writing `api`, `worker`, `mobile` and `scheduler` four months after I'd retired those names on purpose. And Stripe got drawn as a plain box twenty times, even though its logo was right there.
 
-{% highlight kotlin %}
-charge = aws/lambda "Charge Handler" #pci { ... }
-{% endhighlight %}
-
-That wasn't legal. Commas were the same story: required in some places and forbidden in others, so agents and I got them wrong in both directions. When every new reader writes it the same way, the language is the thing that's wrong. Both are legal now.
+So [Squinch 0.24](https://github.com/jquatier/squinch/releases/tag/v0.24.0) is mostly the logs' wish list. The everyday words agents guess now draw the icon you'd expect: `api` is braces, `worker` is a cog, `device` is a phone, and the four retired names are back. The product logos nearly doubled, from 147 to 283, picked from a list of 578 technologies that architecture diagrams tend to name. The skill also shows a third party keeping its logo (`logos/stripe "Stripe" external`). The next round made 213 CLI calls and none of them hit an unknown icon. The answers used `sys/api` 20 times, and Stripe never showed up as a box.
 
 **One mistake should be one error.** An agent declared nine boxes inside a system, referred to them from outside without the system's prefix, and got back twenty-eight `unknown id` errors. Every one was correct, and together they buried the single thing worth saying. Now three or more errors with the same cause fold into one message that says what that cause is.
 
@@ -84,7 +80,7 @@ Running a round costs real money and the results aren't deterministic, so it's n
 
 The answers from the last round I reviewed are committed, and a scorer with no model and no network runs over them on every push. It builds every answer, renders every view, checks the SVG, and makes sure each answer still has what its prompt asked for. If I change the engine and an answer some past agent wrote breaks, CI says so.
 
-The latest round scored 41 out of 42, and 30 of the 42 got there on the first `check`. The one miss was a modeling call (a nightly sync job drawn as an arrow instead of a box), not the tool.
+The latest round scored 41 out of 42, and 32 of the 42 got there on the first `check`. The one miss was a modeling call (a nightly sync job drawn as an arrow instead of a box), not the tool.
 
 ### Tips for testing with cold agents
 
