@@ -110,3 +110,31 @@ h1.entry-title,
 	color: var(--color-faint);
 	margin-bottom: 10px;
 }
+
+/* a prompt handed to an agent, drawn as the PROMPT.md file it arrives in.
+   mark a blockquote with {: .prompt} on the line after it */
+.entry-content blockquote.prompt {
+	margin: 4px 0 18px;
+	padding: 0;
+	background: var(--color-surface-2);
+	border: 1px solid var(--color-border-strong);
+	border-left: 3px solid var(--color-accent);
+	border-radius: 3px;
+}
+
+.entry-content blockquote.prompt::before {
+	content: 'PROMPT.md';
+	display: block;
+	padding: 6px 14px;
+	border-bottom: 1px solid var(--color-border);
+	font-family: var(--font-mono);
+	font-size: 11px;
+	letter-spacing: 0.04em;
+	color: var(--color-faint);
+}
+
+.entry-content blockquote.prompt p {
+	margin: 0;
+	padding: 12px 14px 14px;
+	color: var(--color-fg);
+}

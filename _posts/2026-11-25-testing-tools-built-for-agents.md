@@ -21,10 +21,12 @@ Each prompt gets its own folder (I call it a box) with three things in it:
 A fresh `claude -p` session starts in that box. It doesn't have the repo or any example diagrams, and it hasn't seen any earlier answers. Some prompts are tidy:
 
 > Order events flow through EventBridge to two consumers: an email notifier (Lambda plus SNS) and an analytics writer (Lambda plus an S3 data lake). Failed events land in an SQS dead-letter queue. Show asynchronous flows as async.
+{: .prompt}
 
 And some are written the way people actually talk:
 
 > OK so this is our thing. Customers come in through the mobile app or the website, does not really matter, both hit the same gateway. [...] Billing reads from Postgres too. Actually no, scratch that, billing has its own database, separate one. Do not bother with the internal admin tool, nobody cares about it.
+{: .prompt}
 
 One of them hands the agent a real open source repo, pinned to a commit, and asks it to diagram what the code actually does.
 
